@@ -1,4 +1,4 @@
-use gamp;
+use db_cmms;
 
 DROP PROCEDURE IF EXISTS `registrarActivoTarea`
 DELIMITER //
