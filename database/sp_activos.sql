@@ -84,7 +84,7 @@ BEGIN
     INNER JOIN estados E ON A.idestado = E.idestado
     INNER JOIN subcategorias S ON A.idsubcategoria = S.idsubcategoria
     INNER JOIN categorias C ON S.idcategoria = C.idcategoria
-    WHERE AA.idestado = 5
+    WHERE AA.idestado = 14
     AND (E.idestado = _idestado OR _idestado IS NULL)
     AND (C.idcategoria = _idcategoria OR _idcategoria IS NULL)
     AND (S.idsubcategoria = _idsubcategoria OR _idsubcategoria IS NULL)

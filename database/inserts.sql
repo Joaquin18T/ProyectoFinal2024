@@ -8,7 +8,7 @@ INSERT INTO modulos (modulo) VALUES
 	('bajas'),
     ('reportes'),
     ('configuracion'); -- ONLY ADMIN
-SELECT*FROM modulos;
+
 INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 	(null, 'home',1,'Inicio',''),
     
@@ -24,23 +24,21 @@ INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
     -- BAJAS
     (4, 'listar-activo-baja', '1', 'Baja', ''),
     
-	(5, 'reporte-activo','1','reporte de Activos',''), -- FILTRADO POR ESTADO, FECHA REGISTRO, ETC.
-    -- (5, 'reporte-area','0','reporte de Areas',''); -- FILTRADO DE ACTIVOS EN CADA AREA, ESTADO.
-    
+        -- REPORTES
+	(5, 'reporte','1','Reportes',''), -- FILTRADO POR ESTADO, FECHA REGISTRO, ETC.
+	(5, 'reporte-activo','0','R. de activos',''),
+	(5, 'reporte-mantenimiento','0','R. de mantenimiento',''),
+
 	-- Configuracion (se registrara nuevas categorias, subcategorias, marcas, areas, etc.)
 	(6,'gestion-data', '1', 'Gestion', '');
-    -- REPORTES
-    -- REPORTE - ACTIVOS
 
 
-	
-    
 INSERT INTO perfiles (perfil, nombrecorto) VALUES
 	('Administrador', 'ADM'),
 	('Usuario', 'USR'),
 	('Tecnico', 'TNC');
     
-    
+    SELECT*FROM vistas;
 INSERT INTO permisos(idperfil, idvista) VALUES
 -- ADMINISTRADOR
 	(1,1),
@@ -50,10 +48,13 @@ INSERT INTO permisos(idperfil, idvista) VALUES
 	(1,5),
     (1,6),
     (1,7),
+    (1,8),
+    (1,9),
 -- USUARIOS
-	(2,1),
-	(2,6);
-SELECT*FROM vistas;
+	(2,6),
+	(2,7),
+	(2,8);
+
 INSERT INTO tipo_doc(tipodoc) VALUES
 	('dni'),
     ('Carnet de extranjeria');
@@ -67,7 +68,8 @@ INSERT INTO tipo_estados(tipo_estado) VALUES
 	('usuario'),
     ('activo'),
     ('responsable'),
-    ('tarea');
+    ('tarea'),
+    ('ubicacion');
 
 INSERT INTO estados (idtipo_estado, nom_estado) VALUES
 	(1,'Habilitado'),
@@ -82,7 +84,9 @@ INSERT INTO estados (idtipo_estado, nom_estado) VALUES
 	(4, 'pendiente'),
 	(4, 'proceso'),
 	(4, 'revision'),
-	(4, 'finalizado');
+	(4, 'finalizado'),
+    (5, 'ubicacion actual'),
+    (5, 'cambio de ubicacion');
 
 -- Insertando en la tabla PERSONAS
 INSERT INTO PERSONAS (idtipodoc, num_doc, apellidos, nombres, genero, telefono)VALUES 
@@ -221,15 +225,15 @@ VALUES
 
 INSERT INTO activos_asignados (idarea, idactivo, condicion_asig, imagenes, idestado)
 VALUES
-    (1, 1, 'Asignado para uso general en el departamento de TI', '{"img1": "imagen1.jpg"}', 3),
-    (2, 2, 'Asignado para el área administrativa', '{"img2": "imagen2.jpg"}', 3),
-    (3, 3, 'En mantenimiento preventivo', '{"img3": "imagen3.jpg"}', 2);
+    (1, 1, 'Asignado para uso general en el departamento de TI', '{"img1": "imagen1.jpg"}', 14),
+    (2, 2, 'Asignado para el área administrativa', '{"img2": "imagen2.jpg"}', 14),
+    (3, 3, 'En mantenimiento preventivo', '{"img3": "imagen3.jpg"}', 14);
 
 INSERT INTO historial_asignaciones_activos (idactivo_asig, idresponsable, coment_adicional)
 VALUES
     (1, 1, 'Inicialmente asignado al área de TI para soporte técnico'),
-    (2, 2, 'Reasignado para trabajos administrativos'),
-    (3, 3, 'Enviado a mantenimiento preventivo');
+    (2, 1, 'Reasignado para trabajos administrativos'),
+    (3, 1, 'Enviado a mantenimiento preventivo');
 
 INSERT INTO notificaciones_asignaciones (idactivo_asig, tipo, mensaje)
 VALUES
@@ -240,5 +244,5 @@ VALUES
 INSERT INTO bajas_activo (idactivo, motivo, coment_adicionales, ruta_doc, idusuario_aprobacion)
 VALUES
     (1, 'Obsolescencia', 'Activo reemplazado por equipo más moderno', 'docs/baja_activo1.pdf', 1),
-    (2, 'Daño irreparable', 'Activo dañado sin posibilidad de reparación', 'docs/baja_activo2.pdf', 2),
-    (3, 'Fin de vida útil', 'Activo retirado por antigüedad', 'docs/baja_activo3.pdf', 3);
+    (2, 'Daño irreparable', 'Activo dañado sin posibilidad de reparación', 'docs/baja_activo2.pdf', 1),
+    (3, 'Fin de vida útil', 'Activo retirado por antigüedad', 'docs/baja_activo3.pdf', 1);
