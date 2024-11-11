@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How To Generate And Download CSV File in Javscript</title>
+</head>
+
+<body>
+    <h3>How To Generate And Download CSV File in Javscript</h3>
+
+    <a id="a2" download="employees.csv">Download</a>
+
+    <script>
+        const data = [{
+            "name": "Sanjay Kumar",
+            "email": "sanjay_sample@example.net",
+            "designation": "Web Developer",
+            "age": "30",
+            "gender": "Male"
+        }, {
+            "name": "Vijay Rohila",
+            "email": "vijay_sample@example.net",
+            "designation": "Python Developer",
+            "age": "32",
+            "gender": "Male"
+        }, {
+            "name": "Ashish Kumar",
+            "email": "ashish_sample@example.net",
+            "designation": "PHP Developer",
+            "age": "29",
+            "gender": "Male"
+        }];
+
+        // get keys as array
+        const keys = Object.keys(data[0]);
+
+        const commaSeparatedString = [keys.join(","), data.map(row => keys.map(key => row[key]).join(",")).join("\n")].join("\n")
+
+        const csvBlob = new Blob([commaSeparatedString])
+
+        const a2 = document.getElementById("a2")
+
+        a2.href = URL.createObjectURL(csvBlob)
+    </script>
+</body>
+
+</html>
+          

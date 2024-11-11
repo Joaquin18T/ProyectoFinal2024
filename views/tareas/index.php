@@ -190,9 +190,9 @@
 <!-- Luego, el archivo de DataTables -->
 <!-- jKanban JS -->
 <script src="https://cdn.jsdelivr.net/npm/jkanban@1.2.0/dist/jkanban.min.js"></script>
-<script>
+<!-- <script>
     const idusuario = "<?php echo $_SESSION['login']['idusuario']; ?>"
-</script>
+</script> -->
 <script src="http://localhost/SIGEMAPRE/js/tareas/index.js"></script>
 
 </body>
