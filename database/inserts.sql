@@ -59,9 +59,10 @@ INSERT INTO tipo_doc(tipodoc) VALUES
     ('Carnet de extranjeria');
     
 INSERT INTO areas (area) VALUES
-('Lugar 1'),
-('Lugar 2'),
-('Lugar 3');
+    ('Departamento de TI'),        
+    ('Área Administrativa'),         
+    ('Area contable'),
+    ('Logística y Transporte');
 
 INSERT INTO tipo_estados(tipo_estado) VALUES
 	('usuario'),
@@ -223,7 +224,11 @@ INSERT INTO activos_asignados (idarea, idactivo, condicion_asig, imagenes, idest
 VALUES
     (1, 1, 'Asignado para uso general en el departamento de TI', '{"img1": "imagen1.jpg"}', 3),
     (2, 2, 'Asignado para el área administrativa', '{"img2": "imagen2.jpg"}', 3),
-    (3, 3, 'En mantenimiento preventivo', '{"img3": "imagen3.jpg"}', 2);
+    (3, 3, 'Asignado para area de contable', '{"img3": "imagen3.jpg"}', 2),
+    (4, 6, 'Asignado al área de Logística y Transporte para transporte de carga pesada', '{"img4": "camion_carga.jpg"}', 3),
+    (4, 7, 'Asignado al área de Logística y Transporte para trabajo pesado', '{"img5": "camioneta_trabajo.jpg"}', 3),
+    (4, 8, 'Asignado al área de Logística y Transporte para patrullaje', '{"img6": "motocicleta_patrullaje.jpg"}', 3),
+    (4, 20, 'Asignado al área de Logística y Transporte para carga pesada', '{"img7": "camion_carga_pesada.jpg"}', 3);
 
 INSERT INTO historial_asignaciones_activos (idactivo_asig, idresponsable, coment_adicional)
 VALUES
