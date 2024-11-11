@@ -9,13 +9,13 @@ if (!isset($_SESSION['login']) || $_SESSION['login']['estado']==false) {
   $rutaCompleta = array_filter($rutaCompleta);
   $totalElementos = count($rutaCompleta);
 
-  var_dump($totalElementos);
+  //var_dump($totalElementos);
   //Buscar la vista actual en la lista de acceso
   $vistaActual = $rutaCompleta[$totalElementos];
   $listaAcceso = $_SESSION['login']['accesos'];
 
   //Verificando el permiso
-  var_dump($listaAcceso);
+  //var_dump($listaAcceso);
   $encontrado = false;
   $i=0;
 
@@ -27,7 +27,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login']['estado']==false) {
   }
 
   if(!$encontrado){
-    header("Location:http://localhost/SIGEMAPRE/views/");
+    header("Location:http://localhost/SIGEMAPRE/views/home");
   }
 }
 //$idusuario = $_SESSION['login']['usuario'];
@@ -36,7 +36,6 @@ $host = "http://localhost/SIGEMAPRE/";
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,7 +122,7 @@ $host = "http://localhost/SIGEMAPRE/";
             if($access['isVisible']==1){
               echo "
                 <li class='nav-item'>
-                  <a href='<?= $host ?>views/{$access['modulo']}/{$access['ruta']}' class='nav-link'>
+                  <a href='http://localhost/SIGEMAPRE/views/{$access['modulo']}/{$access['ruta']}' class='nav-link'>
                     <span class='sidebar-icon'>
                       <!-- ICONO -->
                     </span>
