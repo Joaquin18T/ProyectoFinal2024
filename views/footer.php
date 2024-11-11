@@ -29,6 +29,11 @@
   </div>
 </footer> -->
 </main>
+<<<<<<< HEAD
+
+
+
+=======
 <!-- INICIO MODAL -->
 <div class="modal fade" id="modal-detalle-notificacion" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -60,6 +65,7 @@
   </div>
 </div>
 <!-- ./SIDEBAR DE NOTIFICACIONES -->
+>>>>>>> c2f0e08fea6493c8c4fb8b739ba5102275c0fae0
 <!-- Core -->
 <script
   src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -67,10 +73,18 @@
   crossorigin="anonymous"></script>
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 <!-- Script personzalizado -->
+<<<<<<< HEAD
+<!-- <script src="http://localhost/CMMS/js/dashboard/select-option.js"></script> -->
+<!-- SWEET ALERT -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Libreria que simplifica sweet alert -->
+ <!-- <script src="http://localhost/SIGEMAPRE/js/swalcustom.js"></script> -->
+=======
 <script src="http://localhost/SIGEMAPRE/js/dashboard/select-option.js"></script>
 <!-- SWEET ALERT -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Libreria que simplifica sweet alert -->
  <script src="http://localhost/SIGEMAPRE/js/swalcustom.js"></script>
+>>>>>>> c2f0e08fea6493c8c4fb8b739ba5102275c0fae0
  <!-- JQUERY -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

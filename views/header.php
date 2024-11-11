@@ -1,10 +1,37 @@
 <?php
-/* session_start();
-if (!isset($_SESSION['login']) || (isset($_SESSION['login']) && !$_SESSION['login']['permitido'])) {
-  header('Location:http://localhost/SIGEMAPRE/');
+session_start();
+if (!isset($_SESSION['login']) || $_SESSION['login']['estado']==false) {
+  header('location:http://localhost/SIGEMAPRE');
+}else{
+  //El usuario logeado, solo se le permitira acceso a las vistas indicadores por su PERFIL
+  $url = $_SERVER['REQUEST_URI']; //obtener url
+  $rutaCompleta = explode("/", $url); //url ->array()
+  $rutaCompleta = array_filter($rutaCompleta);
+  $totalElementos = count($rutaCompleta);
+
+  var_dump($totalElementos);
+  //Buscar la vista actual en la lista de acceso
+  $vistaActual = $rutaCompleta[$totalElementos];
+  $listaAcceso = $_SESSION['login']['accesos'];
+
+  //Verificando el permiso
+  var_dump($listaAcceso);
+  $encontrado = false;
+  $i=0;
+
+  while(($i<count($listaAcceso)) && !$encontrado){
+    if($listaAcceso[$i]['ruta']==$vistaActual){
+      $encontrado = true;
+    }
+    $i++;
+  }
+
+  if(!$encontrado){
+    header("Location:http://localhost/SIGEMAPRE/views/");
+  }
 }
-$idusuario = $_SESSION['login']['usuario'];
-$rol = $_SESSION['login']['rol']; */
+//$idusuario = $_SESSION['login']['usuario'];
+//$rol = $_SESSION['login']['rol'];
 $host = "http://localhost/SIGEMAPRE/";
 ?>
 <!DOCTYPE html>
@@ -21,10 +48,10 @@ $host = "http://localhost/SIGEMAPRE/";
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
     crossorigin="anonymous" />
   <!-- Volt CSS -->
-  <link type="text/css" href="http://localhost/SIGEMAPRE/css/dashboard/volt.css" rel="stylesheet" />
+  <link type="text/css" href="http://localhost/CMMS/css/dashboard/volt.css" rel="stylesheet" />
   <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="http://localhost/SIGEMAPRE/css/responsables/list-asignaciones.css">
-  <link rel="stylesheet" href="http://localhost/SIGEMAPRE/css/global.css">
+  <link rel="stylesheet" href="http://localhost/CMMS/css/responsables/list-asignaciones.css">
+  <link rel="stylesheet" href="http://localhost/CMMS/css/global.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -84,163 +111,29 @@ $host = "http://localhost/SIGEMAPRE/";
       <!-- OPCIONES SIDEBAR -->
       <ul class="nav flex-column pt-3 pt-md-0" id="options-sidebar">
         <li class="nav-item mb-3">
-          <a href="#" class="nav-link d-flex align-items-center">
+          <a class="nav-link d-flex align-items-center">
             <span class="sidebar-icon">
               <!-- LOGO -->
             </span>
-            <span class="mt-1 ms-1 sidebar-text">SISGEMAPRE</span>
+            <span class="mt-1 ms-1 sidebar-text">SIGEMAPRE</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="<?= $host ?>views/usuarios" class="nav-link">
-            <span class="sidebar-icon">
-              <!-- LOGO -->
-            </span>
-            <span class="sidebar-text">USUARIOS</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?= $host ?>views/activo" class="nav-link d-flex justify-content-between">
-            <span>
-              <span class="sidebar-icon">
-                <!-- ICONO -->
-              </span>
-              <span class="sidebar-text">Activos</span>
-            </span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <span
-            class="nav-link collapsed d-flex justify-content-between align-items-center"
-            data-bs-toggle="collapse"
-            data-bs-target="#submenu-app">
-            <span>
-              <span class="sidebar-icon">
-                <svg
-                  class="icon icon-xs me-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    fill-rule="evenodd"
-                    d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
-                    clip-rule="evenodd"></path>
-                </svg>
-              </span>
-              <span class="sidebar-text">Asignaciones</span>
-            </span>
-            <span class="link-arrow">
-              <svg
-                class="icon icon-sm"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </span>
-          </span>
-          <div
-            class="multi-level collapse"
-            role="list"
-            id="submenu-app"
-            aria-expanded="false">
-            <ul class="flex-column nav">
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="<?= $host ?>views/responsables/">
-                  <span class="sidebar-text">Lista de Asig.</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div
-            class="multi-level collapse"
-            role="list"
-            id="submenu-app"
-            aria-expanded="false">
-            <ul class="flex-column nav">
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="<?= $host ?>views/responsables/select-responsable">
-                  <span class="sidebar-text">Resp. Principal</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <span
-            class="nav-link collapsed d-flex justify-content-between align-items-center"
-            data-bs-toggle="collapse"
-            data-bs-target="#submenu-tareas">
-            <span>
-              <span class="sidebar-icon">
-                <svg
-                  class="icon icon-xs me-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    fill-rule="evenodd"
-                    d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
-                    clip-rule="evenodd"></path>
-                </svg>
-              </span>
-              <span class="sidebar-text">Tareas</span>
-            </span>
-            <span class="link-arrow">
-              <svg
-                class="icon icon-sm"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </span>
-          </span>
-          <div
-            class="multi-level collapse"
-            role="list"
-            id="submenu-tareas"
-            aria-expanded="false">
-            <ul class="flex-column nav">
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="<?= $host ?>views/plantareas">
-                  <span class="sidebar-text">Plan de tareas</span>
-                </a>
-              </li>
-            </ul>
-            <ul class="flex-column nav">
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="<?= $host ?>views/odt">
-                  <span class="sidebar-text">Ordenes de Trabajo</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a href="<?= $host ?>views/bajas" class="nav-link d-flex justify-content-between">
-            <span>
-              <span class="sidebar-icon">
-                <!-- ICONO -->
-              </span>
-              <span class="sidebar-text">Bajas</span>
-            </span>
-          </a>
-        </li>
+        <?php 
+          foreach($listaAcceso as $access){
+            if($access['isVisible']==1){
+              echo "
+                <li class='nav-item'>
+                  <a href='<?= $host ?>views/{$access['modulo']}/{$access['ruta']}' class='nav-link'>
+                    <span class='sidebar-icon'>
+                      <!-- ICONO -->
+                    </span>
+                    <span class='sidebar-text'>{$access['texto']}</span>
+                  </a>
+                </li>            
+              ";
+            }
+          }
+        ?>
       </ul>
       <!--/ OPCIONES SIDEBAR -->
     </div>
@@ -313,7 +206,7 @@ $host = "http://localhost/SIGEMAPRE/";
                 <div class="media d-flex align-items-center">
                   <img class="avatar rounded-circle" alt="Image placeholder" src="#" />
                   <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                    <span class="mb-0 font-small fw-bold text-gray-900" id="nomuser"><?= $idusuario ?></span>
+                    <span class="mb-0 font-small fw-bold text-gray-900" id="nomuser"></span>
                   </div>
                 </div>
               </a>
@@ -322,7 +215,6 @@ $host = "http://localhost/SIGEMAPRE/";
                 <!-- Opción de rol de usuario -->
                 <li>
                   <a class="dropdown-item d-flex align-items-center" id="rolUser">
-                    <?= $rol ?>
                   </a>
                 </li>
                 <!-- Separador -->
@@ -331,7 +223,7 @@ $host = "http://localhost/SIGEMAPRE/";
                 </li>
                 <!-- Opción de logout -->
                 <li>
-                  <a class="dropdown-item d-flex align-items-center" href="<?= $host ?>/controllers/usuarios.controller.php?operation=destroy">
+                  <a class="dropdown-item d-flex align-items-center" href="<?= $host ?>/controllers/usuario.controller.php?operation=destroy">
                     <svg
                       class="dropdown-icon text-danger me-2"
                       fill="none"

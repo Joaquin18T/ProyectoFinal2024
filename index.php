@@ -1,7 +1,12 @@
 <?php
   session_start();
+<<<<<<< HEAD
+  if(isset($_SESSION['login']) && $_SESSION['login']['estado']){
+    header('Location:http://localhost/SIGEMAPRE/views');
+=======
   if(isset($_SESSION['login']) && $_SESSION['login']['permitido']){
     header('Location:http://localhost/SIGEMAPRE/views/index.php');
+>>>>>>> c2f0e08fea6493c8c4fb8b739ba5102275c0fae0
   }
 ?>
 <!DOCTYPE html>
@@ -31,11 +36,32 @@
 
   <script>
     document.addEventListener("DOMContentLoaded",()=>{
+<<<<<<< HEAD
+      document.querySelector("#form-login").addEventListener("submit",async(e)=>{
+=======
       document.querySelector("#form-login").addEventListener("submit",(e)=>{
+>>>>>>> c2f0e08fea6493c8c4fb8b739ba5102275c0fae0
         e.preventDefault();
 
         const params = new URLSearchParams();
         params.append("operation","login");
+<<<<<<< HEAD
+        params.append("nom_usuario", document.querySelector("#usuario").value);
+        params.append("claveacceso", document.querySelector("#passusuario").value);
+
+        const resp = await fetch(`http://localhost/SIGEMAPRE/controllers/usuario.controller.php`,{
+          'method':'POST',
+          'body':params
+        });
+        const data = await resp.json();
+        console.log(data);
+        
+        if(data.login){
+          window.location.href='http://localhost/SIGEMAPRE/views/activos/listar-activo';
+        }else{
+          alert(data.mensaje);
+        }
+=======
         params.append("usuario", document.querySelector("#usuario").value);
         params.append("passusuario", document.querySelector("#passusuario").value);
 
@@ -50,6 +76,7 @@
           }
         })
         
+>>>>>>> c2f0e08fea6493c8c4fb8b739ba5102275c0fae0
       })
     })
   </script>
