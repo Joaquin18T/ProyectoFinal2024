@@ -26,9 +26,9 @@ class Usuario extends ExecQuery{
     }
   }
 }
- //$user = new Usuario();
+//  $user = new Usuario();
 
-//echo json_encode($user->login(['nom_usuario'=>'ana.martinez']));
+// echo json_encode($user->login(['nom_usuario'=>'ana.martinez']));
 // //echo $resp[0]['claveacceso'];
 
 
