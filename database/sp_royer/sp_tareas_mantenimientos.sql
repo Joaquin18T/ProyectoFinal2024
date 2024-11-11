@@ -41,3 +41,14 @@ BEGIN
     where ACT.idactivo = _idactivo;
 END //
 
+DROP PROCEDURE IF EXISTS `obtenerMantenimientosActivosPorFecha`
+DELIMITER //
+CREATE PROCEDURE `obtenerMantenimientosActivosPorFecha`(
+	IN _idactivo	INT
+)
+BEGIN
+	SELECT * FROM tareas_mantenimiento TM
+	INNER JOIN tareas TAR ON TM.idtarea = TAR.idtarea
+    INNER JOIN activos_tarea ACT ON TAR.idtarea = ACT.idtarea
+    where ACT.idactivo = _idactivo;
+END //

@@ -1,10 +1,10 @@
 <?php
-session_start();
+/* session_start();
 if (!isset($_SESSION['login']) || (isset($_SESSION['login']) && !$_SESSION['login']['permitido'])) {
   header('Location:http://localhost/SIGEMAPRE/');
 }
 $idusuario = $_SESSION['login']['usuario'];
-$rol = $_SESSION['login']['rol'];
+$rol = $_SESSION['login']['rol']; */
 $host = "http://localhost/SIGEMAPRE/";
 ?>
 <!DOCTYPE html>
