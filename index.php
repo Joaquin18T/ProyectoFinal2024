@@ -2,7 +2,7 @@
   session_start();
 
   if(isset($_SESSION['login']) && $_SESSION['login']['estado']){
-    header('Location:http://localhost/SIGEMAPRE/views');
+    header('Location:http://localhost/SIGEMAPRE/views/');
   }
 ?>
 <!DOCTYPE html>
