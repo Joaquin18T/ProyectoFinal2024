@@ -37,4 +37,4 @@ BEGIN
         LEFT JOIN modulos M ON V.idmodulo = M.idmodulo
         WHERE PRM.idperfil = _idperfil;
 END $$
-CALL sp_obtener_permisos(1);
+-- CALL sp_obtener_permisos(2);

@@ -3,6 +3,7 @@
 require_once 'ExecQuery.php';
 
 class Usuario extends ExecQuery{
+
   public function login($params = []): array
   {
     try {
@@ -68,8 +69,100 @@ class Usuario extends ExecQuery{
       return false;
     }
   }
+
+  public function cambiarAreaUsuario($params=[]):bool{
+    try{
+      $estado = false;
+      $cmd = parent::execQ("CALL sp_cambiar_area_usuario(?,?)");
+      $estado= $cmd->execute(
+        array(
+          $params['idusuario'],
+          $params['idarea']
+        )
+      );
+      return $estado;
+    }catch(Exception $e){
+      error_log("Error: ".$e->getMessage());
+      return false;
+    }
+  }
+
+  public function filtrarUsuarios($params=[]):array{
+    try{
+      $defaultParams=[
+        'dato' => null,
+        'numdoc' => null,
+        'idtipodoc' => null,
+        'estado' => null,
+        'responsable_area' => null,
+        'idperfil' => null,
+      ];
+
+      $realParams = array_merge($defaultParams, $params);
+
+      $cmd = parent::execQ("CALL sp_filtrar_usuarios(?,?,?,?,?,?)");
+      $cmd->execute(
+        array(
+          $realParams['dato'],
+          $realParams['numdoc'],
+          $realParams['idtipodoc'],
+          $realParams['responsable_area'],
+          $realParams['idperfil']
+        )
+      );
+    }catch(Exception $e){
+      error_log("Error: ".$e->getMessage());
+      return [];
+    }
+  }
+
+  public function getUsuarioById($params=[]):array{
+    try{
+      $cmd = parent::execQ("CALL sp_get_usuario_by_id(?)");
+      $cmd->execute(
+        array($params['idusuario'])
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    }catch(Exception $e){
+      error_log("Error: ".$e->getMessage());
+      return [];
+    }
+  }
+
+  public function updateEstado($params = []): bool
+  {
+    try {
+      $state = false;
+      $cmd = parent::execQ("CALL sp_update_estado_usuario(?,?)");
+      $state = $cmd->execute(
+        array(
+          $params['idusuario'],
+          $params['estado']
+        )
+      );
+      return $state;
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
+    }
+  }
+
+  public function searchUser($params = []): array
+  {
+    try {
+      $cmd = parent::execQ("CALL sp_search_nom_usuario(?)");
+      $cmd->execute(
+        array($params['usuario'])
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }
-//$user = new Usuario();
+// $user = new Usuario();
+
+// $up = $user->cambiarAreaUsuario(['idusuario'=>3, 'idarea'=>2]);
+// echo $up;
 
 // $id = $user->add([
 //   'idpersona'=>7,
