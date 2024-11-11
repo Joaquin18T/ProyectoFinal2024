@@ -6,7 +6,8 @@ RewriteRule ^(.*)$ $1.php [L]
 
 Options All -Indexes
 
-ErrorDocument 404 /CMMS/unauthorized.php
-ErrorDocument 401 /CMMS/unauthorized.php
-ErrorDocument 403 /CMMS/unauthorized.php
-ErrorDocument 404 /CMMS/404.php
+ErrorDocument 404 /SIGEMAPRE/unauthorized.php
+ErrorDocument 401 /SIGEMAPRE/unauthorized.php
+ErrorDocument 403 /SIGEMAPRE/unauthorized.php
+ErrorDocument 404 /SIGEMAPRE/404.php
+

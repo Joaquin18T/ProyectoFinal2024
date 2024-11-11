@@ -1,7 +1,8 @@
 <?php
   session_start();
-  if(isset($_SESSION['login']) && $_SESSION['login']['permitido']){
-    header('Location:http://localhost/SIGEMAPRE/views/index.php');
+
+  if(isset($_SESSION['login']) && $_SESSION['login']['estado']){
+    header('Location:http://localhost/SIGEMAPRE/views');
   }
 ?>
 <!DOCTYPE html>
@@ -31,25 +32,27 @@
 
   <script>
     document.addEventListener("DOMContentLoaded",()=>{
-      document.querySelector("#form-login").addEventListener("submit",(e)=>{
+      document.querySelector("#form-login").addEventListener("submit",async(e)=>{
+
         e.preventDefault();
 
         const params = new URLSearchParams();
         params.append("operation","login");
-        params.append("usuario", document.querySelector("#usuario").value);
-        params.append("passusuario", document.querySelector("#passusuario").value);
+        params.append("nom_usuario", document.querySelector("#usuario").value);
+        params.append("claveacceso", document.querySelector("#passusuario").value);
 
-        fetch(`./controllers/usuarios.controller.php?${params}`)
-        .then(resp=>resp.json())
-        .then(acceso=>{
-          console.log(acceso);
-          if(!acceso.permitido){
-            alert(acceso.status);
-          }else{
-            window.location.href='./views/odt';
-          }
-        })
+        const resp = await fetch(`http://localhost/SIGEMAPRE/controllers/usuario.controller.php`,{
+          'method':'POST',
+          'body':params
+        });
+        const data = await resp.json();
+        console.log(data);
         
+        if(data.login){
+          window.location.href='http://localhost/SIGEMAPRE/views/home';
+        }else{
+          alert(data.mensaje);
+        }
       })
     })
   </script>
