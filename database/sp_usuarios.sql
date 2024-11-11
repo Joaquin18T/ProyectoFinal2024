@@ -18,3 +18,6 @@ BEGIN
 END $$
 
 CALL sp_user_login('ana.martinez');
+
+
+select * from personas
