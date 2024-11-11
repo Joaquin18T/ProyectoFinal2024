@@ -25,8 +25,65 @@ class Usuario extends ExecQuery{
       die($e->getMessage());
     }
   }
+
+  public function add($params=[]):int{
+    try{
+      $pdo = parent::getConexion();
+      $cmd = $pdo->prepare('CALL sp_add_usuario(@idpersona,?,?,?,?,?,?,?)');
+      $cmd->execute(
+        array(
+          $params['idpersona'],
+          $params['nom_usuario'],
+          $params['claveacceso'],
+          $params['perfil'],
+          $params['idperfil'],
+          $params['idarea'],
+          $params['responsable_area']
+        )
+      );
+
+      $respuesta = $pdo->query("SELECT @idpersona AS idpersona")->fetch(PDO::FETCH_ASSOC);
+      return $respuesta['idpersona'];
+    }catch(Exception $e){
+      error_log("Error: ".$e->getMessage());
+      return -1;
+    }
+  }
+
+  public function updateUsuario($params=[]):bool{
+    try{
+      $pdo = parent::getConexion();
+      $cmd = $pdo->prepare("CALL sp_update_usuario(@idpersona, ?, ?)");
+      $cmd->execute(
+        array(
+          $params['idusuario'],
+          $params['idperfil']
+        )
+      );
+
+      $respuesta = $pdo->query("SELECT @idpersona AS idpersona")->fetch(PDO::FETCH_ASSOC);
+      return $respuesta['idpersona'];
+    }catch(Exception $e){
+      error_log("Error: ".$e->getMessage());
+      return false;
+    }
+  }
 }
-//  $user = new Usuario();
+//$user = new Usuario();
+
+// $id = $user->add([
+//   'idpersona'=>7,
+//   'nom_usuario'=>'luis',
+//   'claveacceso'=>'luis2024',
+//   'perfil'=>'USR',
+//   'idperfil'=>2,
+//   'idarea'=>3,
+//   'responsable_area'=>0
+// ]);
+// echo $id;
+
+// $up = $user->updateUsuario(['idusuario'=>7, 'idperfil'=>3]);
+// echo $up;
 
 // echo json_encode($user->login(['nom_usuario'=>'ana.martinez']));
 // //echo $resp[0]['claveacceso'];
