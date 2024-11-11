@@ -52,3 +52,32 @@ BEGIN
     INNER JOIN activos_tarea ACT ON TAR.idtarea = ACT.idtarea
     where ACT.idactivo = _idactivo;
 END //
+
+
+-- OBTENER mantenimmientos de un activo por intervalo de fechas
+DELIMITER $$
+CREATE PROCEDURE obtenerMantenimientosPorFecha (
+    IN _idactivo INT,
+    IN _fecha_inicio DATE,
+    IN _fecha_finalizado DATE
+)
+BEGIN
+    SELECT 
+        tm.idtarea_mantenimiento,
+        tm.descripcion,
+        tm.fecha_inicio,
+        tm.fecha_final,
+        t.descripcion AS tarea_descripcion
+    FROM 
+        tarea_mantenimiento tm
+    INNER JOIN tareas t ON tm.idtarea = t.idtarea
+	INNER JOIN activos_tarea ACT ON t.idtarea = ACT.idtarea
+    WHERE 
+        ACT.idactivo = _idactivo
+        AND tm.fecha_inicio >= _fecha_inicio
+        AND (tm.fecha_finalizado <= _fecha_finalizado OR tm.fecha_finalizado IS NULL)
+    ORDER BY 
+        tm.fecha_inicio ASC;
+END $$
+
+DELIMITER ;

@@ -78,13 +78,24 @@ CREATE TABLE ROLES
   CONSTRAINT uk_rol UNIQUE(rol)
 )ENGINE=INNODB;
 
+-- TABLA ESTADOS
+CREATE TABLE tipo_estados
+(
+	idtipo_estado INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_estado   VARCHAR(50) NOT NULL,
+    CONSTRAINT uk_tipo_estado UNIQUE(tipo_estado)
+)ENGINE=INNODB;
+
 CREATE TABLE estados
 (
 	idestado 	INT AUTO_INCREMENT PRIMARY KEY,
-    tipo_estado VARCHAR(50) NOT NULL,
+    idtipo_estado INT NOT NULL,
     nom_estado	VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_idtipo_estado FOREIGN KEY(idtipo_estado) REFERENCES tipo_estados(idtipo_estado),
     CONSTRAINT uk_nom_estado UNIQUE(nom_estado)
 )ENGINE=INNODB;
+-- FIN TABLA ESTADOS
+
 
 CREATE TABLE areas
 (
@@ -107,7 +118,7 @@ CREATE TABLE USUARIOS
   estado	  	TINYINT DEFAULT 1,  -- 1 , 0
   asignacion	int		null default 7,
   perfil		CHAR(3) NOT NULL, -- ADM, RSP, TNC
-  idpefil 		INT NOT NULL,
+  idperfil 		INT NOT NULL,
   idarea		INT NOT NULL,
   responsable_area TINYINT DEFAULT 0, -- 1 Y 0
   CONSTRAINT fk_persona1 FOREIGN KEY (idpersona) REFERENCES PERSONAS(id_persona),
@@ -118,23 +129,6 @@ CREATE TABLE USUARIOS
   CONSTRAINT fk_idarea_usu FOREIGN KEY (idarea) REFERENCES areas(idarea)
 )ENGINE=INNODB;
 
--- TABLA ESTADOS
-CREATE TABLE tipo_estados
-(
-	idtipo_estado INT AUTO_INCREMENT PRIMARY KEY,
-    tipo_estado   VARCHAR(50) NOT NULL,
-    CONSTRAINT uk_tipo_estado UNIQUE(tipo_estado)
-)ENGINE=INNODB;
-
-CREATE TABLE estados
-(
-	idestado 	INT AUTO_INCREMENT PRIMARY KEY,
-    idtipo_estado INT NOT NULL,
-    nom_estado	VARCHAR(50) NOT NULL,
-    CONSTRAINT fk_idtipo_estado FOREIGN KEY(idtipo_estado) REFERENCES tipo_estados(idtipo_estado),
-    CONSTRAINT uk_nom_estado UNIQUE(nom_estado)
-)ENGINE=INNODB;
--- FIN TABLA ESTADOS
 
 CREATE TABLE categorias
 (
@@ -251,7 +245,7 @@ create table tareas
     fecha_inicio	date	not null,
     hora_inicio		time	not null,
     idestado			int		null default 8,
-	CONSTRAINT fk_idusuario	FOREIGN KEY (idusuario) REFERENCES usuarios (id_usuario),
+	CONSTRAINT fk_idusuario	FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_estado	FOREIGN KEY (idestado) REFERENCES estados (idestado)
 )ENGINE=INNODB	;
 
