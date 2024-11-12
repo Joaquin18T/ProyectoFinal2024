@@ -35,10 +35,10 @@ INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 	(6,'gestion-data', '1', 'Gestion', ''),
     
     -- TAREAS 
-    (6,'listar-tareas', '1', 'Tareas', ''),
-    (6,'registrar-tarea', '0', 'Registrar Tarea', ''),    
-    (6,'ejecutar-tarea', '0', 'Ejecutar Tarea', ''),
-    (6,'revisar-tarea', '0', 'Revisar Tarea', '');
+    (7,'listar-tareas', '1', 'Tareas', ''),
+    (7,'registrar-tarea', '0', 'Registrar Tarea', ''),    
+    (7,'ejecutar-tarea', '0', 'Ejecutar Tarea', ''),
+    (7,'revisar-tarea', '0', 'Revisar Tarea', '');
     
 
 INSERT INTO perfiles (perfil, nombrecorto) VALUES
