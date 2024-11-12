@@ -1,3 +1,5 @@
+use db_cmms;
+
 DROP PROCEDURE IF EXISTS sp_filter_marcas_by_subcategoria;
 DELIMITER $$
 CREATE PROCEDURE sp_filter_marcas_by_subcategoria

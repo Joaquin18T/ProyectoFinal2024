@@ -1,3 +1,5 @@
+use db_cmms;
+
 DROP PROCEDURE IF EXISTS sp_user_login;
 DELIMITER $$
 CREATE PROCEDURE sp_user_login

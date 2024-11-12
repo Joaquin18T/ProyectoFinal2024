@@ -1,3 +1,5 @@
+use db_cmms;
+
 DROP PROCEDURE IF EXISTS sp_default_especificacion;
 DELIMITER $$
 CREATE PROCEDURE sp_default_especificacion

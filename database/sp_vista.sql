@@ -1,3 +1,5 @@
+use db_cmms;
+
 -- VISTAS
 DROP PROCEDURE IF EXISTS sp_listar_vistas;
 DELIMITER $$
