@@ -66,6 +66,10 @@ INSERT INTO permisos(idperfil, idvista) VALUES
     (1,11),
     (1,12),
     (1,13),
+    (1,14),
+    (1,15),
+    (1,16),
+    (1,17),
 -- USUARIOS
 	(2,1),
 	(2,10),
@@ -289,7 +293,7 @@ INSERT INTO activos_tarea (idactivos_tarea, idtarea, idactivo) VALUES
     (4, 3, 4);   -- Activo  vinculado a la tarea 3
 
 INSERT INTO tareas_mantenimiento (idtarea, descripcion, fecha_inicio, hora_inicio, fecha_finalizado, hora_finalizado, tiempo_ejecutado) VALUES
-    (1, 'Actualizacion de windows 10', '2024-11-01', '08:00:00', NULL, NULL, NULL),
-    (1, 'Limpiar pantalla', '2024-11-01', '08:00:00', NULL, NULL, NULL),
+    (1, 'Actualizacion de windows 10', '2024-11-01', '08:00:00', '2024-11-02', '11:00:00', '01:30:00'),
+    (1, 'Limpiar pantalla', '2024-11-01', '08:00:00', '2024-11-02', '11:00:00', '01:30:00'),
     (2, 'Cambio de filtros y limpieza', '2024-11-02', '09:30:00', '2024-11-02', '11:00:00', '01:30:00'),
-    (3, 'Revisión de sistemas eléctricos', '2024-11-03', '10:00:00', NULL, NULL, NULL);
+    (3, 'Revisión de sistemas eléctricos', '2024-11-03', '10:00:00', '2024-11-02', '11:00:00', '01:30:00');
