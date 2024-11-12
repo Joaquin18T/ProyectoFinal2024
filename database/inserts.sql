@@ -7,7 +7,8 @@ INSERT INTO modulos (modulo) VALUES
 	('asignaciones'),
 	('bajas'),
     ('reportes'),
-    ('configuracion'); -- ONLY ADMIN
+    ('configuracion'), -- ONLY ADMIN
+    ('tareas');
 
 INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 	(null, 'home',1,'Inicio',''),
@@ -30,8 +31,15 @@ INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 	(5, 'reporte-mantenimiento','0','R. de mantenimiento',''),
 
 	-- Configuracion (se registrara nuevas categorias, subcategorias, marcas, areas, etc.)
-	(6,'gestion-data', '1', 'Gestion', '');
-
+	(6,'gestion-data', '1', 'Gestion', ''),
+	(6,'gestion-data', '1', 'Gestion', ''),
+    
+    -- TAREAS 
+    (6,'listar-tareas', '1', 'Tareas', ''),
+    (6,'registrar-tarea', '0', 'Registrar Tarea', ''),    
+    (6,'ejecutar-tarea', '0', 'Ejecutar Tarea', ''),
+    (6,'revisar-tarea', '0', 'Revisar Tarea', '');
+    
 
 INSERT INTO perfiles (perfil, nombrecorto) VALUES
 	('Administrador', 'ADM'),
