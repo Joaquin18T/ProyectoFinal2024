@@ -7,38 +7,50 @@ INSERT INTO modulos (modulo) VALUES
 	('asignaciones'),
 	('bajas'),
     ('reportes'),
-    ('configuracion'); -- ONLY ADMIN
+    ('configuracion'),
+    ('tareas'); -- ONLY ADMIN
 
 INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 	(null, 'home',1,'Inicio',''),
     
     -- USUARIOS
 	(1,'listar-usuario', '1', 'Usuario', ''),
+	(1,'registrar-usuario', '0', 'Usuario', ''),
+	(1,'update-usuario', '0', 'Usuario', ''),
     
     -- ACTIVOS
 	(2, 'listar-activo', '1', 'Activo', ''),
+	(2, 'registrar-activo', '0', 'Activo', ''),
+	(2, 'update-activo', '0', 'Activo', ''),
     
     -- ASIGNACIONES
-    (3, 'listar-asignacion', '1', 'Asignacion', ''),
+    (3, 'registrar-asignacion', '1', 'Asignacion', ''),
     
     -- BAJAS
     (4, 'listar-activo-baja', '1', 'Baja', ''),
     
+
         -- REPORTES
 	(5, 'reporte','1','Reportes',''), -- FILTRADO POR ESTADO, FECHA REGISTRO, ETC.
 	(5, 'reporte-activo','0','R. de activos',''),
 	(5, 'reporte-mantenimiento','0','R. de mantenimiento',''),
 
 	-- Configuracion (se registrara nuevas categorias, subcategorias, marcas, areas, etc.)
-	(6,'gestion-data', '1', 'Gestion', '');
-
+	(6,'gestion-data', '1', 'Gestion', ''),
+	
+    
+    -- TAREAS
+    (6,'listar-tareas', '1', 'Tareas', ''),
+    (6,'registrar-tarea', '0', 'Registrar Tarea', ''),    
+    (6,'ejecutar-tarea', '0', 'Ejecutar Tarea', ''),
+    (6,'revisar-tarea', '0', 'Revisar Tarea','');
 
 INSERT INTO perfiles (perfil, nombrecorto) VALUES
 	('Administrador', 'ADM'),
 	('Usuario', 'USR'),
 	('Tecnico', 'TNC');
     
-
+-- SELECT*FROM vistas;
 INSERT INTO permisos(idperfil, idvista) VALUES
 -- ADMINISTRADOR
 	(1,1),
@@ -50,11 +62,15 @@ INSERT INTO permisos(idperfil, idvista) VALUES
     (1,7),
     (1,8),
     (1,9),
+    (1,10),
+    (1,11),
+    (1,12),
+    (1,13),
 -- USUARIOS
 	(2,1),
-	(2,6),
-	(2,7),
-	(2,8);
+	(2,10),
+	(2,11),
+	(2,12);
 
 INSERT INTO tipo_doc(tipodoc) VALUES
 	('dni'),
