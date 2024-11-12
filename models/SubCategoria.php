@@ -32,7 +32,37 @@ class SubCategoria extends ExecQuery
     }
   }
 
+  public function getSubcategoriaById($params = []): array
+  {
+    try {
+      $cmd = parent::execQ("SELECT subcategoria FROM subcategorias WHERE idsubcategoria=?");
+      $cmd->execute(
+        array(
+          $params['idsubcategoria']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+      return [];
+    }
+  }
 
+  public function getSubcategoriaByCategoria($params = []): array
+  {
+    try {
+      $cmd = parent::execQ("SELECT * FROM subcategorias WHERE idcategoria = ?");
+      $cmd->execute(
+        array(
+          $params['idcategoria']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+      return [];
+    }
+  }
 }
 
 // $sub = new SubCategoria();

@@ -7,14 +7,13 @@ class Activo extends ExecQuery{
     try{
       $pdo = parent::getConexion();
 
-      $cmd = $pdo->prepare("CALL sp_add_activo(@idactivo,?,?,?,?,?,?,?)");
+      $cmd = $pdo->prepare("CALL sp_add_activo(@idactivo,?,?,?,?,?,?)");
       $cmd->execute(
         array(
           $params['idsubcategoria'],
           $params['idmarca'],
           $params['modelo'],
           $params['cod_identificacion'],
-          $params['fecha_adquisicion'],
           $params['descripcion'],
           $params['especificaciones']
         )

@@ -39,8 +39,6 @@ DELIMITER $$
 CREATE PROCEDURE sp_update_persona
 (
 	IN _idpersona INT,
-    IN _idtipodoc INT,
-    IN _num_doc	VARCHAR(20),
     IN _apellidos VARCHAR(100),
     IN _nombres VARCHAR(100),
     IN _genero	CHAR(1),
@@ -48,8 +46,6 @@ CREATE PROCEDURE sp_update_persona
 )
 BEGIN
 	UPDATE personas SET
-	idtipodoc = _idtipodoc,
-    num_doc = _num_doc,
     apellidos = _apellidos,
     nombres = _nombres,
     genero = _genero,
@@ -57,7 +53,7 @@ BEGIN
     update_at = NOW()
     WHERE id_persona = _idpersona;
 END $$
--- CALL sp_update_persona(4,1,'95858344', 'Valdez Saravia', 'Luka', 'M', '987485783');
+-- CALL sp_update_persona('Valdez Saravia', 'Luka', 'M', '987485783');
 
 DROP PROCEDURE IF EXISTS sp_search_persona_by_id;
 DELIMITER $$

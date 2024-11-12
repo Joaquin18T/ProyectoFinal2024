@@ -30,7 +30,7 @@ class Usuario extends ExecQuery{
   public function add($params=[]):int{
     try{
       $pdo = parent::getConexion();
-      $cmd = $pdo->prepare('CALL sp_add_usuario(@idpersona,?,?,?,?,?,?,?)');
+      $cmd = $pdo->prepare('CALL sp_add_usuario(@idusuario,?,?,?,?,?,?,?)');
       $cmd->execute(
         array(
           $params['idpersona'],
@@ -43,8 +43,8 @@ class Usuario extends ExecQuery{
         )
       );
 
-      $respuesta = $pdo->query("SELECT @idpersona AS idpersona")->fetch(PDO::FETCH_ASSOC);
-      return $respuesta['idpersona'];
+      $respuesta = $pdo->query("SELECT @idusuario AS idusuario")->fetch(PDO::FETCH_ASSOC);
+      return $respuesta['idusuario'];
     }catch(Exception $e){
       error_log("Error: ".$e->getMessage());
       return -1;
@@ -151,16 +151,47 @@ class Usuario extends ExecQuery{
     try {
       $cmd = parent::execQ("CALL sp_search_nom_usuario(?)");
       $cmd->execute(
-        array($params['usuario'])
+        array($params['nom_usuario'])
       );
       return $cmd->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
       die($e->getMessage());
     }
   }
-}
-// $user = new Usuario();
 
+  public function existeResponsableArea($params=[]):array{
+    try{
+      $cmd = parent::execQ("CALL sp_existe_responsable_area(?)");
+      $cmd->execute(
+        array(
+          $params['idarea']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    }catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
+    }
+  }
+
+  public function designarResponsableArea($params=[]):bool{
+    try{
+      $state = false;
+      $cmd = parent::execQ("CALL sp_designar_responsable_area(?,?)");
+      $state = $cmd->execute(
+        array(
+          $params['idusuario'],
+          $params['responsable_area']
+        )
+      );
+      return $state;
+    }catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
+      return false;
+    }
+  }
+}
+//  $user = new Usuario();
+//  echo json_encode($user->existeResponsableArea(['idarea'=>1]));
 // $up = $user->cambiarAreaUsuario(['idusuario'=>3, 'idarea'=>2]);
 // echo $up;
 

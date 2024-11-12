@@ -160,6 +160,14 @@ CREATE TABLE detalles_marca_subcategoria
     CONSTRAINT fk_idsubcategoria FOREIGN KEY (idsubcategoria) REFERENCES subcategorias (idsubcategoria)
 )ENGINE = INNODB;
 
+CREATE TABLE especificacionesdefecto
+(
+	idespecificacionD	INT AUTO_INCREMENT PRIMARY KEY,
+    idsubcategoria		INT NOT NULL,
+    especificaciones 	JSON NOT NULL,
+    CONSTRAINT uk_subcategoria_especificacion UNIQUE(idsubcategoria, especificaciones)
+)ENGINE=INNODB;
+
 CREATE TABLE activos
 (
 	idactivo			INT AUTO_INCREMENT PRIMARY KEY,
@@ -168,10 +176,11 @@ CREATE TABLE activos
     idestado			INT 		NOT NULL DEFAULT 1,
     modelo				VARCHAR(60) NULL,
     cod_identificacion	VARCHAR(40) NOT NULL, -- VARCHAR para mayor flexibilidad
-    fecha_adquisicion	DATE 		NOT NULL,
+    fecha_adquisicion	DATE 		NOT NULL DEFAULT NOW(),
     descripcion			VARCHAR(200) NULL,
     especificaciones	JSON 		NOT NULL,
     create_at	DATETIME NOT NULL DEFAULT NOW(),
+    update_at 	DATETIME NULL,
     CONSTRAINT fkidmarca	 FOREIGN KEY (idmarca)	REFERENCES marcas(idmarca),
     CONSTRAINT fk_actsubcategoria FOREIGN KEY(idsubcategoria) REFERENCES subcategorias(idsubcategoria),
     CONSTRAINT fk_idestado FOREIGN KEY (idestado) REFERENCES estados(idestado),
@@ -207,11 +216,22 @@ CREATE TABLE historial_asignaciones_activos
     CONSTRAINT fk_responsable_his FOREIGN KEY(idresponsable) REFERENCES usuarios (idusuario)
 )ENGINE=INNODB;
 
+CREATE TABLE historial_areas_usuarios
+(
+	idhistorial_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    idusuario			INT NOT NULL,
+    idarea				INT NOT NULL,
+    fecha_inicio		DATETIME NOT NULL DEFAULT NOW(),
+    fecha_fin			DATETIME NULL,
+    comentario			VARCHAR(500) NULL,
+    CONSTRAINT fk_usuario_his FOREIGN KEY (idusuario)REFERENCES usuarios (idusuario),
+    CONSTRAINT fk_idarea_his FOREIGN KEY (idarea) REFERENCES areas(idarea)
+)ENGINE = INNODB;
+
 CREATE TABLE notificaciones_asignaciones
 (
 	idnotificacion_activo	INT AUTO_INCREMENT PRIMARY KEY,
     idactivo_asig			INT NULL, 
-    tipo					VARCHAR(90) NOT NULL,
     mensaje					VARCHAR(250) NOT NULL,
     fecha_creacion			DATETIME NOT NULL DEFAULT NOW(),
     visto					TINYINT(1) NOT NULL DEFAULT 0,
@@ -222,6 +242,7 @@ CREATE TABLE notificaciones_asignaciones
     -- CONSTRAINT fk_idactivo_noti_activo FOREIGN KEY(idactivo) REFERENCES activos(idactivo)
     
 )ENGINE = INNODB;
+
 
 CREATE TABLE bajas_activo
 (
@@ -244,12 +265,22 @@ create table tareas
 (
 	idtarea		int auto_increment primary key,
     idusuario	int	not null,
-    fecha_inicio	date	not null,
+    fecha_inicio	date	not null, -- fecha programada
     hora_inicio		time	not null,
     idestado			int		null default 8,
 	CONSTRAINT fk_idusuario	FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_estado	FOREIGN KEY (idestado) REFERENCES estados (idestado)
 )ENGINE=INNODB	;
+
+CREATE TABLE notificaciones_tareas
+(
+	idnotificacion_tarea 	INT AUTO_INCREMENT PRIMARY KEY,
+    idtarea 				INT NOT NULL,
+    mensaje					VARCHAR(250) NOT NULL,
+    visto					TINYINT(1) NOT NULL DEFAULT 0,
+    create_at DATETIME NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_idtarea_notif FOREIGN KEY(idtarea) REFERENCES tareas(idtarea)
+)ENGINE = INNODB;
 
 CREATE TABLE activos_tarea
 (

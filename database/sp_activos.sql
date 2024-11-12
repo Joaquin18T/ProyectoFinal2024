@@ -9,7 +9,6 @@ CREATE PROCEDURE sp_add_activo
 	IN _idmarca INT,
     IN _modelo VARCHAR(60),
     IN _cod_identificacion CHAR(40),
-    IN _fecha_adquisicion DATE,
     IN _descripcion VARCHAR(200),
     IN _especificaciones JSON
 )
@@ -21,8 +20,8 @@ BEGIN
         SET existe_error = 1;
 	END;
     
-	INSERT INTO activos(idsubcategoria, idmarca, modelo, cod_identificacion, fecha_adquisicion, descripcion, especificaciones) VALUES
-		(_idsubcategoria, _idmarca, _modelo, _cod_identificacion, _fecha_adquisicion, _descripcion, _especificaciones);
+	INSERT INTO activos(idsubcategoria, idmarca, modelo, cod_identificacion, descripcion, especificaciones) VALUES
+		(_idsubcategoria, _idmarca, _modelo, _cod_identificacion, _descripcion, _especificaciones);
         
 	IF existe_error= 1 THEN
 		SET _idactivo = -1;
@@ -92,7 +91,8 @@ BEGIN
     AND (A.modelo LIKE CONCAT('%', _modelo, '%') OR _modelo IS NULL)
     AND (A.cod_identificacion LIKE CONCAT('%', _cod_identificacion, '%') OR _cod_identificacion IS NULL)
     AND (AR.idarea = _idarea OR _idarea IS NULL)
-    AND (A.fecha_adquisicion>=_fecha_adquisicion AND A.fecha_adquisicion<=_fecha_adquisicion_fin OR _fecha_adquisicion IS NULL OR _fecha_adquisicion_fin IS NULL);
+    AND (A.fecha_adquisicion>=_fecha_adquisicion AND A.fecha_adquisicion<=_fecha_adquisicion_fin OR _fecha_adquisicion IS NULL OR _fecha_adquisicion_fin IS NULL)
+    ORDER BY A.create_at DESC;
 END $$
 
 -- CALL sp_filtrar_activos(null,null,null,null,NULL,null,null,'2024-11-10','2024-11-11');

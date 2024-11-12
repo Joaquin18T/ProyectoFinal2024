@@ -121,7 +121,8 @@ BEGIN
 			AND (U.estado = _estado OR _estado IS NULL)
             AND (U.responsable_area = _responsable_area OR _responsable_area IS NULL)
             AND (U.idarea = _idarea OR _idarea IS NULL)
-            AND (PER.idperfil = _idperfil OR _idperfil IS NULL);
+            AND (PER.idperfil = _idperfil OR _idperfil IS NULL)
+            ORDER BY U.create_at DESC;
 END $$
 -- CALL sp_filtrar_usuarios(null, null, null, 1, null, null, 3);
 
@@ -171,3 +172,30 @@ BEGIN
 END $$
 
 -- CALL sp_search_nom_usuario('luka');
+
+DROP PROCEDURE IF EXISTS sp_existe_responsable_area;
+DELIMITER $$
+CREATE PROCEDURE sp_existe_responsable_area
+(
+	IN _idarea INT
+)
+BEGIN
+	SELECT COUNT(*) as existe FROM usuarios
+    WHERE responsable_area = 1 AND idarea = _idarea;
+END $$
+
+-- CALL sp_existe_responsable_area(1);
+
+DROP PROCEDURE IF EXISTS sp_designar_responsable_area;
+DELIMITER $$
+CREATE PROCEDURE sp_designar_responsable_area
+(
+	IN _idusuario INT,
+    IN _responsable_area TINYINT
+)
+BEGIN
+	UPDATE usuarios SET
+    responsable_area = _responsable_area
+    WHERE idusuario = _idusuario;
+END $$
+CALL sp_designar_responsable_area(1,1);

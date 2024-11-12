@@ -29,12 +29,10 @@ class Persona extends ExecQuery{
   {
     try {
       $status = false;
-      $cmd = parent::execQ("CALL sp_update_persona(?,?,?,?,?,?,?)");
+      $cmd = parent::execQ("CALL sp_update_persona(?,?,?,?,?)");
       $status = $cmd->execute(
         array(
           $params['idpersona'],
-          $params['idtipodoc'],
-          $params['num_doc'],
           $params['apellidos'],
           $params['nombres'],
           $params['genero'],
@@ -43,6 +41,20 @@ class Persona extends ExecQuery{
       );
       return $status;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function getPersonaById($params=[]):array{
+    try{
+      $cmd = parent::execQ("CALL sp_search_persona_by_id(?)");
+      $cmd->execute(
+        array(
+          $params['idpersona']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    }catch (Exception $e) {
       die($e->getMessage());
     }
   }
