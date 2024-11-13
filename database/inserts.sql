@@ -76,6 +76,7 @@ INSERT INTO permisos(idperfil, idvista) VALUES
 	(2,12),
     
 -- TECNICO
+    (3,1),
 	(3,14),
     (3,16);
 
@@ -267,12 +268,32 @@ VALUES
 
 INSERT INTO notificaciones_asignaciones (idactivo_asig,tipo, mensaje)
 VALUES
-    (1, 'Asignación', 'Activo asignado a departamento de TI'),
-    (2, 'Reasignación', 'Activo movido a área administrativa'),
-    (3, 'Mantenimiento', 'Activo enviado a mantenimiento preventivo');
+    (1, 'Activo asignado a departamento de TI'),
+    (2, 'Activo movido a área administrativa'),
+    (3, 'Activo enviado a mantenimiento preventivo');
 
 INSERT INTO bajas_activo (idactivo, motivo, coment_adicionales, ruta_doc, idusuario_aprobacion)
 VALUES
     (1, 'Obsolescencia', 'Activo reemplazado por equipo más moderno', 'docs/baja_activo1.pdf', 1),
     (2, 'Daño irreparable', 'Activo dañado sin posibilidad de reparación', 'docs/baja_activo2.pdf', 1),
     (3, 'Fin de vida útil', 'Activo retirado por antigüedad', 'docs/baja_activo3.pdf', 1);
+    
+
+-- ***************************** INSERTS ROYER **********************************************
+
+INSERT INTO tareas (idusuario, fecha_inicio, hora_inicio, idestado) VALUES
+    (1, '2024-11-01', '08:00:00', 8),
+    (2, '2024-11-02', '09:30:00', 8),
+    (3, '2024-11-03', '10:00:00', NULL);  -- `idestado` es NULL, lo que establece el estado predeterminado
+
+INSERT INTO activos_tarea (idactivos_tarea, idtarea, idactivo) VALUES
+    (1, 1, 1),   -- Activo  vinculado a la tarea 1
+    (2, 1, 2),   -- Activo  vinculado a la tarea 1
+    (3, 2, 3),   -- Activo  vinculado a la tarea 2
+    (4, 3, 4);   -- Activo  vinculado a la tarea 3
+
+INSERT INTO tareas_mantenimiento (idtarea, descripcion, fecha_inicio, hora_inicio, fecha_finalizado, hora_finalizado, tiempo_ejecutado) VALUES
+    (1, 'Actualizacion de windows 10', '2024-11-01', '08:00:00', '2024-11-02', '11:00:00', '01:30:00'),
+    (1, 'Limpiar pantalla', '2024-11-01', '08:00:00', '2024-11-02', '11:00:00', '01:30:00'),
+    (2, 'Cambio de filtros y limpieza', '2024-11-02', '09:30:00', '2024-11-02', '11:00:00', '01:30:00'),
+    (3, 'Revisión de sistemas eléctricos', '2024-11-03', '10:00:00', '2024-11-02', '11:00:00', '01:30:00');
