@@ -67,3 +67,31 @@ BEGIN
     WHERE id_persona = _idpersona;
 END $$
 -- CALL sp_search_persona_by_id(2);
+
+DROP PROCEDURE IF EXISTS sp_search_persona_numdoc;
+DELIMITER $$
+CREATE PROCEDURE sp_search_persona_numdoc
+(
+	IN _numdoc VARCHAR(20)
+)
+BEGIN
+	SELECT 
+    P.id_persona, P.apellidos, P.nombres, P.genero, P.telefono, P.idtipodoc,
+    U.nom_usuario, U.idperfil, U.idarea, U.responsable_area
+    FROM usuarios U
+    INNER JOIN personas P ON U.idpersona = P.id_persona
+    WHERE P.num_doc = _numdoc;
+END $$
+
+-- CALL sp_search_persona_numdoc('12345678');
+
+DELIMITER $$
+CREATE PROCEDURE sp_search_telefono
+(
+	IN _telefono CHAR(9)
+)
+BEGIN
+	SELECT id_persona FROM personas WHERE telefono =_telefono;
+END $$
+
+-- CALL sp_search_telefono('555-1234');

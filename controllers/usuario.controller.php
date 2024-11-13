@@ -38,6 +38,7 @@ if(isset($_GET['operation'])){
         'idtipodoc'=>$_GET['idtipodoc']==''?null:$usuario->limpiarCadena($_GET['idtipodoc']),
         'estado'=>$_GET['estado']==''?null:$usuario->limpiarCadena($_GET['estado']),
         'responsable_area'=>$_GET['responsable_area']==''?null:$usuario->limpiarCadena($_GET['responsable_area']),
+        'idarea'=>$_GET['idarea']==''?null:$usuario->limpiarCadena($_GET['idarea']),
         'idperfil'=>$_GET['idperfil']==''?null:$usuario->limpiarCadena($_GET['idperfil'])
       ];
       echo json_encode($usuario->filtrarUsuarios($cleanData));
@@ -111,7 +112,7 @@ if(isset($_POST['operation'])){
         'perfil'=>$usuario->limpiarCadena($_POST['perfil']),
         'idperfil'=>$usuario->limpiarCadena($_POST['idperfil']),
         'idarea'=>$usuario->limpiarCadena($_POST['idarea']),
-        'idresponsable_area'=>$usuario->limpiarCadena($_POST['idresponsable_area'])
+        'responsable_area'=>$usuario->limpiarCadena($_POST['responsable_area'])
       ];
 
       $respuesta=['idusuario'=>-1];

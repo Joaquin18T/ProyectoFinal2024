@@ -95,21 +95,25 @@ class Usuario extends ExecQuery{
         'idtipodoc' => null,
         'estado' => null,
         'responsable_area' => null,
+        'idarea' => null,
         'idperfil' => null,
       ];
 
       $realParams = array_merge($defaultParams, $params);
 
-      $cmd = parent::execQ("CALL sp_filtrar_usuarios(?,?,?,?,?,?)");
+      $cmd = parent::execQ("CALL sp_filtrar_usuarios(?,?,?,?,?,?,?)");
       $cmd->execute(
         array(
           $realParams['dato'],
           $realParams['numdoc'],
           $realParams['idtipodoc'],
+          $realParams['estado'],
           $realParams['responsable_area'],
+          $realParams['idarea'],
           $realParams['idperfil']
         )
       );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
     }catch(Exception $e){
       error_log("Error: ".$e->getMessage());
       return [];
@@ -190,7 +194,17 @@ class Usuario extends ExecQuery{
     }
   }
 }
-//  $user = new Usuario();
+// $user = new Usuario();
+
+// echo json_encode($user->filtrarUsuarios([
+//   'dato' => null,
+//   'numdoc' => null,
+//   'idtipodoc' => null,
+//   'estado' => null,
+//   'responsable_area' => null,
+//   'idarea' => null,
+//   'idperfil' => null
+// ]));
 //  echo json_encode($user->existeResponsableArea(['idarea'=>1]));
 // $up = $user->cambiarAreaUsuario(['idusuario'=>3, 'idarea'=>2]);
 // echo $up;

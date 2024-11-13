@@ -40,11 +40,11 @@ INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 	
     
     -- TAREAS
-    (6,'listar-tareas', '1', 'Tareas', ''),
-    (6,'registrar-tarea', '0', 'Registrar Tarea', ''),    
-    (6,'ejecutar-tarea', '0', 'Ejecutar Tarea', ''),
-    (6,'revisar-tarea', '0', 'Revisar Tarea','');
-
+    (7,'listar-tareas', '1', 'Tareas', ''),
+    (7,'registrar-tarea', '0', 'Registrar Tarea', ''),    
+    (7,'ejecutar-tarea', '0', 'Ejecutar Tarea', ''),
+    (7,'revisar-tarea', '0', 'Revisar Tarea','');
+-- SELECT*FROM vistas
 INSERT INTO perfiles (perfil, nombrecorto) VALUES
 	('Administrador', 'ADM'),
 	('Usuario', 'USR'),
@@ -66,21 +66,29 @@ INSERT INTO permisos(idperfil, idvista) VALUES
     (1,11),
     (1,12),
     (1,13),
+    (1,14),
+    (1,15),
+    (1,17),
 -- USUARIOS
 	(2,1),
 	(2,10),
 	(2,11),
-	(2,12);
+	(2,12),
+    
+-- TECNICO
+	(3,14),
+    (3,16);
 
 INSERT INTO tipo_doc(tipodoc) VALUES
-	('dni'),
+	('DNI'),
     ('Carnet de extranjeria');
     
 INSERT INTO areas (area) VALUES
-    ('Departamento de TI'),        
+	('Departamento de TI'),        
     ('Área Administrativa'),         
     ('Area contable'),
-    ('Logística y Transporte');
+    ('Logística y Transporte'),
+    ('No Asignado');
 
 INSERT INTO tipo_estados(tipo_estado) VALUES
 	('usuario'),
@@ -108,11 +116,11 @@ INSERT INTO estados (idtipo_estado, nom_estado) VALUES
 
 -- Insertando en la tabla PERSONAS
 INSERT INTO PERSONAS (idtipodoc, num_doc, apellidos, nombres, genero, telefono)VALUES 
-(1, '1234567890', 'Gonzalez', 'Juan', 'M', '555-1234'),
+(1, '12345678', 'Gonzalez', 'Juan', 'M', '555-1234'),
 
-(1, '2345678901', 'Martinez', 'Ana', 'F', '555-5678'),
+(1, '23456789', 'Martinez', 'Ana', 'F', '555-5678'),
 
-(1, '3456789012', 'Ramirez', 'Luis', 'M', '555-8765');
+(1, '34567890', 'Ramirez', 'Luis', 'M', '555-8765');
 
 
 -- Insertando en la tabla USUARIOS
@@ -240,16 +248,16 @@ VALUES
     (6, 4, 'Chevrolet Silverado', 'VE-006', '2021-12-11', 'Camioneta para trabajo', '{"motor":"V8", "capacidad_asientos":"6"}', 6),
     (3,3, 'Teclado Logitech D4', 'FR5-345K', '2023-08-10', 'Teclado para empleados', '{"tipo":"mecanico"}', 6);
     
-
+-- select*from estados;
 INSERT INTO activos_asignados (idarea, idactivo, condicion_asig, imagenes, idestado)
 VALUES
-    (1, 1, 'Asignado para uso general en el departamento de TI', '{"img1": "imagen1.jpg"}', 3),
-    (2, 2, 'Asignado para el área administrativa', '{"img2": "imagen2.jpg"}', 3),
-    (3, 3, 'Asignado para area de contable', '{"img3": "imagen3.jpg"}', 2),
-    (4, 6, 'Asignado al área de Logística y Transporte para transporte de carga pesada', '{"img4": "camion_carga.jpg"}', 3),
-    (4, 7, 'Asignado al área de Logística y Transporte para trabajo pesado', '{"img5": "camioneta_trabajo.jpg"}', 3),
-    (4, 8, 'Asignado al área de Logística y Transporte para patrullaje', '{"img6": "motocicleta_patrullaje.jpg"}', 3),
-    (4, 20, 'Asignado al área de Logística y Transporte para carga pesada', '{"img7": "camion_carga_pesada.jpg"}', 3);
+    (1, 1, 'Asignado para uso general en el departamento de TI', '{"img1": "imagen1.jpg"}', 14),
+    (2, 2, 'Asignado para el área administrativa', '{"img2": "imagen2.jpg"}', 14),
+    (3, 3, 'Asignado para area de contable', '{"img3": "imagen3.jpg"}', 14),
+    (4, 6, 'Asignado al área de Logística y Transporte para transporte de carga pesada', '{"img4": "camion_carga.jpg"}', 14),
+    (4, 7, 'Asignado al área de Logística y Transporte para trabajo pesado', '{"img5": "camioneta_trabajo.jpg"}', 14),
+    (4, 8, 'Asignado al área de Logística y Transporte para patrullaje', '{"img6": "motocicleta_patrullaje.jpg"}', 14),
+    (4, 20, 'Asignado al área de Logística y Transporte para carga pesada', '{"img7": "camion_carga_pesada.jpg"}', 14);
 
 INSERT INTO historial_asignaciones_activos (idactivo_asig, idresponsable, coment_adicional)
 VALUES
@@ -257,7 +265,7 @@ VALUES
     (2, 1, 'Reasignado para trabajos administrativos'),
     (3, 1, 'Enviado a mantenimiento preventivo');
 
-INSERT INTO notificaciones_asignaciones (idactivo_asig, tipo, mensaje)
+INSERT INTO notificaciones_asignaciones (idactivo_asig,tipo, mensaje)
 VALUES
     (1, 'Asignación', 'Activo asignado a departamento de TI'),
     (2, 'Reasignación', 'Activo movido a área administrativa'),

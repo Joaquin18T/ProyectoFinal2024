@@ -66,13 +66,12 @@ CREATE TABLE PERSONAS
 	genero        char(1)             not null,
 	telefono      char(15)		      null,
     create_at	  DATETIME			  NOT NULL DEFAULT NOW(),
-    update_at	  DATETIME			  NOT NULL, 
+    update_at	  DATETIME			  NULL, 
 	constraint    uk_telefono         UNIQUE(telefono),
 	constraint    uk_num_doc          UNIQUE(num_doc),
 	constraint    fk_idtipodoc        foreign key (idtipodoc) references TIPO_DOC (idtipodoc),
 	constraint    chk_genero          CHECK(genero IN('M', 'F'))
 )ENGINE=INNODB;
-
 
 CREATE TABLE areas
 (
@@ -232,6 +231,7 @@ CREATE TABLE notificaciones_asignaciones
 (
 	idnotificacion_activo	INT AUTO_INCREMENT PRIMARY KEY,
     idactivo_asig			INT NULL, 
+    tipo 					VARCHAR(50) NOT NULL,
     mensaje					VARCHAR(250) NOT NULL,
     fecha_creacion			DATETIME NOT NULL DEFAULT NOW(),
     visto					TINYINT(1) NOT NULL DEFAULT 0,
