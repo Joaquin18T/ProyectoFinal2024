@@ -117,6 +117,7 @@ CREATE TABLE USUARIOS
   idarea		INT NOT NULL,
   responsable_area TINYINT DEFAULT 0, -- 1 Y 0
   create_at		DATETIME NOT NULL DEFAULT NOW(),
+  update_at 	DATETIME NULL,
   CONSTRAINT fk_persona_user FOREIGN KEY (idpersona) REFERENCES personas(id_persona),
   CONSTRAINT uk_idpersona_user UNIQUE(idpersona,nom_usuario),
   CONSTRAINT fk_idperfil_user FOREIGN KEY (idperfil) REFERENCES perfiles(idperfil),

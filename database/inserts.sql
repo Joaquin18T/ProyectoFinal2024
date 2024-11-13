@@ -69,7 +69,7 @@ INSERT INTO permisos(idperfil, idvista) VALUES
     (1,14),
     (1,15),
     (1,17),
--- USUARIOS
+-- SUPERVISOR
 	(2,1),
 	(2,10),
 	(2,11),
@@ -268,9 +268,9 @@ VALUES
 
 INSERT INTO notificaciones_asignaciones (idactivo_asig,tipo, mensaje)
 VALUES
-    (1, 'Activo asignado a departamento de TI'),
-    (2, 'Activo movido a área administrativa'),
-    (3, 'Activo enviado a mantenimiento preventivo');
+    (1,'Asignacion', 'Activo asignado a departamento de TI'),
+    (2,'Cambio de Area', 'Activo movido a área administrativa'),
+    (3,'Mantenimiento', 'Activo enviado a mantenimiento preventivo');
 
 INSERT INTO bajas_activo (idactivo, motivo, coment_adicionales, ruta_doc, idusuario_aprobacion)
 VALUES

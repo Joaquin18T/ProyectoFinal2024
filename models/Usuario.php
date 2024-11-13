@@ -51,7 +51,7 @@ class Usuario extends ExecQuery{
     }
   }
 
-  public function updateUsuario($params=[]):bool{
+  public function updateUsuario($params=[]):int{
     try{
       $pdo = parent::getConexion();
       $cmd = $pdo->prepare("CALL sp_update_usuario(@idpersona, ?, ?)");
@@ -196,6 +196,9 @@ class Usuario extends ExecQuery{
 }
 // $user = new Usuario();
 
+// $up = $user->cambiarAreaUsuario(['idusuario'=>4, 'idarea'=>3]);
+// echo $up;
+
 // echo json_encode($user->filtrarUsuarios([
 //   'dato' => null,
 //   'numdoc' => null,
@@ -205,7 +208,7 @@ class Usuario extends ExecQuery{
 //   'idarea' => null,
 //   'idperfil' => null
 // ]));
-//  echo json_encode($user->existeResponsableArea(['idarea'=>1]));
+//echo json_encode($user->existeResponsableArea(['idarea'=>1]));
 // $up = $user->cambiarAreaUsuario(['idusuario'=>3, 'idarea'=>2]);
 // echo $up;
 
@@ -220,7 +223,7 @@ class Usuario extends ExecQuery{
 // ]);
 // echo $id;
 
-// $up = $user->updateUsuario(['idusuario'=>7, 'idperfil'=>3]);
+// $up = $user->updateUsuario(['idusuario'=>1, 'idperfil'=>1]);
 // echo $up;
 
 // echo json_encode($user->login(['nom_usuario'=>'ana.martinez']));

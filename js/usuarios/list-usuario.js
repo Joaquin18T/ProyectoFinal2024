@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  //Nota: Se puede actualizar el estado del usuario cuando esta de baja?
   let myTable = null;
   const globals = {
-    iduserBaja:""
+    idusuario:0,
+    idarea:0,
+    iduserBaja:"",
   }
   const host = "http://localhost/SIGEMAPRE/controllers/";
 
@@ -17,13 +20,29 @@ document.addEventListener("DOMContentLoaded", () => {
   //Areas
   (async()=>{
     const data = await getDatos(`${host}area.controller.php`,"operation=getAll");
+    const options = addOptions(data);
+
+    options.forEach(x=>{
+      selector("area").appendChild(x);
+    });
+
+    const optionSB = addOptions(data);
+    optionSB.forEach(x=>{
+      selector("sb-area").appendChild(x);
+    });
+    
+  })();
+
+  function addOptions(data=[]){
+    let lisOptions = [];
     data.forEach(x=>{
       const element = document.createElement("option");
       element.textContent = x.area;
       element.value = x.idarea;
-      selector("area").appendChild(element);
+      lisOptions.push(element);
     });
-  })();
+    return lisOptions;
+  }
 
   //Perfiles
   (async () => {
@@ -98,6 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
               ${parseInt(x.estado)===0?'Ninguna Accion':
                 `<button type="button" class="btn btn-sm btn-warning update-user" data-iduser=${x.idusuario}>Update</button>
                 <button type="button" class="btn btn-sm btn-danger dar-baja" data-iduser=${x.idusuario}>Dar baja</button>
+                <button type="button" class="btn btn-sm btn-info change-area" data-iduser=${x.idusuario} data-idarea=${x.idarea}>
+                  Areas
+                </button>
                 `
               }
           </td>
@@ -163,6 +185,11 @@ document.addEventListener("DOMContentLoaded", () => {
           globals.iduserBaja = e;
           showModalBaja();
         }
+        if(e.target.classList.contains("change-area")){
+          globals.idusuario = parseInt(e.target.getAttribute("data-iduser"));
+          globals.idarea=parseInt(e.target.getAttribute("data-idarea"));
+          changeArea(e);
+        }
       }
     });
   }
@@ -189,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
     modalImg.show();
   }
   
-
   selector("aceptar-baja").addEventListener("click",async()=>{
     await DarBajaUsuario();
   });
@@ -198,21 +224,73 @@ document.addEventListener("DOMContentLoaded", () => {
     const iduser = globals.iduserBaja.target.getAttribute("data-iduser");
   
     const params = new FormData();
-    params.append("operation","darBajaUser");
-    params.append("estado","0");
+    params.append("operation","updateEstadoUser");
     params.append("idusuario",parseInt(iduser));
+    params.append("estado",0);
 
     const data = await fetch(`${host}usuario.controller.php`, {
       method:'POST',
       body:params
     });
 
-    const {respuesta} = await data.json();
-    if(respuesta>0){
-      console.log("actualizado");
+    const {update} = await data.json();
+    if(update){
+      alert("Al usuario se le ha dado de baja correctamente");
       
       await showUsuarios();
     }
   }
 
+  async function changeArea(e){
+    console.log("iduser", globals.idusuario);
+    console.log("idarea", globals.idarea);
+    
+    const nomArea = await getAreaId(globals.idarea);
+
+    selector("sb-show-current-area").innerHTML=`(Area actual: ${nomArea[0].area})`;
+
+    const modalImg = new bootstrap.Modal(selector("sb-change-area"));
+    modalImg.show();
+  }
+
+  async function getAreaId(id){
+    const params = new URLSearchParams();
+    params.append("operation","getAreaById");
+    params.append("idarea",parseInt(id));
+
+    const data = await getDatos(`${host}area.controller.php`, params);
+    return data;
+  }
+
+  selector("save-change-area").addEventListener("click",async()=>{
+    if(confirm("¿Estas seguro de actualizar el area del usuario?")){
+      const nuevaArea = selector("sb-area").value;
+      const resp = await updateArea(globals.idusuario, nuevaArea);
+      // let modal = new bootstrap.Modal(selector("sb-change-area"));
+      // modal.hide();
+      console.log(resp);
+      
+      //validar si es responsable anterior
+      if(resp.update){
+        await showUsuarios();
+        const myModal = bootstrap.Modal.getOrCreateInstance(selector("sb-change-area"));
+        myModal.hide();
+        alert("Se ha actualizado el area");
+      }
+    }
+  });
+
+  async function updateArea(iduser, idarea){
+    const params = new FormData();
+    params.append("operation","cambiarAreaUser");
+    params.append("idusuario",iduser);
+    params.append("idarea",parseInt(idarea));
+
+    const data = await fetch(`${host}usuario.controller.php`, {
+      method:'POST',
+      body:params
+    });
+    const resp = await data.json();
+    return resp;
+  }
 });

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   const host = "http://localhost/SIGEMAPRE/controllers/";
   let isReset= false;
   let isTenico = false;
+  let nomPerfil = "";
   blockCamps(true);
   function selector(value) {
     return document.querySelector(`#${value}`);
@@ -69,12 +70,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   selector("perfil").addEventListener("change",()=>{
     const selectPerfil = selector("perfil");
     const textOption = selectPerfil.options[selectPerfil.selectedIndex].text;
-    if(textOption==="Tecnico"){
+    if(textOption==="Tecnico" || textOption==="Administrador"){
       selector("responsable").disabled= true;
+      nomPerfil = textOption;
       isTenico=true;
     }else{
       selector("responsable").disabled= false;
-
     }
     
   });
@@ -176,7 +177,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   //Registrar Persona
-  selector("btnEnviar").addEventListener("click",async(e)=>{
+  selector("form-person-user").addEventListener("submit",async(e)=>{
     e.preventDefault();
     isReset=true;
     await validateNumDoc(); //valida que el numero de caracteres y otras validaciones sean correctas
@@ -188,16 +189,22 @@ document.addEventListener("DOMContentLoaded",()=>{
     const validarClaveAcceso = validarClave(selector("password").value); //valida la clave de acceso
     //console.log(validarClaveAcceso);
     const validarTipoNumDoc = validateTipoDocNumDoc(); //valida la cantidad de num doc con el tipodoc
-    console.log(validarTipoNumDoc);
+    //console.log(validarTipoNumDoc);
     //console.log(selector("tipodoc").value);
     const unikeUser = await searchNomUser(selector("usuario").value);// valida que el nom usuario sea unico
     //console.log(unikeUser);
+
+    //Valida si existe un responsable en el area elegida
+    const responsableArea = await existeResponsableArea(selector("area").value);
     //const validNumDoc = validateNumDoc();
     // const idperfil = await getPerfil(2);
-    // console.log(idperfil);
+    //console.log(responsableArea);
+
+    const chooseSUP = (nomPerfil==="Supervisor" && parseInt(selector("responsable").value)===1);
+    //preguntar si al elegir como sup si o si debe ser responsable de un area
     
     if(validateFields && isUnikeTelf.length===0 && unikeUser.length===0&&
-      validarClaveAcceso && validarTipoNumDoc && numericTelefono){
+      validarClaveAcceso && validarTipoNumDoc && numericTelefono && parseInt(responsableArea[0].existe)===0){
         if(confirm("¿Estas seguro de registrar?")){
           const params = new FormData();
           params.append("operation", "addPersona");
@@ -219,10 +226,10 @@ document.addEventListener("DOMContentLoaded",()=>{
               alert("Se ha registrado correctamente");
               isTenico=false;
             }
-            //console.log(usuario.idusuario);
             resetUI();
             selector("numDoc").value="";
             blockCamps(true);
+            selector("numDoc").focus();
           }else{
             alert("Hubo un error al registrar los datos de la persona");
           }
@@ -236,6 +243,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       if(!validarClaveAcceso){message="el minimo de caracteres para la clave es de 8";}
       if(!validarTipoNumDoc){message="El tipo de documento elegido no coincide con los caracteres de tu numero de doc.";}
       if(unikeUser.length>0){message="el nombre de usuario ya existe";}
+      if(parseInt(responsableArea[0].existe)===1){message="Ya hay un responsable del area seleccionado";}
       alert(message);
     }
   });
@@ -307,6 +315,15 @@ document.addEventListener("DOMContentLoaded",()=>{
     params.append("nom_usuario", user);
 
     const data = await getDatos("usuario.controller.php", params);
+    return data;
+  }
+
+  async function existeResponsableArea(id){
+    const params = new URLSearchParams();
+    params.append("operation","existeResponsableArea");
+    params.append("idarea",parseInt(id));
+
+    const data = await getDatos(`usuario.controller.php`,params);
     return data;
   }
 

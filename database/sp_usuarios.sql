@@ -109,7 +109,7 @@ BEGIN
 		CONCAT(P.apellidos, ' ', P.nombres) AS dato, P.num_doc, P.genero, P.telefono, 
         TP.tipodoc,
         U.idusuario,U.nom_usuario, U.responsable_area, U.estado,
-        A.area,
+        A.area,A.idarea,
         PER.perfil
         FROM usuarios U
         INNER JOIN areas A ON U.idarea = A.idarea
