@@ -68,22 +68,24 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table id="tablaActivos" class="stripe row-border order-column nowrap table-hover" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Id</th>
-                                            <th>Activo</th>
-                                            <th>Marca</th>
-                                            <th>Modelo</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="activoBodyTable"></tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table id="tablaActivos" class="stripe row-border order-column nowrap table-hover" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Id</th>
+                                                <th>Activo</th>
+                                                <th>Marca</th>
+                                                <th>Modelo</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="activoBodyTable"></tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="card-footer">
-                                <button type="button" class="btn btn-primary" id="btnAsignarResponsables">Asignar Responsables</button>
+                                <button type="button" class="btn btn-primary" id="btnAsignarResponsables" data-bs-toggle="modal" data-bs-target="#staticBackdrop" disabled>Asignar Responsables</button>
                             </div>
                         </div>
 
@@ -128,17 +130,35 @@
         </div>
     </div> -->
 
-    <!-- MODAL DE MOSTRAR EVIDENCIAS -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightEvidencias"
-        aria-labelledby="offcanvasRightMostrarMantenimientosActivo">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasRightMostrarMantenimientosActivo">Mantenimientos</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div id="modal-mantenimientos-container">
-                <!-- Aquí se agregarán las evidencias -->
-                <p>Esto es un texto de prueba dentro de modal-content.</p> <!-- Este texto debe aparecer -->
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Asignar responsables</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-mantenimientos-container">
+                    <div class="table-responsive">
+                        <table id="tablaResponsables" class="stripe row-border order-column nowrap table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Id</th>
+                                    <th>Activo</th>
+                                    <th>Marca</th>
+                                    <th>Modelo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activoBodyTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Hecho</button>
+                </div>
             </div>
         </div>
     </div>

@@ -22,6 +22,13 @@ $(document).ready(async function () {
     const selectSubcategoria = $q("#subcategoria");
     const filtro = $q(".filtro") //podra tener poder de manipular el change de cada select
     const tbodyActivos = $q("#activoBodyTable")
+    const btnAsignarResponsables = $q("#btnAsignarResponsables")
+
+    //LISTAS
+    let activosElegidos = []
+
+    //MODAL
+    let modalMantenimientosContainer = $q(".modal-mantenimientos-container")
 
     //render
     await renderSelectArea()
@@ -78,6 +85,17 @@ $(document).ready(async function () {
         return data
     }
 
+    // ************************************** REGISTROS *******************************************
+    async function filtrarUsuariosArea() {
+        //fetch
+        const params = new URLSearchParams()
+        params.append("operation", "filtrarUsuariosArea")
+        params.append("idarea", selectArea.value)
+        const data = await getDatos(`${host}usuario.controller.php`, params)
+        return data
+    }
+
+
     // ************************************* RENDER SELECT **********************************
     async function renderSelectArea() {
         const areas = await obtenerAreas()
@@ -94,6 +112,7 @@ $(document).ready(async function () {
 
     // ************************* EVENTOS *****************************************************
 
+    // obtiene las AREAS
     selectArea.addEventListener("change", async () => {
         tbodyActivos.innerHTML = ''
         const categorias = await obtenerCategoriasPorArea(selectArea.value)
@@ -104,10 +123,14 @@ $(document).ready(async function () {
                 <option value="${categoria.idcategoria}">${categoria.categoria}</option>
             `
         });
+        activosElegidos = []
+        btnAsignarResponsables.disabled = true
+
         /* const categorias = await obtenerCategorias()
         const subcategorias = await obtenerSubCategorias() */
     })
 
+    // obteiene las CATEGORIAS
     selectCategoria.addEventListener("change", async () => {
         tbodyActivos.innerHTML = ''
         const subcategorias = await obtenerSubCategoriasPorCategoria(selectCategoria.value)
@@ -117,8 +140,11 @@ $(document).ready(async function () {
                 <option value="${subcategoria.idsubcategoria}">${subcategoria.subcategoria}</option>
             `
         });
+        activosElegidos = []
+        btnAsignarResponsables.disabled = true
     })
 
+    // obtiene las SUBCATEGORIAS
     selectSubcategoria.addEventListener("change", async () => {
         const activosAsignados = await filtrarActivosAsignados(selectSubcategoria.value)
         console.log("actios asignados: -> ", activosAsignados)
@@ -129,27 +155,73 @@ $(document).ready(async function () {
             tbodyActivos.innerHTML += `
             <tr>
                 <th scope="row">
-                    <input type="checkbox" class="activo-checkbox" data-idactas="${actas.idactivoasignado}" data-idactivo="${actas.idactivo}">
+                    <input type="checkbox" class="activo-checkbox" data-idactas="${actas.idactivo_asig}" data-idactivo="${actas.idactivo}">
                 </th>
                 <td>${actas.cod_identificacion}</td>
                 <td>${actas.descripcion}</td>
                 <td>${actas.marca}</td>
                 <td>${actas.modelo}</td>
                 <td>
-                    <button>Ver Mantenimientos</button>
+                    <button class="btn btn-primary">Ver Mantenimientos</button>
                 </td>
             </tr>
             `;
         });
-    })
 
+        // Selecciona todos los checkboxes después de renderizar la tabla
+        const checkboxes = $all(".activo-checkbox");
+
+        // Marca los checkboxes que están en activosElegidos
+        checkboxes.forEach(chk => {
+            const idactasignado = parseInt(chk.getAttribute("data-idactas"));
+            console.log("idactasignado: ", idactasignado)
+            const activoEncontrado = activosElegidos.find(activo => activo.idactivo_asig === idactasignado);
+            console.log("actvos elegidos actualmante: ", activosElegidos)
+
+
+            if (activoEncontrado) {
+                chk.checked = true; // Marca el checkbox si el activo ya fue seleccionado previamente
+            }
+
+            // Agrega el evento para manejar la selección y deselección
+            chk.addEventListener("change", () => {
+                const idactivo = parseInt(chk.getAttribute("data-idactivo"));
+
+                if (chk.checked) {
+                    // Agrega a `activosElegidos` si está marcado y no existe
+                    const found = activosElegidos.find(activo => activo.idactivo_asig === idactasignado);
+                    if (!found) {
+                        activosElegidos.push({
+                            idactivo_asig: idactasignado,
+                            idactivo: idactivo
+                        });
+                    }
+                } else {
+                    // Elimina de `activosElegidos` si se desmarca
+                    activosElegidos = activosElegidos.filter(activo => activo.idactivo !== idactasignado);
+                }
+
+                console.log("activosElegidos después del cambio:", activosElegidos);
+
+                // Verifica si al menos uno está marcado y habilita/deshabilita el botón
+                btnAsignarResponsables.disabled = activosElegidos.length === 0;
+            });
+        });
+
+        btnAsignarResponsables.disabled = activosElegidos.length === 0;
+
+    });
+
+    btnAsignarResponsables.addEventListener("click", async () => {
+        await renderModalResponsables()
+    })
     // ******************************** RENDER TABLES ************************************************
     function renderTablaActivos() {
         if (tbActivos) {
             tbActivos.clear().rows.add($(tbodyActivos).find('tr')).draw();
         } else {
             // Inicializa DataTable si no ha sido inicializado antes
-            tbActivos = $('#tbodyActivos').DataTable({
+            tbActivos = $('#tablaActivos').DataTable({
                 paging: true,
                 searching: false,
                 lengthMenu: [10, 25, 50, 100],
@@ -166,5 +238,17 @@ $(document).ready(async function () {
                 }
             });
         }
+
+
     }
-});
+
+    async function renderModalResponsables() {
+        const responsables = await filtrarUsuariosArea()
+        console.log("responsables necontrado por area: ", responsables)
+    }
+
+})
+
+
+
+

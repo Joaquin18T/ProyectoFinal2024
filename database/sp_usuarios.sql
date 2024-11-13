@@ -201,3 +201,19 @@ BEGIN
     WHERE idusuario = _idusuario;
 END $$
 -- CALL sp_designar_responsable_area(1,1);
+
+DROP PROCEDURE IF EXISTS sp_filtrar_usuarios_area
+DELIMITER $$
+CREATE PROCEDURE sp_filtrar_usuarios_area
+(
+	IN _idarea INT
+)
+BEGIN
+	SELECT 
+		HAU.idhistorial_usuario,
+        USU.idusuario,
+		USU.nom_usuario        
+        FROM historial_areas_usuarios HAU
+		INNER JOIN usuarios USU ON USU.idusuario = HAU.idusuario
+        where HAU.idarea = _idarea;
+END $$

@@ -2,7 +2,8 @@
 
 require_once 'ExecQuery.php';
 
-class Usuario extends ExecQuery{
+class Usuario extends ExecQuery
+{
 
   public function login($params = []): array
   {
@@ -15,20 +16,22 @@ class Usuario extends ExecQuery{
     }
   }
 
-  public function getPermisos($params=[]):array{
-    try{
+  public function getPermisos($params = []): array
+  {
+    try {
       $cmd = parent::execQ("CALL sp_obtener_permisos(?)");
       $cmd->execute(
         array($params['idperfil'])
       );
       return $cmd->fetchAll(PDO::FETCH_ASSOC);
-    }catch (Exception $e) {
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }
 
-  public function add($params=[]):int{
-    try{
+  public function add($params = []): int
+  {
+    try {
       $pdo = parent::getConexion();
       $cmd = $pdo->prepare('CALL sp_add_usuario(@idusuario,?,?,?,?,?,?,?)');
       $cmd->execute(
@@ -45,14 +48,15 @@ class Usuario extends ExecQuery{
 
       $respuesta = $pdo->query("SELECT @idusuario AS idusuario")->fetch(PDO::FETCH_ASSOC);
       return $respuesta['idusuario'];
-    }catch(Exception $e){
-      error_log("Error: ".$e->getMessage());
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
       return -1;
     }
   }
 
-  public function updateUsuario($params=[]):bool{
-    try{
+  public function updateUsuario($params = []): bool
+  {
+    try {
       $pdo = parent::getConexion();
       $cmd = $pdo->prepare("CALL sp_update_usuario(@idpersona, ?, ?)");
       $cmd->execute(
@@ -64,32 +68,34 @@ class Usuario extends ExecQuery{
 
       $respuesta = $pdo->query("SELECT @idpersona AS idpersona")->fetch(PDO::FETCH_ASSOC);
       return $respuesta['idpersona'];
-    }catch(Exception $e){
-      error_log("Error: ".$e->getMessage());
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
       return false;
     }
   }
 
-  public function cambiarAreaUsuario($params=[]):bool{
-    try{
+  public function cambiarAreaUsuario($params = []): bool
+  {
+    try {
       $estado = false;
       $cmd = parent::execQ("CALL sp_cambiar_area_usuario(?,?)");
-      $estado= $cmd->execute(
+      $estado = $cmd->execute(
         array(
           $params['idusuario'],
           $params['idarea']
         )
       );
       return $estado;
-    }catch(Exception $e){
-      error_log("Error: ".$e->getMessage());
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
       return false;
     }
   }
 
-  public function filtrarUsuarios($params=[]):array{
-    try{
-      $defaultParams=[
+  public function filtrarUsuarios($params = []): array
+  {
+    try {
+      $defaultParams = [
         'dato' => null,
         'numdoc' => null,
         'idtipodoc' => null,
@@ -114,21 +120,22 @@ class Usuario extends ExecQuery{
         )
       );
       return $cmd->fetchAll(PDO::FETCH_ASSOC);
-    }catch(Exception $e){
-      error_log("Error: ".$e->getMessage());
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
       return [];
     }
   }
 
-  public function getUsuarioById($params=[]):array{
-    try{
+  public function getUsuarioById($params = []): array
+  {
+    try {
       $cmd = parent::execQ("CALL sp_get_usuario_by_id(?)");
       $cmd->execute(
         array($params['idusuario'])
       );
       return $cmd->fetchAll(PDO::FETCH_ASSOC);
-    }catch(Exception $e){
-      error_log("Error: ".$e->getMessage());
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
       return [];
     }
   }
@@ -163,8 +170,9 @@ class Usuario extends ExecQuery{
     }
   }
 
-  public function existeResponsableArea($params=[]):array{
-    try{
+  public function existeResponsableArea($params = []): array
+  {
+    try {
       $cmd = parent::execQ("CALL sp_existe_responsable_area(?)");
       $cmd->execute(
         array(
@@ -172,13 +180,29 @@ class Usuario extends ExecQuery{
         )
       );
       return $cmd->fetchAll(PDO::FETCH_ASSOC);
-    }catch (Exception $e) {
+    } catch (Exception $e) {
       error_log("Error: " . $e->getMessage());
     }
   }
 
-  public function designarResponsableArea($params=[]):bool{
-    try{
+  public function filtrarUsuariosArea($params = []): array
+  {
+    try {
+      $cmd = parent::execQ("CALL sp_filtrar_usuarios_area(?)");
+      $cmd->execute(
+        array(
+          $params['idarea']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
+    }
+  }
+
+  public function designarResponsableArea($params = []): bool
+  {
+    try {
       $state = false;
       $cmd = parent::execQ("CALL sp_designar_responsable_area(?,?)");
       $state = $cmd->execute(
@@ -188,7 +212,7 @@ class Usuario extends ExecQuery{
         )
       );
       return $state;
-    }catch (Exception $e) {
+    } catch (Exception $e) {
       error_log("Error: " . $e->getMessage());
       return false;
     }
