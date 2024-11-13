@@ -6,6 +6,7 @@ CREATE PROCEDURE sp_add_notificacion_asignacion
 (
 	OUT _idnotificacion INT,
     IN _idactivo_asig INT,
+    IN _tipo VARCHAR(50),
     IN _mensaje VARCHAR (250)
 )
 BEGIN
@@ -16,8 +17,8 @@ BEGIN
         SET existe_error = 1;
 	END;
     
-    INSERT INTO notificaciones_asignaciones(idactivo_asig,mensaje) VALUES
-    (_idactivo_asig, _mensaje);
+    INSERT INTO notificaciones_asignaciones(idactivo_asig, tipo,mensaje) VALUES
+    (_idactivo_asig,_tipo, _mensaje);
     
 	IF existe_error= 1 THEN
 		SET _idnotificacion = -1;
@@ -37,7 +38,7 @@ CREATE PROCEDURE sp_listar_notificacion_by_responsable_area
 )
 BEGIN 
 	SELECT 
-		N.idnotificacion_asig, N.mensaje, N.fecha_creacion, N.visto,
+		N.idnotificacion_asig, N.mensaje, N.tipo, N.fecha_creacion, N.visto,
         A.descripcion
         FROM notificaciones_asignaciones N
         INNER JOIN activos_asignados AA ON N.idactivo_asig = AA.idactivo_asig

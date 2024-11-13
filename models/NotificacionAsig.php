@@ -6,10 +6,11 @@ class NotificacionAsig extends ExecQuery{
   public function add($params=[]):int{
     try{
       $pdo = parent::getConexion();
-      $cmd = $pdo->prepare("CALL sp_add_notificacion_asignacion(@idnotif,?,?)");
+      $cmd = $pdo->prepare("CALL sp_add_notificacion_asignacion(@idnotif,?,?,?)");
       $cmd->execute(
         array(
           $params['idactivo_asig'],
+          $params['tipo'],
           $params['mensaje']
         )
       );
@@ -73,6 +74,7 @@ class NotificacionAsig extends ExecQuery{
 
 // $id = $notif->add([
 //   'idactivo_asig'=>4,
+//   'tipo'=>'Asignacion',
 //   'mensaje'=>'Nueva asignacion de un activo al area'
 // ]);
 

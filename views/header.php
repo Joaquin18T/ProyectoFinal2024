@@ -47,10 +47,10 @@ $host = "http://localhost/SIGEMAPRE/";
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
     crossorigin="anonymous" />
   <!-- Volt CSS -->
-  <link type="text/css" href="http://localhost/CMMS/css/dashboard/volt.css" rel="stylesheet" />
+  <link type="text/css" href="http://localhost/SIGEMAPRE/css/dashboard/volt.css" rel="stylesheet" />
   <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="http://localhost/CMMS/css/responsables/list-asignaciones.css">
-  <link rel="stylesheet" href="http://localhost/CMMS/css/global.css">
+  <link rel="stylesheet" href="http://localhost/SIGEMAPRE/css/responsables/list-asignaciones.css">
+  <link rel="stylesheet" href="http://localhost/SIGEMAPRE/css/global.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 

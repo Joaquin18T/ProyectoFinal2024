@@ -126,7 +126,7 @@ BEGIN
             AND (PER.idperfil = _idperfil OR _idperfil IS NULL)
             ORDER BY U.create_at DESC;
 END $$
--- CALL sp_filtrar_usuarios(null, null, null, 1, null, null, 3);
+-- CALL sp_filtrar_usuarios(null, null, null, null, null, null, null);
 
 DROP PROCEDURE IF EXISTS sp_get_usuario_by_id;
 DELIMITER $$
@@ -200,4 +200,4 @@ BEGIN
     responsable_area = _responsable_area
     WHERE idusuario = _idusuario;
 END $$
-CALL sp_designar_responsable_area(1,1);
+-- CALL sp_designar_responsable_area(1,1);

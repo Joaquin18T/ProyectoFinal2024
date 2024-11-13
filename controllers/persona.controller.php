@@ -8,6 +8,12 @@ if(isset($_GET['operation'])){
     case 'personaById':
       echo json_encode($persona->getPersonaById(['idpersona'=>$_GET['idpersona']]));
       break;
+    case 'searchPersonaNumDoc':
+      echo json_encode($persona->searchPersonaNumDoc(['numdoc'=>$_GET['numdoc']]));
+      break;
+    case 'searchTelefono':
+      echo json_encode($persona->searchTelf(['telefono'=>$_GET['telefono']]));
+      break;
   }
 }
 if(isset($_POST['operation'])){

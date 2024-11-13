@@ -4,6 +4,7 @@
 
 SELECT* FROM tipo_doc;
 SELECT*FROM personas;
+SELECT*FROM tipo_doc;
 SELECT*FROM areas;
 SELECT*FROM usuarios;
 SELECT*FROM subcategorias;
@@ -21,7 +22,7 @@ SELECT*FROM modulos;
 SELECT*FROM vistas;
 select*from permisos;
 
--- ALTER TABLE permisos auto_increment = 1;
+-- ALTER TABLE notificaciones_asignaciones auto_increment = 1;
 -- delete from permisos where idpermiso>=1;
 -- delete from vistas where idvista>=1;
 -- delete from modulos where idmodulo>=1;

@@ -56,6 +56,35 @@ class Persona extends ExecQuery{
       return $cmd->fetchAll(PDO::FETCH_ASSOC);
     }catch (Exception $e) {
       die($e->getMessage());
+      return [];
+    }
+  }
+
+  public function searchPersonaNumDoc($params=[]):array{
+    try{
+      $cmd = parent::execQ("CALL sp_search_persona_numdoc(?)");
+      $cmd->execute(
+        array(
+          $params['numdoc']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    }catch (Exception $e) {
+      die($e->getMessage());
+      return [];
+    }
+  }
+
+  public function searchTelf($params = []): array
+  {
+    try {
+      $cmd = parent::execQ("CALL sp_search_telefono(?)");
+      $cmd->execute(
+        array($params['telefono'])
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
     }
   }
 }

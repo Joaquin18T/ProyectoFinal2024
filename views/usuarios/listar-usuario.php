@@ -20,10 +20,16 @@
                 </div>
                 <div class="col-md-2">
                   <div class="form-floating">
-                    <select name="rol" id="rol" class="form-select filters">
+                    <input type="text" class="form-control filters" id="numdoc" placeholder="Escribe num. de doc." name="numdoc" autocomplete="off">
+                    <label for="numdoc" class="form-label">Numero de Doc.</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <select name="perfil" id="perfil" class="form-select filters">
                       <option value="">Selecciona</option>
                     </select>
-                    <label for="rol" class="form-label">Roles</label>
+                    <label for="perfil" class="form-label">Perfiles</label>
                   </div>
                 </div>
                 <div class="col-md-2">
@@ -31,7 +37,7 @@
                     <select name="estado" id="estado" class="form-select filters">
                       <option value="">Selecciona</option>
                       <option value="1">Activo</option>
-                      <option value="0">De baja</option>
+                      <option value="0">Inactivo</option>
                     </select>
                     <label for="estado" class="form-label">Estados</label>
                   </div>
@@ -42,6 +48,26 @@
                       <option value="">Selecciona</option>
                     </select>
                     <label for="tipodoc" class="form-label">Tipo Doc</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row g-2 md-3 mt-1">
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <select name="responsable" id="responsable" class="form-select filters">
+                      <option value="">Selecciona</option>
+                      <option value="0">Usuarios</option>
+                      <option value="1">Responsables</option>
+                    </select>
+                    <label for="responsable" class="form-label">Responsables</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <select name="area" id="area" class="form-select filters">
+                      <option value="">Selecciona</option>
+                    </select>
+                    <label for="area" class="form-label">Areas</label>
                   </div>
                 </div>
               </div>
@@ -60,9 +86,10 @@
                       <th>Rol</th>
                       <th>Nombres y Ap.</th>
                       <th>Tipo doc.</th>
+                      <th>Num. doc.</th>
                       <th>Genero</th>
                       <th>Estado</th>
-                      <th>Asignado</th>
+                      <th>Area</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -118,7 +145,7 @@
 
 <!-- LIBRERIA -->
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-<!-- <script src="http://localhost/CMMS/js/users/index.js"></script> -->
+<script src="<?= $host ?>js/usuarios/list-usuario.js"></script>
 </body>
 
 </html>
