@@ -54,3 +54,25 @@ BEGIN
 END $$
 -- sp de agg historial
 -- validar que si hay asignaciones anteriores de un activo para actualizar la asignacion a 6
+
+DROP PROCEDURE IF EXISTS sp_filtrar_activosAsignados
+DELIMITER $$
+CREATE PROCEDURE sp_filtrar_activosAsignados
+(
+    IN _idsubcategoria INT
+)
+BEGIN 
+	select
+		ACTAS.idactivo_asig,
+        ACT.cod_identificacion,
+        ACT.idactivo,
+        ACT.descripcion,
+        MAR.marca,
+        ACT.modelo
+	from activos_asignados ACTAS
+    INNER JOIN activos ACT ON ACT.idactivo = ACTAS.idactivo
+    INNER JOIN subcategorias SUBC ON SUBC.idsubcategoria = ACT.idsubcategoria
+    INNER JOIN categorias CAT ON CAT.idcategoria = SUBC.idcategoria
+    INNER JOIN marcas MAR ON MAR.idmarca = ACT.idmarca
+    WHERE ACT.idsubcategoria = _idsubcategoria AND ACTAS.idestado = 3;
+END $$

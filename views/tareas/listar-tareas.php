@@ -69,7 +69,7 @@
     /* Estilo para el área donde se puede hacer drag (opcional) */
     .kanban-drag {
         opacity: 1;
-        max-height: 700px;
+        max-height: 1200px;
         /* Ajusta esta altura según necesites */
         overflow-y: auto;
         /* Agrega el scroll vertical */
@@ -95,7 +95,8 @@
     <div id="kanban-container"></div>
 
 </div>
-<br>
+<a href="http://localhost/SIGEMAPRE/views/tareas/registrar-tarea" class="btn btn-primary">Nueva tarea</a>
+<!-- <br>
 <br>
 
 <div class="row px-2 contenedor-tabla-creacion-odt">
@@ -126,7 +127,7 @@
             <button class="btn btn-primary btnCrearOdt">Crear Orden de trabajo</button>
         </div>
     </div>
-</div>
+</div> -->
 <!--     <div class="tablero">
         <div class="col-tablero" data-idcolumna="pendientes">
             <div class="nom-col">
@@ -190,9 +191,9 @@
 <!-- Luego, el archivo de DataTables -->
 <!-- jKanban JS -->
 <script src="https://cdn.jsdelivr.net/npm/jkanban@1.2.0/dist/jkanban.min.js"></script>
-<!-- <script>
+<script>
     const idusuario = "<?php echo $_SESSION['login']['idusuario']; ?>"
-</script> -->
+</script>
 <script src="http://localhost/SIGEMAPRE/js/tareas/index.js"></script>
 
 </body>

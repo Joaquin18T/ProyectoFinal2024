@@ -53,6 +53,21 @@ class ActivosAsignados extends ExecQuery{
       return false;
     }
   }
+
+  public function filtrarActivosAsignados($params = []): array
+  {
+    try {
+      $cmd = parent::execQ("CALL sp_filtrar_activosAsignados(?)");
+      $cmd->execute(
+        array(
+          $params['idsubcategoria']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
+    }
+  }
 }
 
 //$activosAs = new ActivosAsignados();

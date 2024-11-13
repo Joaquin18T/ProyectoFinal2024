@@ -5,8 +5,8 @@ DELIMITER //
 CREATE PROCEDURE `registrarTarea`(
 	OUT _idtarea 	INT,
 	IN _idusuario	INT,
-    IN _fecha_inicio	DATE,
-    IN _hora_inicio		TIME
+    IN _fecha_programada	DATE,
+    IN _hora_programada		TIME
 )
 BEGIN
     DECLARE existe_error INT DEFAULT 0;
@@ -17,8 +17,8 @@ BEGIN
         SET existe_error = 1;
 	END;
     
-    INSERT INTO tareas (idusuario, fecha_inicio, hora_inicio)
-    VALUES (_idusuario, _fecha_inicio, _hora_inicio);
+    INSERT INTO tareas (idusuario, fecha_programada, hora_programada)
+    VALUES (_idusuario, _fecha_programada, _hora_programada);
     
     IF existe_error = 1 THEN
 		SET _idtarea = -1;
@@ -36,8 +36,7 @@ CREATE PROCEDURE `obtenerTareasPorEstado`(
 	IN _idestado	INT
 )
 BEGIN
-	SELECT * FROM tareas where estado = _idestado;
+	SELECT * FROM tareas where idestado = _idestado;
 END //
 
-
-
+call obtenerTareasPorEstado(10);

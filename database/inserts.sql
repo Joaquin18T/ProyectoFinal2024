@@ -131,12 +131,12 @@ update usuarios set claveacceso = '$2y$10$5ImJFOxfRveSsORgTQNs5eFxQKLiP5lK9SgLdk
 update usuarios set claveacceso = '$2y$10$5ImJFOxfRveSsORgTQNs5eFxQKLiP5lK9SgLdkRWKxiAViBF7dx9u' where idusuario = 2; -- clave: 1234
 update usuarios set claveacceso = '$2y$10$5ImJFOxfRveSsORgTQNs5eFxQKLiP5lK9SgLdkRWKxiAViBF7dx9u' where idusuario = 3; -- clave: 1234
 
-INSERT INTO categorias(categoria)
+INSERT INTO categorias(idarea,categoria)
 	VALUES
-	('Equipos de computo'),
-    ('Vehiculos'),
-    ('Inmobiliario de oficina'),
-    ('Equipos de redes y conectividad');
+	(2,'Equipos de computo'),
+    (4,'Vehiculos'),
+    (3,'Inmobiliario de oficina'),
+    (1,'Equipos de redes y conectividad');
 
 INSERT INTO subcategorias(idcategoria, subcategoria)
 	VALUES
@@ -281,10 +281,23 @@ VALUES
 
 -- ***************************** INSERTS ROYER **********************************************
 
-INSERT INTO tareas (idusuario, fecha_inicio, hora_inicio, idestado) VALUES
-    (1, '2024-11-01', '08:00:00', 8),
-    (2, '2024-11-02', '09:30:00', 8),
-    (3, '2024-11-03', '10:00:00', NULL);  -- `idestado` es NULL, lo que establece el estado predeterminado
+INSERT INTO tareas (idusuario, fecha_programada, hora_programada) VALUES
+    (1, '2024-11-04', '08:30:00'),
+    (2, '2024-11-05', '09:45:00'),
+    (3, '2024-11-06', '10:15:00'),
+    (1, '2024-11-07', '07:30:00'),
+    (2, '2024-11-08', '11:00:00'),
+    (3, '2024-11-09', '08:45:00'),
+    (3, '2024-11-10', '09:15:00'),
+    (2, '2024-11-11', '10:00:00'),
+    (1, '2024-11-12', '07:45:00'),
+    (1, '2024-11-13', '08:15:00'),
+    (2, '2024-11-14', '09:30:00'),
+    (3, '2024-11-15', '10:45:00'),
+    (1, '2024-11-16', '08:00:00'),
+    (2, '2024-11-17', '09:00:00'),
+    (3, '2024-11-18', '11:30:00');
+
 
 INSERT INTO activos_tarea (idactivos_tarea, idtarea, idactivo) VALUES
     (1, 1, 1),   -- Activo  vinculado a la tarea 1
@@ -293,7 +306,11 @@ INSERT INTO activos_tarea (idactivos_tarea, idtarea, idactivo) VALUES
     (4, 3, 4);   -- Activo  vinculado a la tarea 3
 
 INSERT INTO tareas_mantenimiento (idtarea, descripcion, fecha_inicio, hora_inicio, fecha_finalizado, hora_finalizado, tiempo_ejecutado) VALUES
-    (1, 'Actualizacion de windows 10', '2024-11-01', '08:00:00', '2024-11-02', '11:00:00', '01:30:00'),
-    (1, 'Limpiar pantalla', '2024-11-01', '08:00:00', '2024-11-02', '11:00:00', '01:30:00'),
-    (2, 'Cambio de filtros y limpieza', '2024-11-02', '09:30:00', '2024-11-02', '11:00:00', '01:30:00'),
-    (3, 'Revisión de sistemas eléctricos', '2024-11-03', '10:00:00', '2024-11-02', '11:00:00', '01:30:00');
+    (1, 'Mantenimiento preventivo de hardware', '2024-11-04', '08:30:00', '2024-11-05', '10:00:00', '01:30:00'),
+    (2, 'Verificación de sistema operativo', '2024-11-05', '09:45:00', '2024-11-05', '11:15:00', '01:30:00'),
+    (3, 'Actualización de software', '2024-11-06', '10:15:00', '2024-11-06', '11:45:00', '01:30:00'),
+    (4, 'Inspección de cables y conexiones', '2024-11-07', '07:30:00', '2024-11-07', '09:00:00', '01:30:00'),
+    (5, 'Prueba de red y conectividad', '2024-11-08', '11:00:00', '2024-11-08', '12:30:00', '01:30:00'),
+    (6, 'Revisión de batería', '2024-11-09', '08:45:00', '2024-11-09', '10:15:00', '01:30:00');
+
+select * from tareas;

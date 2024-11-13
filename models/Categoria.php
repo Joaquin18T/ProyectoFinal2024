@@ -6,9 +6,20 @@ class Categoria extends ExecQuery{
 
   public function getAll():array{
     try{
-      $query = "SELECT idcategoria, categoria FROM categorias ORDER BY idcategoria ASC";
+      $query = "SELECT * FROM categorias";
       $cmd = parent::execQ($query);
       $cmd->execute();
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    }catch(Exception $e){
+      die($e->getMessage());
+    }
+  }
+  
+  public function obtenerCategoriasPorArea($params):array{
+    try{
+      $query = "SELECT * FROM categorias where idarea = ?";
+      $cmd = parent::execQ($query);
+      $cmd->execute(array($params['idarea']));
       return $cmd->fetchAll(PDO::FETCH_ASSOC);
     }catch(Exception $e){
       die($e->getMessage());
