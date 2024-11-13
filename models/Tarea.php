@@ -25,8 +25,8 @@ class Tarea extends ExecQuery
       $sp->execute(
         array(
           $params['idusuario'],
-          $params['fecha_inicio'],
-          $params['hora_inicio']
+          $params['fecha_programada'],
+          $params['hora_programada']
         ),
 
       );

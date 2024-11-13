@@ -20,8 +20,8 @@ if (isset($_POST['operation'])) {
             $id = -1;
             $datosEnviar = [
                 "idusuario"               => $_POST["idusuario"],
-                "fecha_inicio"          => $_POST["fecha_inicio"],
-                "hora_inicio"               => $_POST["hora_inicio"]
+                "fecha_programada"          => $_POST["fecha_programada"],
+                "hora_programada"               => $_POST["hora_programada"]
             ];
 
             $id = $tarea->registrarTarea($datosEnviar);

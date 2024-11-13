@@ -20,5 +20,6 @@ if (isset($_GET['operation'])) {
     case 'getSubcategoriaByCategoria':
       echo json_encode($sub->getSubcategoriaByCategoria(['idcategoria' => $_GET['idcategoria']]));
       break;
+      
   }
 }

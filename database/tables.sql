@@ -127,9 +127,11 @@ CREATE TABLE USUARIOS
 CREATE TABLE categorias
 (
 	idcategoria		INT AUTO_INCREMENT PRIMARY KEY,
+    idarea			int not null,
     categoria		VARCHAR(60) NOT NULL,	-- UK
     create_at	DATETIME NOT NULL DEFAULT NOW(),
-    CONSTRAINT uk_categoria UNIQUE(categoria)
+    CONSTRAINT uk_categoria UNIQUE(categoria),
+    constraint fk_idareaC foreign key (idarea) references areas (idarea)
 )ENGINE=INNODB;
 
 CREATE TABLE subcategorias
@@ -266,9 +268,9 @@ create table tareas
 (
 	idtarea		int auto_increment primary key,
     idusuario	int	not null,
-    fecha_inicio	date	not null, -- fecha programada
-    hora_inicio		time	not null,
-    idestado			int		null default 8,
+    fecha_programada	date	not null, -- fecha programada
+    hora_programada		time	not null,
+    idestado			int		null default 10,
 	CONSTRAINT fk_idusuario	FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_estado	FOREIGN KEY (idestado) REFERENCES estados (idestado)
 )ENGINE=INNODB	;

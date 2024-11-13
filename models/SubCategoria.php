@@ -7,7 +7,7 @@ class SubCategoria extends ExecQuery
   public function getAll(): array
   {
     try {
-      $query = "SELECT idsubcategoria, subcategoria FROM subcategorias";
+      $query = "SELECT * FROM subcategorias";
       $cmd = parent::execQ($query);
       $cmd->execute();
       return $cmd->fetchAll(PDO::FETCH_ASSOC);
