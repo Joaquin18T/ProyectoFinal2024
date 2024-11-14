@@ -56,6 +56,12 @@ if (isset($_GET['operation'])) {
     case 'filtrarUsuariosArea':
       echo json_encode($usuario->filtrarUsuariosArea(['idarea' => $_GET['idarea']]));
       break;
+    case 'getIdAdmin':
+      echo json_encode($usuario->getIdAdmin());
+      break;
+    case 'getIdSupervisorArea':
+      echo json_encode($usuario->getIdSupervisorArea(['idarea'=>$_GET['idarea']]));
+      break;
   }
 }
 

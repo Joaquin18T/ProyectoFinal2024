@@ -190,6 +190,18 @@ END $$
 
 -- CALL sp_existe_responsable_area(1);
 
+DROP PROCEDURE IF EXISTS sp_get_idsupervisor_area;
+DELIMITER $$
+CREATE PROCEDURE sp_get_idsupervisor_area
+(
+	IN _idarea INT
+)
+BEGIN
+	SELECT idusuario  FROM usuarios
+    WHERE responsable_area = 1 AND idarea = _idarea;
+END $$;
+-- CALL sp_get_idsupervisor_area(2)
+
 DROP PROCEDURE IF EXISTS sp_designar_responsable_area;
 DELIMITER $$
 CREATE PROCEDURE sp_designar_responsable_area
@@ -221,5 +233,18 @@ BEGIN
         where HAU.idarea = _idarea AND USU.idperfil = 3 AND USU.estado = 1;
 END $$
 -- call sp_filtrar_usuarios_area(1)
-select * from perfiles;
-select * from usuarios;
+-- select * from perfiles;
+-- select * from usuarios;
+
+DROP PROCEDURE IF EXISTS sp_get_user_admin;
+DELIMITER $$
+CREATE PROCEDURE sp_get_user_admin
+(
+
+)
+BEGIN
+	SELECT idusuario FROM usuarios
+    WHERE idperfil = 1 AND estado = 1
+    ORDER BY idusuario ASC
+    LIMIT 1;
+END $$

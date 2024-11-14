@@ -54,14 +54,8 @@ class Usuario extends ExecQuery
     }
   }
 
-<<<<<<< HEAD
   public function updateUsuario($params=[]):int{
     try{
-=======
-  public function updateUsuario($params = []): bool
-  {
-    try {
->>>>>>> 35e7121ba1bdab02369b330c57f2adee3bf88a67
       $pdo = parent::getConexion();
       $cmd = $pdo->prepare("CALL sp_update_usuario(@idpersona, ?, ?)");
       $cmd->execute(
@@ -222,8 +216,29 @@ class Usuario extends ExecQuery
       return false;
     }
   }
+
+  public function getIdAdmin():array{
+    return parent::getData("sp_get_user_admin");
+  }
+
+  public function getIdSupervisorArea($params=[]):array{
+    try{
+      $cmd = parent::execQ("CALL sp_get_idsupervisor_area(?)");
+      $cmd->execute(
+        array(
+          $params['idarea']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
+      return [];
+    }
+  }
 }
 // $user = new Usuario();
+// echo json_encode($user->getIdSupervisorArea(['idarea'=>2]));
+// echo json_encode($user->getIdAdmin());
 
 // $up = $user->cambiarAreaUsuario(['idusuario'=>4, 'idarea'=>3]);
 // echo $up;

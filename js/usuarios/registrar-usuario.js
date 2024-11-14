@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded",()=>{
   const host = "http://localhost/SIGEMAPRE/controllers/";
   let isReset= false;
-  //let isTenico = false;
+  let mensaje = "";
   let nomPerfil = "";
   blockCamps(true);
   function selector(value) {
@@ -78,9 +78,26 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(textOption==="Tecnico" || textOption==="Administrador" ||textOption==="Usuario"){
       selector("responsable").value=0;
     }
+    nomPerfil = textOption;
+    
     selector("responsable").disabled= true;
     
   });
+
+  //Mensaje de la notificacion segun el perfil
+  function perfilSelected(){
+    switch(nomPerfil){
+      case 'Supervisor':
+        mensaje = "Han asignado a un supervisor a un area";
+        break;
+      case 'Tecnico':
+        mensaje ="Han asignado a un tecnico a un area";
+        break;
+      case 'Usuario':
+        mensaje = "Han asignado a un usuario a un area";
+        break;
+    }
+  }
 
   //Valida que el num. doc sea unico y cumpla ciertos parametros
   async function validateNumDoc(){
@@ -228,13 +245,17 @@ document.addEventListener("DOMContentLoaded",()=>{
             if(usuario.idusuario>0){
               const historialAgregado = await addHistorialAsg(usuario.idusuario,selector("area").value);
               if(historialAgregado.idhis_user>0){
-                alert("Se ha registrado correctamente");
-                //isTenico=false;
-                isReset=false;
-                resetUI();
-                selector("numDoc").value="";
-                blockCamps(true);
-                selector("numDoc").focus();
+                //perfilSelected();
+                const addNotf = await addNotificacion(usuario.idusuario,selector("area").value,"Asignacion", "Han asignado a un nuevo usuario al area");
+                if(addNotf.idnotf>0){
+                  alert("Se ha registrado correctamente");
+                  //isTenico=false;
+                  isReset=false;
+                  resetUI();
+                  selector("numDoc").value="";
+                  blockCamps(true);
+                  selector("numDoc").focus();
+                }
               }
             }
             
@@ -326,6 +347,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     return data;
   }
 
+  //Valida si existe un supervisor del area
   async function existeResponsableArea(id){
     const params = new URLSearchParams();
     params.append("operation","existeResponsableArea");
@@ -335,6 +357,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     return data;
   }
 
+  //Agrega al historial la asignacion
   async function addHistorialAsg(iduser,idarea){
     const params = new FormData();
     params.append("operation","addHisUser");
@@ -350,6 +373,44 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     const data = await resp.json();
     return data;
+  }
+
+  //Crea la notificacion de la nueva asignacion al area elegida
+  async function addNotificacion(iduser,idarea, tipo, msg){
+
+    const params = new FormData();
+    params.append("operation", "addNotfUsers");
+    params.append("idusuario", iduser);
+    params.append("idarea", idarea);
+    params.append("tipo", tipo);
+    params.append("mensaje", msg);
+
+    const resp = await fetch(`${host}notificacionUser.controller.php`,{
+      method:'POST',
+      body:params
+    });
+
+    const data = await resp.json();
+    return data;
+  }
+
+  //Obtiene el id del supervisor del area a asignar
+  async function getIdSupervisor(idarea) {
+    const params = new URLSearchParams();
+    params.append("operation","getIdSupervisorArea");
+    params.append("idarea",parseInt(idarea));
+
+    const data = await getDatos(`usuario.controller.php`,params);
+    return data;
+  }
+
+  //Obtiene el id del admin
+  async function getAdmin(){
+    const params = new URLSearchParams();
+    params.append("operation", "getIdAdmin");
+
+    const data = await getDatos(`usuario.controller.php`, params);
+    return data[0];
   }
 
   //resetea los campos

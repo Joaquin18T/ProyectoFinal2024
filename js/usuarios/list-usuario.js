@@ -272,6 +272,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   selector("save-change-area").addEventListener("click",async()=>{
     const nuevaArea = selector("sb-area").value; //almacena la nueva area
+    let tipoNotf="Asignacion";
+    let msgNotf="Han asignado a un nuevo usuario al area";
+    let msgAlert = "";
 
     const existeRespArea = await existeResponsableArea(nuevaArea);
     const dataUser = await getDataUser(globals.idusuario);
@@ -280,6 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let isSupervisor = false;
     if(dataUser[0].perfil==="Supervisor"){
       if(existeRespArea[0].existe===0){
+        //msgNotf="han asignado a un nuevo supervisor a una area";
         isSupervisor=true;
       }else{
         alert("Ya existe un supervisor en el area seleccionada");
@@ -289,7 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if(!isSupervisor ||isSupervisor){
       if(confirm("¿Estas seguro de actualizar el area del usuario?")){
-        //Dos caminos (SUPERVISOR - USUARIO, TECNICO)
 
         //Paso 1: VERIFICAR EL HISTORIAL DE USUARIOS
         const validaHistorial = await validateHistorialUsres(globals.idusuario); //verifica si existe historial del usuario
@@ -304,14 +307,21 @@ document.addEventListener("DOMContentLoaded", () => {
               //PASO 4: REGISTRAR AL HISTORIAL AL NUEVO SUPERVISOR DEL AREA SELECCIONADA
               const historialAdd = await addHistorialAsg(nuevaArea, selector("comentario").value);
               if(historialAdd.idhis_user>0){
-                selector("sb-area").value="";
-                selector("comentario").value="";
-                await showUsuarios();
-                const myModal = bootstrap.Modal.getOrCreateInstance(selector("sb-change-area"));
-                myModal.hide();
-                alert("Se ha actualizado el area");
-              }
-            }
+                const addNotf = await addNotificacion(globals.idusuario,nuevaArea, tipoNotf, msgNotf);
+                if(addNotf.idnotf>0){
+                  selector("sb-area").value="";
+                  selector("comentario").value="";
+                  await showUsuarios();
+                  const myModal = bootstrap.Modal.getOrCreateInstance(selector("sb-change-area"));
+                  myModal.hide();
+                  alert("Se ha actualizado el area");
+                }else{msgAlert="Hubo un error al crear la notificacion";};
+              }else{msgAlert="Hubo un error al registrar en el historial con su nueva area";}
+            }else{msgAlert = "Hubo un error al actualizar los datos";}
+          }else{msgAlert="Hubo un error al registrar en el historial";}
+
+          if(msgAlert){
+            alert(msgAlert);
           }
         }
       }
@@ -431,6 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return data;
   }
 
+  //Reactiva el estado del usuario
   async function reactivarUser(){
     if(await ask("¿Estas seguro de reactivar al usuario")){
       //console.log("aaaa");
@@ -439,13 +450,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function addNotificacion(){
+  //Evalua si al area a asignar tiene supervisor o no, si es no, la notificacion lo recibe el admin
+  //Cuando es si lo recibe el supervisor
+  async function addNotificacion(iduser,idarea, tipo, msg){
+    // const existeSupervisor = await getIdSupervisor(idarea);
+    // let iduser_sup = 0;
+    // if(existeSupervisor.length===0){
+    //   const {idusuario} = await getAdmin();
+    //   iduser_sup = idusuario;
+    // }else{
+    //   iduser_sup=existeSupervisor[0].idusuario;
+    // }
+
     const params = new FormData();
-    params.append("operation", "addNotifAsig");
-    params.append("idusuario_sup", "usuario supervisor");
-    params.append("idactivo_asig", "null por ahora");
-    params.append("tipo", "pasar como parametro");
-    params.append("mensaje", "pasar como parametro");
+    params.append("operation", "addNotfUsers");
+    params.append("idusuario", iduser);
+    params.append("idarea", idarea);
+    params.append("tipo", tipo);
+    params.append("mensaje", msg);
+
+    const resp = await fetch(`${host}notificacionUser.controller.php`,{
+      method:'POST',
+      body:params
+    });
+
+    const data = await resp.json();
+    return data;
   }
 
+  //Obtiene el id del admin
+  async function getAdmin(){
+    const params = new URLSearchParams();
+    params.append("operation", "getIdAdmin");
+
+    const data = await getDatos(`${host}usuario.controller.php`, params);
+    return data[0];
+  }
+
+  //Obtiene el id del supervisor del area a asignar
+  async function getIdSupervisor(idarea) {
+    const params = new URLSearchParams();
+    params.append("operation","getIdSupervisorArea");
+    params.append("idarea",parseInt(idarea));
+
+    const data = await getDatos(`${host}usuario.controller.php`,params);
+    return data;
+  }
 });

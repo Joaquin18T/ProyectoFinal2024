@@ -231,10 +231,23 @@ CREATE TABLE historial_areas_usuarios
     CONSTRAINT fk_idarea_his FOREIGN KEY (idarea) REFERENCES areas(idarea)
 )ENGINE = INNODB;
 
+CREATE TABLE notificaciones_usuarios
+(
+	idnotificacion_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    idusuario		INT NOT NULL,
+    idarea 			INT NULL,
+    tipo			VARCHAR(40) NOT NULL,
+    mensaje			VARCHAR(250) NOT NULL,
+	fecha_creacion			DATETIME NOT NULL DEFAULT NOW(),
+    visto					TINYINT(1) NOT NULL DEFAULT 0,
+    CONSTRAINT fk_usuario_notf_usuario FOREIGN KEY (idusuario) REFERENCES usuarios(idusuario),
+    CONSTRAINT chk_visto CHECK (visto IN(1,0)),
+    CONSTRAINT fk_idarea_notf_user FOREIGN KEY (idarea) REFERENCES areas(idarea)
+)ENGINE=INNODB;
+
 CREATE TABLE notificaciones_asignaciones
 (
 	idnotificacion_activo	INT AUTO_INCREMENT PRIMARY KEY,
-    idusuario_sup 			INT NOT NULL,
     idactivo_asig			INT NULL, 
     tipo 					VARCHAR(50) NOT NULL,
     mensaje					VARCHAR(250) NOT NULL,
@@ -243,9 +256,7 @@ CREATE TABLE notificaciones_asignaciones
     -- idactivo 				INT  NULL,
     create_at	DATETIME NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_idasignacion_nof FOREIGN KEY(idactivo_asig) REFERENCES activos_asignados (idactivo_asig),
-    CONSTRAINT chk_visto CHECK (visto IN(1,0)),
-    CONSTRAINT fk_usuarios_notf FOREIGN KEY (idusuario_sup) REFERENCES usuarios(idusuario)
-    
+    CONSTRAINT chk_visto CHECK (visto IN(1,0))
 )ENGINE = INNODB;
 
 CREATE TABLE bajas_activo

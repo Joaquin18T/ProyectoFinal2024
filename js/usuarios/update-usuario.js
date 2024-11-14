@@ -133,6 +133,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         if(msg.update){
           alert("datos actualizados correctamente");
           resetUI();
+          selector("btnEnviar").disabled = true;
         }
         // const params = new FormData();
         // params.append("operation", "updateUser");

@@ -1,6 +1,6 @@
 <?php
 
-echo password_hash("juan2024", PASSWORD_BCRYPT);
+echo password_hash("carlos2024", PASSWORD_BCRYPT);
 
 
 

@@ -11,10 +11,18 @@
         <div class="row g-0 mb-3">
           <div class="card">
             <div class="card-body">
-              <div class="row g-2 mb-3">
+              <div class="row g-2">
                 <div class="col-md-2">
                   <div class="form-floating">
-                    <select name="subcategoria" id="subcategoria" class="form-control filter">
+                    <select name="categoria" id="categoria" class="form-select filter">
+                      <option value="">Selecciona</option>
+                    </select>
+                    <label for="categoria" class="form-label">Categorias</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <select name="subcategoria" id="subcategoria" class="form-select filter">
                       <option value="">Selecciona</option>
                     </select>
                     <label for="subcategoria" class="form-label">Subcategorias</label>
@@ -28,43 +36,48 @@
                 </div>
                 <div class="col-md-2">
                   <div class="form-floating">
-                    <select name="estado" id="estado" class="form-control filter">
-                      <option value="">Selecciona</option>
-                    </select>
-                    <label for="estado">Estado</label>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <div class="form-floating">
-                    <select name="marca" id="marca" class="form-control filter">
+                    <select name="marca" id="marca" class="form-select filter">
                       <option value="">Selecciona</option>
                     </select>
                     <label for="marca">Marca</label>
                   </div>
                 </div>
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <select name="modelo" id="modelo" class="form-control filter">
+                      <option value="">Selecciona</option>
+                    </select>
+                    <label for="modelo">Modelo</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <select name="estado" id="estado" class="form-select filter">
+                      <option value="">Selecciona</option>
+                    </select>
+                    <label for="estado">Estado</label>
+                  </div>
+                </div>
               </div>
-              <div class="row pt-3">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="card">
-                      <div class="card-header pb-1 pt-1">Rango de Fechas</div>
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-md-5 ms-4">
-                            <div class="form-floating">
-                              <input type="date" class="form-control filter" id="fecha_adquisicion">
-                              <label for="fecha_adquisicion">Fecha Inicio</label>
-                            </div>
-                          </div>
-                          <div class="col-md-5 ms-2">
-                            <div class="form-floating">
-                              <input type="date" class="form-control filter" id="fecha_adquisicion_fin">
-                              <label for="fecha_adquisicion_fin">Fecha Fin</label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+              <div class="row mt-1 g-2">
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <select name="area" id="area" class="form-select filter">
+                      <option value="">Selecciona</option>
+                    </select>
+                    <label for="area" class="form-label">Areas</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <input type="date" class="form-control filter" id="fecha_adquisicion">
+                    <label for="fecha_adquisicion">Fecha Inicio</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <input type="date" class="form-control filter" id="fecha_adquisicion_fin">
+                    <label for="fecha_adquisicion_fin">Fecha Fin</label>
                   </div>
                 </div>
               </div>
