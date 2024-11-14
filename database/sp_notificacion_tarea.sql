@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS sp_add_notificacion_tarea;
 DELIMITER $$
 CREATE PROCEDURE sp_add_notificacion_tarea
 (
-	OUT _idnotificacion INT,
+	OUT _idnotificacion_tarea INT,
     IN _idtarea INT,
     IN _mensaje VARCHAR(250)
 )
@@ -20,11 +20,14 @@ BEGIN
     (_idtarea, _mensaje);
     
 	IF existe_error= 1 THEN
-		SET _idnotificacion = -1;
+		SET _idnotificacion_tarea = -1;
 	ELSE
-        SET _idnotificacion = last_insert_id();
+        SET _idnotificacion_tarea = last_insert_id();
 	END IF;
 END $$
+
+-- call sp_add_notificacion_tarea(@idnotif, 7, "wtf");
+-- SELECT @idnotif AS idnotif
 
 DROP PROCEDURE IF EXISTS sp_listar_notificacion_tarea;
 DELIMITER $$

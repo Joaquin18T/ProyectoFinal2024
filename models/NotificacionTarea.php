@@ -6,7 +6,7 @@ class NotificacionTarea extends ExecQuery{
   public function add($params=[]):int{
     try{
       $pdo = parent::getConexion();
-      $cmd = $pdo->prepare("CALL sp_add_notificacion_tarea(@idnotif,?,?");
+      $cmd = $pdo->prepare("CALL sp_add_notificacion_tarea(@idnotif,?,?)");
       $cmd->execute(
         array(
           $params['idtarea'],

@@ -39,6 +39,7 @@ $(document).ready(async function () {
         return idodt
     }
 
+    /// *************************************** SECCION DE OBTENER DATOS ***************************************
     async function obtenerTareasPorEstado(idestado) {
         const params = new URLSearchParams()
         params.append("operation", "obtenerTareasPorEstado")
@@ -243,90 +244,99 @@ $(document).ready(async function () {
 
 
             }
+        },
+        click: async function (el) {
+            var cardId = el.getAttribute('data-eid'); // ID de la tarjeta
+            console.log('Tarjeta ' + cardId + ' fue clikeada');
+            window.localStorage.setItem("idtarea", cardId)
+            window.location.href = `http://localhost/SIGEMAPRE/views/tareas/ejecutar-tarea`
         }
 
     });
     await renderTareasPendiente()
 
     async function renderHtmlTarea(tareas) {
+        // Limitar el número de activos a mostrar
+        const activosArray = tareas.descripcion_activos ? tareas.descripcion_activos.split(', ') : [];
+        const activosDisplay = activosArray.length > 2
+            ? `${activosArray.slice(0, 2).join(', ')} y ${activosArray.length - 2} más`
+            : activosArray.join(', ');
+
+        // Limitar el número de responsables a mostrar
+        const responsablesArray = tareas.nombres_responsables ? tareas.nombres_responsables.split(', ') : [];
+        const responsablesDisplay = responsablesArray.length > 2
+            ? `${responsablesArray.slice(0, 2).join(', ')} y ${responsablesArray.length - 2} más`
+            : responsablesArray.join(', ');
+
+        // Generar el HTML con los datos limitados
         const tareaHTML = `
-                <h3 class="card-title"></h3>                   
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><small><strong>Intervalo: </strong></small></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><small><strong>Frecuencia: </strong>aaaa</small></p>
-                    </div>
-                </div>                
-                <p class="card-text"><strong>Plan de tarea: </strong></p>
-                <p><strong>Activos: </strong></p>
-                <hr>
-                <p><strong>Prioridad: </strong></p>                                             
-            `;
-        return tareaHTML
+        <h3 class="card-title"></h3>                   
+        <div class="row">
+            <div class="col-md-6">
+                <p><small><strong>F. Inicio: </strong></small>${tareas.fecha_programada}</p>
+            </div>
+            <div class="col-md-6">
+                <p><small><strong>H. Programada: </strong></small>${tareas.hora_programada}</p>
+            </div>
+        </div>                
+        <p class="card-text"><strong>Responsables: </strong>${responsablesDisplay}</p>
+        <p class="card-text"><strong>Activos: </strong>${activosDisplay}</p>                                             
+    `;
+        return tareaHTML;
     }
 
     async function renderTareasPendiente() {
-        const tareasPen = await obtenerTareasPorEstado(10); // EN PROCESO
+        const tareasPen = await obtenerTareasPorEstado(10); // Tareas en estado 'pendientes'
         console.log("Tareas pendientes: ", tareasPen);
 
+        // Agregar tareas pendientes al kanban
         tareasPen.forEach(async tarea => {
-            const tareaHTML = await renderHtmlTarea(tarea)
-            switch (tarea.idestado) {
-                case 10:
-                    kanban.addElement('b-pendientes', {
-                        id: tarea.idtarea, // Usamos el idtarea como id de la tarjeta
-                        title: tareaHTML // Usamos el HTML que hemos creado
-                    });
-                    break;
+            const tareaHTML = await renderHtmlTarea(tarea);
+            if (tarea.idestado === 10) { // Asegúrate de que estás verificando correctamente el estado
+                kanban.addElement('b-pendientes', {
+                    id: tarea.idtarea, // Usamos el idtarea como id de la tarjeta
+                    title: tareaHTML   // Usamos el HTML que hemos creado
+                });
             }
         });
 
-        const tareasProc = await obtenerTareasPorEstado(11);
-        console.log("tareas proceso: ", tareasProc)
+        const tareasProc = await obtenerTareasPorEstado(11); // Tareas en estado 'proceso'
+        console.log("Tareas en proceso: ", tareasProc);
 
         tareasProc.forEach(async tarea => {
-            const tareaHTML = await renderHtmlTarea(tarea)
-            switch (tarea.idestado) {
-                case 11:
-                    kanban.addElement('b-proceso', {
-                        id: tarea.idtarea, // Usamos el idtarea como id de la tarjeta
-                        title: tareaHTML // Usamos el HTML que hemos creado
-                    });
-                    break;
+            const tareaHTML = await renderHtmlTarea(tarea);
+            if (tarea.idestado === 11) { // Estado 'proceso'
+                kanban.addElement('b-proceso', {
+                    id: tarea.idtarea,
+                    title: tareaHTML
+                });
             }
         });
 
-        const tareasRev = await obtenerTareasPorEstado(12);
-        console.log("tareas revision: ", tareasRev)
+        const tareasRev = await obtenerTareasPorEstado(12); // Tareas en estado 'revision'
+        console.log("Tareas en revisión: ", tareasRev);
 
         tareasRev.forEach(async tarea => {
-            const tareaHTML = await renderHtmlTarea(tarea)
-            switch (tarea.idestado) {
-                case 11:
-                    kanban.addElement('b-proceso', {
-                        id: tarea.idtarea, // Usamos el idtarea como id de la tarjeta
-                        title: tareaHTML // Usamos el HTML que hemos creado
-                    });
-                    break;
+            const tareaHTML = await renderHtmlTarea(tarea);
+            if (tarea.idestado === 12) { // Estado 'revision'
+                kanban.addElement('b-revision', { // Cambié a la columna de revisión
+                    id: tarea.idtarea,
+                    title: tareaHTML
+                });
             }
         });
 
-        const tareasFin = await obtenerTareasPorEstado(13);
-        console.log("tareas finalizadas: ", tareasFin)
+        const tareasFin = await obtenerTareasPorEstado(13); // Tareas en estado 'finalizado'
+        console.log("Tareas finalizadas: ", tareasFin);
 
         tareasFin.forEach(async tarea => {
-            const tareaHTML = await renderHtmlTarea(tarea)
-            switch (tarea.idestado) {
-                case 11:
-                    kanban.addElement('b-proceso', {
-                        id: tarea.idtarea, // Usamos el idtarea como id de la tarjeta
-                        title: tareaHTML // Usamos el HTML que hemos creado
-                    });
-                    break;
+            const tareaHTML = await renderHtmlTarea(tarea);
+            if (tarea.idestado === 13) { // Estado 'finalizado'
+                kanban.addElement('b-finalizado', { // Cambié a la columna de finalizado
+                    id: tarea.idtarea,
+                    title: tareaHTML
+                });
             }
         });
-
     }
 });

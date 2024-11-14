@@ -10,4 +10,4 @@ BEGIN
     INSERT INTO responsables_tarea (idusuario, idtarea) values (_idusuario, _idtarea);
 END $$
 
-call sp_registrar_resp_tarea(6,22);
+-- call sp_registrar_resp_tarea(6,22);
