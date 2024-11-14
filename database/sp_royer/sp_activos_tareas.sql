@@ -16,7 +16,7 @@ BEGIN
         SET existe_error = 1;
 	END;
     
-    INSERT INTO tareas (idtarea, idactivo)
+    INSERT INTO activos_tarea (idtarea, idactivo)
     VALUES (_idtarea, _idactivo);
 
     IF existe_error = 1 THEN
@@ -26,4 +26,5 @@ BEGIN
     END IF;
 END //
 
-
+call registrarActivoTarea(@idacttar, 18, 15);
+SELECT @idacttar as idactivos_tarea

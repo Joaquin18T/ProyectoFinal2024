@@ -119,24 +119,50 @@ INSERT INTO estados (idtipo_estado, nom_estado) VALUES
 
 -- Insertando en la tabla PERSONAS
 INSERT INTO PERSONAS (idtipodoc, num_doc, apellidos, nombres, genero, telefono)VALUES 
-(1, '12345678', 'Gonzalez', 'Juan', 'M', '555-1234'),
+(1, '12345678', 'Gonzalez', 'Juan', 'M', '555-1001'),
+(1, '23456789', 'Martinez', 'Ana', 'F', '555-2002'),
+(1, '34567890', 'Ramirez', 'Luis', 'M', '555-3003'),
+(1, '56789012', 'Lopez', 'Carlos', 'M', '555-4004'),
+(1, '67890123', 'Perez', 'Maria', 'F', '555-5005'),
+(1, '78901234', 'Gomez', 'Pedro', 'M', '555-6006'),
+(1, '89012345', 'Sanchez', 'Laura', 'F', '555-7007'),
+(1, '90123456', 'Hernandez', 'Javier', 'M', '555-8008'),
+(1, '11223344', 'Diaz', 'Carmen', 'F', '555-9009'),
+(1, '22334455', 'Torres', 'Ricardo', 'M', '555-1010'),
+(1, '33445566', 'Mendoza', 'Patricia', 'F', '555-2020'),
+(1, '44556677', 'Ruiz', 'Antonio', 'M', '555-3030'),
+(1, '55667788', 'Alvarez', 'Fernanda', 'F', '555-4040'),
+(1, '66778899', 'Castro', 'Eduardo', 'M', '555-5050'),
+(1, '77889900', 'Morales', 'Rosa', 'F', '555-6060'),
+(1, '88990011', 'Jimenez', 'Oscar', 'M', '555-7070'),
+(1, '99001122', 'Soto', 'Elena', 'F', '555-8080'),
+(1, '10223344', 'Vargas', 'Hector', 'M', '555-9090'),
+(1, '21334455', 'Fernandez', 'Liliana', 'F', '555-1111');
 
-(1, '23456789', 'Martinez', 'Ana', 'F', '555-5678'),
-
-(1, '34567890', 'Ramirez', 'Luis', 'M', '555-8765');
 
 
 -- Insertando en la tabla USUARIOS
--- ALTER TABLE usuarios AUTO_INCREMENT = 1;
+-- clave acceso enncriptada = 1234	
 INSERT INTO USUARIOS (idpersona, nom_usuario, claveacceso, perfil, idperfil, idarea, responsable_area)VALUES 
-(1, 'juan.gonzalez','1234', 'ADM', 5, 1, 0),
-(2, 'ana.martinez', '4567' , 'USR', 2, 2, 1),
- (3, 'luis.ramirez', '78910',  'TNC', 3, 3, 0);
- 
--- SELECT*FROM USUARIOS
-update usuarios set claveacceso = '$2y$10$5ImJFOxfRveSsORgTQNs5eFxQKLiP5lK9SgLdkRWKxiAViBF7dx9u' where idusuario = 1; -- clave: 1234
-update usuarios set claveacceso = '$2y$10$5ImJFOxfRveSsORgTQNs5eFxQKLiP5lK9SgLdkRWKxiAViBF7dx9u' where idusuario = 2; -- clave: 1234
-update usuarios set claveacceso = '$2y$10$5ImJFOxfRveSsORgTQNs5eFxQKLiP5lK9SgLdkRWKxiAViBF7dx9u' where idusuario = 3; -- clave: 1234
+(1, 'juan.gonzalez','$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'ADM', 1, 1, 0),
+(2, 'ana.martinez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK' , 'USR', 2, 2, 0),
+ (3, 'luis.ramirez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK',  'TNC', 3, 3, 0),
+ (4, 'carlos.lopez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0),
+(5, 'maria.perez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 3, 0),
+(6, 'pedro.gomez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 1, 0),
+(7, 'laura.sanchez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 1),
+(8, 'javier.hernandez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 3, 0),
+(9, 'carmen.diaz', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 1, 0),
+(10, 'ricardo.torres', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0),
+(11, 'patricia.mendoza', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 3, 0),
+(12, 'antonio.ruiz', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 1, 0),
+(13, 'fernanda.alvarez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0),
+(14, 'eduardo.castro', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 3, 0),
+(15, 'rosa.morales', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 1, 0),
+(16, 'oscar.jimenez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0),
+(17, 'elena.soto', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 3, 0),
+(18, 'hector.vargas', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 1, 0),
+(19, 'liliana.fernandez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0);
 
 INSERT INTO categorias(idarea,categoria)
 	VALUES
@@ -158,9 +184,9 @@ INSERT INTO subcategorias(idcategoria, subcategoria)
         (3, 'Asientos ergonomicos'),
         (3, 'Mamparas'),
         (3, 'Muebles'),
-        (4, 'Medidores de cableado'),
-		(4, 'Routers'),
-        (4, 'Switches');        
+        (4, 'Medidores de cableado'), -- 12
+		(4, 'Routers'), -- 13
+        (4, 'Switches');      -- 14   
         
 
 INSERT INTO marcas(marca)
@@ -251,10 +277,12 @@ VALUES
     (6, 4, 'Chevrolet Silverado', 'VE-006', '2021-12-11', 'Camioneta para trabajo', '{"motor":"V8", "capacidad_asientos":"6"}', 6),
     (3,3, 'Teclado Logitech D4', 'FR5-345K', '2023-08-10', 'Teclado para empleados', '{"tipo":"mecanico"}', 6);
     
--- select*from estados;
+-- select*from activos_asignados;
 INSERT INTO activos_asignados (idarea, idactivo, condicion_asig, imagenes, idestado)
 VALUES
-    (1, 1, 'Asignado para uso general en el departamento de TI', '{"img1": "imagen1.jpg"}', 14),
+    (1, 14, 'Asignado para uso general en el departamento de TI', '{"img1": "imagen1.jpg"}', 14),
+    (1, 15, 'Asignado para uso general en el departamento de TI', '{"img1": "imagen1.jpg"}', 14),
+    (1, 16, 'Asignado para uso general en el departamento de TI', '{"img1": "imagen1.jpg"}', 14),
     (2, 2, 'Asignado para el área administrativa', '{"img2": "imagen2.jpg"}', 14),
     (3, 3, 'Asignado para area de contable', '{"img3": "imagen3.jpg"}', 14),
     (4, 6, 'Asignado al área de Logística y Transporte para transporte de carga pesada', '{"img4": "camion_carga.jpg"}', 14),
@@ -262,6 +290,29 @@ VALUES
     (4, 8, 'Asignado al área de Logística y Transporte para patrullaje', '{"img6": "motocicleta_patrullaje.jpg"}', 14),
     (4, 20, 'Asignado al área de Logística y Transporte para carga pesada', '{"img7": "camion_carga_pesada.jpg"}', 14);
 
+INSERT INTO historial_areas_usuarios (idusuario, idarea, fecha_inicio, fecha_fin, comentario) VALUES
+(1, 1, '2024-01-01', '2024-12-31', 'Usuario asignado al Departamento de TI'),
+(2, 2, '2024-02-01', '2024-12-31', 'Usuario asignado al Área Administrativa'),
+(3, 3, '2024-03-01', '2024-12-31', 'Usuario asignado al Área Contable'),
+(4, 4, '2024-04-01', '2024-12-31', 'Usuario asignado a Logística y Transporte'),
+(5, 5, '2024-05-01', '2024-12-31', 'Usuario no asignado a un área específica'),
+(6, 1, '2024-06-01', '2024-12-31', 'Usuario asignado al Departamento de TI'),
+(7, 2, '2024-07-01', '2024-12-31', 'Usuario asignado al Área Administrativa'),
+(8, 3, '2024-08-01', '2024-12-31', 'Usuario asignado al Área Contable'),
+(9, 4, '2024-09-01', '2024-12-31', 'Usuario asignado a Logística y Transporte'),
+(10, 5, '2024-10-01', '2024-12-31', 'Usuario no asignado a un área específica'),
+(11, 1, '2024-11-01', '2024-12-31', 'Usuario asignado al Departamento de TI'),
+(12, 2, '2024-12-01', '2024-12-31', 'Usuario asignado al Área Administrativa'),
+(13, 3, '2024-01-01', '2024-12-31', 'Usuario asignado al Área Contable'),
+(14, 4, '2024-02-01', '2024-12-31', 'Usuario asignado a Logística y Transporte'),
+(15, 5, '2024-03-01', '2024-12-31', 'Usuario no asignado a un área específica'),
+(16, 1, '2024-04-01', '2024-12-31', 'Usuario asignado al Departamento de TI'),
+(17, 2, '2024-05-01', '2024-12-31', 'Usuario asignado al Área Administrativa'),
+(18, 3, '2024-06-01', '2024-12-31', 'Usuario asignado al Área Contable'),
+(19, 4, '2024-07-01', '2024-12-31', 'Usuario asignado a Logística y Transporte');
+
+select * from historial_areas_usuarios;
+select * from usuarios;
 INSERT INTO historial_asignaciones_activos (idactivo_asig, idresponsable, coment_adicional)
 VALUES
     (1, 1, 'Inicialmente asignado al área de TI para soporte técnico'),
@@ -270,9 +321,9 @@ VALUES
 
 INSERT INTO notificaciones_asignaciones (idactivo_asig,tipo, mensaje)
 VALUES
-    (1,'Asignacion', 'Activo asignado a departamento de TI'),
-    (2,'Cambio de Area', 'Activo movido a área administrativa'),
-    (3,'Mantenimiento', 'Activo enviado a mantenimiento preventivo');
+    (1, 'asignacion','Activo asignado a departamento de TI'),
+    (2, 'movimiento','Activo movido a área administrativa'),
+    (3, 'mantenimiento','Activo enviado a mantenimiento preventivo');
 
 INSERT INTO bajas_activo (idactivo, motivo, coment_adicionales, ruta_doc, idusuario_aprobacion)
 VALUES
@@ -283,22 +334,22 @@ VALUES
 
 -- ***************************** INSERTS ROYER **********************************************
 
-INSERT INTO tareas (idusuario, fecha_programada, hora_programada) VALUES
-    (1, '2024-11-04', '08:30:00'),
-    (2, '2024-11-05', '09:45:00'),
-    (3, '2024-11-06', '10:15:00'),
-    (1, '2024-11-07', '07:30:00'),
-    (2, '2024-11-08', '11:00:00'),
-    (3, '2024-11-09', '08:45:00'),
-    (3, '2024-11-10', '09:15:00'),
-    (2, '2024-11-11', '10:00:00'),
-    (1, '2024-11-12', '07:45:00'),
-    (1, '2024-11-13', '08:15:00'),
-    (2, '2024-11-14', '09:30:00'),
-    (3, '2024-11-15', '10:45:00'),
-    (1, '2024-11-16', '08:00:00'),
-    (2, '2024-11-17', '09:00:00'),
-    (3, '2024-11-18', '11:30:00');
+INSERT INTO tareas (fecha_programada, hora_programada) VALUES
+    ('2024-11-04', '08:30:00'),
+    ('2024-11-05', '09:45:00'),
+    ('2024-11-06', '10:15:00'),
+    ('2024-11-07', '07:30:00'),
+    ('2024-11-08', '11:00:00'),
+    ('2024-11-09', '08:45:00'),
+    ('2024-11-10', '09:15:00'),
+    ('2024-11-11', '10:00:00'),
+    ('2024-11-12', '07:45:00'),
+    ('2024-11-13', '08:15:00'),
+    ('2024-11-14', '09:30:00'),
+    ('2024-11-15', '10:45:00'),
+    ('2024-11-16', '08:00:00'),
+    ('2024-11-17', '09:00:00'),
+    ('2024-11-18', '11:30:00');
 
 
 INSERT INTO activos_tarea (idactivos_tarea, idtarea, idactivo) VALUES
@@ -314,5 +365,7 @@ INSERT INTO tareas_mantenimiento (idtarea, descripcion, fecha_inicio, hora_inici
     (4, 'Inspección de cables y conexiones', '2024-11-07', '07:30:00', '2024-11-07', '09:00:00', '01:30:00'),
     (5, 'Prueba de red y conectividad', '2024-11-08', '11:00:00', '2024-11-08', '12:30:00', '01:30:00'),
     (6, 'Revisión de batería', '2024-11-09', '08:45:00', '2024-11-09', '10:15:00', '01:30:00');
+    
+INSERT INTO mantenimiento_activos_responsables (idtm, idactivo, idusuario) values (1, 14, 11),(2, 14, 12),(3, 14, 10);
 
-select * from tareas;
+select * from tareas_mantenimiento;

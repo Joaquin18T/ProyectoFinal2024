@@ -4,7 +4,6 @@ DROP PROCEDURE IF EXISTS `registrarTarea`
 DELIMITER //
 CREATE PROCEDURE `registrarTarea`(
 	OUT _idtarea 	INT,
-	IN _idusuario	INT,
     IN _fecha_programada	DATE,
     IN _hora_programada		TIME
 )
@@ -17,8 +16,8 @@ BEGIN
         SET existe_error = 1;
 	END;
     
-    INSERT INTO tareas (idusuario, fecha_programada, hora_programada)
-    VALUES (_idusuario, _fecha_programada, _hora_programada);
+    INSERT INTO tareas ( fecha_programada, hora_programada)
+    VALUES ( _fecha_programada, _hora_programada);
     
     IF existe_error = 1 THEN
 		SET _idtarea = -1;

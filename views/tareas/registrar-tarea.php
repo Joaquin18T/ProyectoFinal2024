@@ -46,7 +46,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-floating mb-3">
-                                            <select class="form-select filtro" id="area" required>
+                                            <select class="form-select filtro" id="area" autofocus required>
                                             </select>
                                             <label for="area" class="form-label">Área</label>
                                         </div>
@@ -68,22 +68,24 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table id="tablaActivos" class="stripe row-border order-column nowrap table-hover" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Id</th>
-                                            <th>Activo</th>
-                                            <th>Marca</th>
-                                            <th>Modelo</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="activoBodyTable"></tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table id="tablaActivos" class="stripe row-border order-column nowrap table-hover" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Id</th>
+                                                <th>Activo</th>
+                                                <th>Marca</th>
+                                                <th>Modelo</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="activoBodyTable"></tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="card-footer">
-                                <button type="button" class="btn btn-primary" id="btnAsignarResponsables">Asignar Responsables</button>
+                                <button type="button" class="btn btn-primary" id="btnAsignarResponsables" data-bs-toggle="modal" data-bs-target="#staticBackdrop" disabled>Asignar Responsables</button>
                             </div>
                         </div>
 
@@ -102,7 +104,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <button id="btnCrearTarea" class="mb-3 btn btn-primary">Generar Tarea</button>
+        <button id="btnOrdenarTarea" class="mb-3 btn btn-primary" disabled>Ordenar Tarea</button>
     </div>
     <!-- MODAL DE MOSTRAR RESPONSABLES -->
     <!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightResponsables" aria-labelledby="offcanvasRightResponsablesLabel">
@@ -128,21 +130,49 @@
         </div>
     </div> -->
 
-    <!-- MODAL DE MOSTRAR EVIDENCIAS -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightEvidencias"
-        aria-labelledby="offcanvasRightMostrarMantenimientosActivo">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasRightMostrarMantenimientosActivo">Mantenimientos</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div id="modal-mantenimientos-container">
-                <!-- Aquí se agregarán las evidencias -->
-                <p>Esto es un texto de prueba dentro de modal-content.</p> <!-- Este texto debe aparecer -->
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Asignar responsable</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-responsable-container card">
+                    <div class="table-responsive">
+                        <table id="tablaResponsables" class="stripe row-border order-column nowrap table-hover px-4" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Usuario</th>
+                                </tr>
+                            </thead>
+                            <tbody id="responsableBodyTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+<!--                     <button type="button" class="btn btn-primary" id="btnConfirmarAsignacion" disabled>Hecho</button>
+ -->                </div>
             </div>
         </div>
     </div>
 
+</div>
+
+<!-- MODAL DE MOSTRAR EVIDENCIAS -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightMantenimientos"
+    aria-labelledby="offcanvasRightMantenimientosLabel">
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <h2>Mantenimientos</h2>
+        <div id="modal-container">
+
+        </div>
+    </div>
 </div>
 
 

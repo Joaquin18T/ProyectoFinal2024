@@ -21,10 +21,9 @@ class Tarea extends ExecQuery
   public function registrarTarea($params = []): int
   {
     try {
-      $sp = parent::execQ("CALL registrarTarea(@idtarea,?,?,?)");
+      $sp = parent::execQ("CALL registrarTarea(@idtarea,?,?)");
       $sp->execute(
         array(
-          $params['idusuario'],
           $params['fecha_programada'],
           $params['hora_programada']
         ),

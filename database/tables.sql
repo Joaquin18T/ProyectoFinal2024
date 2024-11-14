@@ -268,11 +268,9 @@ ENGINE=INNODB;
 create table tareas
 (
 	idtarea		int auto_increment primary key,
-    idusuario	int	not null,
     fecha_programada	date	not null, -- fecha programada
     hora_programada		time	not null,
     idestado			int		null default 10,
-	CONSTRAINT fk_idusuario	FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_estado	FOREIGN KEY (idestado) REFERENCES estados (idestado)
 )ENGINE=INNODB	;
 
@@ -288,12 +286,22 @@ CREATE TABLE notificaciones_tareas
 
 CREATE TABLE activos_tarea
 (
-	idactivos_tarea		int not null,
+	idactivos_tarea		int AUTO_INCREMENT PRIMARY KEY,
     idtarea				int not null,
     idactivo			int not null,
     CONSTRAINT fk_idtareaAVT foreign key (idtarea) references tareas (idtarea),
     CONSTRAINT fk_idactivoAVT foreign key (idactivo) references activos (idactivo)
 )ENGINE=INNODB;
+
+CREATE TABLE responsables_tarea
+(
+	idresp_tarea		int AUTO_INCREMENT PRIMARY KEY,
+    idusuario			int not null,
+    idtarea				int not null,
+	CONSTRAINT fk_idusuarioRT foreign key (idusuario) references usuarios (idusuario),
+    CONSTRAINT fk_idtareaRT foreign key (idtarea) references tareas (idtarea)
+)ENGINE=INNODB;
+
 
 CREATE TABLE tareas_mantenimiento
 (
@@ -307,6 +315,18 @@ CREATE TABLE tareas_mantenimiento
     tiempo_ejecutado		time	null,
     CONSTRAINT fk_idtareaTM	FOREIGN KEY (idtarea) REFERENCES tareas (idtarea)
 )ENGINE=INNODB;
+
+CREATE TABLE mantenimiento_activos_responsables (
+    idatm              INT AUTO_INCREMENT PRIMARY KEY,
+    idtm               INT NOT NULL,  -- Referencia a la tarea de mantenimiento
+    idactivo           INT NOT NULL,  -- Referencia al activo específico
+    idusuario           INT NOT NULL,  -- ID del usuario responsable
+    fecha_registro      DATETIME NOT NULL DEFAULT NOW(), -- Fecha de registro (opcional)
+    CONSTRAINT fk_idtm FOREIGN KEY (idtm) REFERENCES tareas_mantenimiento (idtm),
+    CONSTRAINT fk_idactivo FOREIGN KEY (idactivo) REFERENCES activos (idactivo),
+    CONSTRAINT fk_idusuario FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
+) ENGINE = INNODB;
+
 
 CREATE TABLE evidencias
 (

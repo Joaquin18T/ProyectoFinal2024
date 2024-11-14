@@ -74,5 +74,8 @@ BEGIN
     INNER JOIN subcategorias SUBC ON SUBC.idsubcategoria = ACT.idsubcategoria
     INNER JOIN categorias CAT ON CAT.idcategoria = SUBC.idcategoria
     INNER JOIN marcas MAR ON MAR.idmarca = ACT.idmarca
-    WHERE ACT.idsubcategoria = _idsubcategoria AND ACTAS.idestado = 3;
+    WHERE ACT.idsubcategoria = _idsubcategoria AND ACT.idestado = 3;
 END $$
+call sp_filtrar_activosAsignados(12);
+select * from estados;
+select * from subcategorias;
