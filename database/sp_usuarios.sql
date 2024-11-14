@@ -210,10 +210,14 @@ CREATE PROCEDURE sp_filtrar_usuarios_area
 )
 BEGIN
 	SELECT 
+		
 		HAU.idhistorial_usuario,
         USU.idusuario,
 		USU.nom_usuario        
         FROM historial_areas_usuarios HAU
 		INNER JOIN usuarios USU ON USU.idusuario = HAU.idusuario
-        where HAU.idarea = _idarea;
+        where HAU.idarea = _idarea AND USU.idperfil = 3 AND USU.estado = 1;
 END $$
+-- call sp_filtrar_usuarios_area(1)
+select * from perfiles;
+select * from usuarios;

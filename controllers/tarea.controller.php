@@ -19,7 +19,6 @@ if (isset($_POST['operation'])) {
         case 'registrarTarea':
             $id = -1;
             $datosEnviar = [
-                "idusuario"               => $_POST["idusuario"],
                 "fecha_programada"          => $_POST["fecha_programada"],
                 "hora_programada"               => $_POST["hora_programada"]
             ];

@@ -46,7 +46,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-floating mb-3">
-                                            <select class="form-select filtro" id="area" required>
+                                            <select class="form-select filtro" id="area" autofocus required>
                                             </select>
                                             <label for="area" class="form-label">Área</label>
                                         </div>
@@ -135,29 +135,25 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Asignar responsables</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Asignar responsable</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-mantenimientos-container">
+                <div class="modal-responsable-container card">
                     <div class="table-responsive">
-                        <table id="tablaResponsables" class="stripe row-border order-column nowrap table-hover" style="width:100%">
+                        <table id="tablaResponsables" class="stripe row-border order-column nowrap table-hover px-4" style="width:100%">
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Id</th>
-                                    <th>Activo</th>
-                                    <th>Marca</th>
-                                    <th>Modelo</th>
-                                    <th>Acciones</th>
+                                    <th>Usuario</th>
                                 </tr>
                             </thead>
-                            <tbody id="activoBodyTable"></tbody>
+                            <tbody id="responsableBodyTable"></tbody>
                         </table>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">Hecho</button>
+                    <button type="button" class="btn btn-primary" id="btnConfirmarAsignacion" disabled>Hecho</button>
                 </div>
             </div>
         </div>

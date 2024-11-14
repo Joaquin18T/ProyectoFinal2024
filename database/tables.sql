@@ -266,11 +266,9 @@ ENGINE=INNODB;
 create table tareas
 (
 	idtarea		int auto_increment primary key,
-    idusuario	int	not null,
     fecha_programada	date	not null, -- fecha programada
     hora_programada		time	not null,
     idestado			int		null default 10,
-	CONSTRAINT fk_idusuario	FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_estado	FOREIGN KEY (idestado) REFERENCES estados (idestado)
 )ENGINE=INNODB	;
 
@@ -286,12 +284,22 @@ CREATE TABLE notificaciones_tareas
 
 CREATE TABLE activos_tarea
 (
-	idactivos_tarea		int not null,
+	idactivos_tarea		int AUTO_INCREMENT PRIMARY KEY,
     idtarea				int not null,
     idactivo			int not null,
     CONSTRAINT fk_idtareaAVT foreign key (idtarea) references tareas (idtarea),
     CONSTRAINT fk_idactivoAVT foreign key (idactivo) references activos (idactivo)
 )ENGINE=INNODB;
+
+CREATE TABLE responsables_tarea
+(
+	idresp_tarea		int AUTO_INCREMENT PRIMARY KEY,
+    idusuario			int not null,
+    idtarea				int not null,
+	CONSTRAINT fk_idusuarioRT foreign key (idusuario) references usuarios (idusuario),
+    CONSTRAINT fk_idtareaRT foreign key (idtarea) references tareas (idtarea)
+)ENGINE=INNODB;
+
 
 CREATE TABLE tareas_mantenimiento
 (

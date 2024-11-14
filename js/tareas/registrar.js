@@ -15,6 +15,7 @@ $(document).ready(async function () {
     //VARIABLES 
     const host = "http://localhost/SIGEMAPRE/controllers/"
     let tbActivos = null
+    let tbResponsables = null
 
     //UI
     const selectArea = $q("#area");
@@ -22,10 +23,13 @@ $(document).ready(async function () {
     const selectSubcategoria = $q("#subcategoria");
     const filtro = $q(".filtro") //podra tener poder de manipular el change de cada select
     const tbodyActivos = $q("#activoBodyTable")
+    const tbodyResponsables = $q("#responsableBodyTable")
     const btnAsignarResponsables = $q("#btnAsignarResponsables")
+    const btnConfirmarAsignacion = $q("#btnConfirmarAsignacion")
 
     //LISTAS
     let activosElegidos = []
+    let responsablesElegidos = []
 
     //MODAL
     let modalMantenimientosContainer = $q(".modal-mantenimientos-container")
@@ -85,15 +89,48 @@ $(document).ready(async function () {
         return data
     }
 
-    // ************************************** REGISTROS *******************************************
     async function filtrarUsuariosArea() {
         //fetch
+        console.log("selectArea.value: ", selectArea.value)
         const params = new URLSearchParams()
         params.append("operation", "filtrarUsuariosArea")
         params.append("idarea", selectArea.value)
         const data = await getDatos(`${host}usuario.controller.php`, params)
         return data
     }
+
+    // ************************************** REGISTROS *******************************************
+
+    async function registrarTarea(fechaprogramada, horaprogramada) {
+        const formTarea = new FormData()
+        formTarea.append("operation", "registrarTarea")
+        formTarea.append("fecha_programada", fechaprogramada)
+        formTarea.append("hora_programada", horaprogramada)
+        const Ftarea = await fetch(`${host}tarea.controller.php`, { method: "POST", body: formTarea })
+        const tarea = await Ftarea.json()
+        return tarea
+    }
+
+    async function registrarActivoTarea(idtarea, idactivo) {
+        const formAT = new FormData()
+        formAT.append("operation", "registrarActivoTarea")
+        formAT.append("idtarea", idtarea)
+        formAT.append("idactivo", idactivo)
+        const Ftarea = await fetch(`${host}activostarea.controller.php`, { method: "POST", body: formAT })
+        const tarea = await Ftarea.json()
+        return tarea
+    }
+
+    async function registrarResponsableTarea(idtarea, idusuario) {
+        const formAT = new FormData()
+        formAT.append("operation", "registrarResponsableTarea")
+        formAT.append("idusuario", idusuario)
+        formAT.append("idtarea", idtarea)
+        const Fresptarea = await fetch(`${host}respTarea.controller.php`, { method: "POST", body: formAT })
+        const respTarea = await Fresptarea.json()
+        return respTarea
+    }
+
 
 
     // ************************************* RENDER SELECT **********************************
@@ -168,6 +205,7 @@ $(document).ready(async function () {
             `;
         });
 
+
         // Selecciona todos los checkboxes después de renderizar la tabla
         const checkboxes = $all(".activo-checkbox");
 
@@ -189,8 +227,8 @@ $(document).ready(async function () {
 
                 if (chk.checked) {
                     // Agrega a `activosElegidos` si está marcado y no existe
-                    const found = activosElegidos.find(activo => activo.idactivo_asig === idactasignado);
-                    if (!found) {
+                    const encontrado = activosElegidos.find(activo => activo.idactivo_asig === idactasignado);
+                    if (!encontrado) {
                         activosElegidos.push({
                             idactivo_asig: idactasignado,
                             idactivo: idactivo
@@ -198,7 +236,7 @@ $(document).ready(async function () {
                     }
                 } else {
                     // Elimina de `activosElegidos` si se desmarca
-                    activosElegidos = activosElegidos.filter(activo => activo.idactivo !== idactasignado);
+                    activosElegidos = activosElegidos.filter(activo => activo.idactivo_asig !== idactasignado);
                 }
 
                 console.log("activosElegidos después del cambio:", activosElegidos);
@@ -215,6 +253,25 @@ $(document).ready(async function () {
     btnAsignarResponsables.addEventListener("click", async () => {
         await renderModalResponsables()
     })
+
+    //este evento EJECUTARÁ registrar tarea, registrar activos tarea, registrar responsables tareas
+    btnConfirmarAsignacion.addEventListener("click", async ()=>{
+        const tareaRegistrada = await registrarTarea() // ESTO ME DEVOLVERA SU ID DE REGISTRO
+        console.log("tareaRegistrada -> ", tareaRegistrada)
+        for (let i = 0; i < activosElegidos.length; i++) {
+            const atRegistrado = await registrarActivoTarea(tareaRegistrada.id, activosElegidos[i].idactivo)
+            console.log("atRegistrado -> ", atRegistrado);            
+        }
+        for (let e = 0; e < responsablesElegidos.length; e++) {
+            const rtRegistrado = await registrarResponsableTarea(tareaRegistrada.id, responsablesElegidos[e].idusuario)
+            console.log("rtRegistrado -> ", rtRegistrado);            
+        }
+        
+        console.log("TAREA ORDENADA!!!!")
+        showToast(`Tarea ordenada correctamente`, 'SUCCESS', 3000);
+        window.location.href = `http://localhost/SIGEMAPRE/views/tareas/listar-tareas`
+    })
+
     // ******************************** RENDER TABLES ************************************************
     function renderTablaActivos() {
         if (tbActivos) {
@@ -223,6 +280,79 @@ $(document).ready(async function () {
             // Inicializa DataTable si no ha sido inicializado antes
             tbActivos = $('#tablaActivos').DataTable({
                 paging: true,
+                ordering: false,
+                searching: false,
+                lengthMenu: [10, 25, 50, 100],
+                pageLength: 10,
+                language: {
+                    lengthMenu: "Mostrar _MENU_ filas por página",
+                    paginate: {
+                        previous: "Anterior",
+                        next: "Siguiente"
+                    },
+                    emptyTable: "No hay datos disponibles",
+                    search: "Buscar:",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros"
+                }
+            });
+        }
+    }
+
+    async function renderModalResponsables() {
+        renderTablaResponsables()
+        const responsables = await filtrarUsuariosArea()
+        console.log("responsables necontrado por area: ", responsables)
+        tbodyResponsables.innerHTML = ''
+        responsables.forEach(responsable => {
+            tbodyResponsables.innerHTML += `
+            <tr>
+                <th scope="row">
+                    <input type="checkbox" class="responsable-checkbox" data-husuario="${responsable.idhistorial_usuario}" data-idusuario="${responsable.idusuario}">
+                </th>
+                <td>${responsable.nom_usuario}</td>
+            </tr>
+            `;
+        });
+
+        $all(".responsable-checkbox").forEach(chk => {
+            const idhusuario = parseInt(chk.getAttribute("data-husuario")); // id historial usuario
+            //console.log("idhusuario: ", idhusuario)
+            const responsableEncontrado = responsablesElegidos.find(responsable => responsable.idhistorial_usuario === idhusuario);
+            if (responsableEncontrado) {
+                chk.checked = true
+            }
+            chk.addEventListener("change", () => {
+                const idusuario = parseInt(chk.getAttribute("data-idusuario")); // id usuario
+                if (chk.checked) {
+                    const encontrado = responsablesElegidos.find(responsable => responsable.idhistorial_usuario === idhusuario)
+                    if (!encontrado) {
+                        responsablesElegidos.push({
+                            idhistorial_usuario: idhusuario,
+                            idusuario: idusuario
+                        })
+                    }
+                } else {
+                    responsablesElegidos = responsablesElegidos.filter(responsable => responsable.idhistorial_usuario !== idhusuario)
+                }
+
+                console.log("responsablesElegidos después del cambio:", responsablesElegidos);
+
+                btnConfirmarAsignacion.disabled = responsablesElegidos.length === 0
+            })
+        })
+
+        btnConfirmarAsignacion.disabled = responsablesElegidos.length === 0
+
+    }
+
+    function renderTablaResponsables() {
+        if (tbResponsables) {
+            tbResponsables.clear().rows.add($(tbodyResponsables).find('tr')).draw();
+        } else {
+            // Inicializa DataTable si no ha sido inicializado antes
+            tbResponsables = $('#tablaResponsables').DataTable({
+                paging: true,
+                ordering: false,
                 searching: false,
                 lengthMenu: [10, 25, 50, 100],
                 pageLength: 10,
@@ -240,11 +370,6 @@ $(document).ready(async function () {
         }
 
 
-    }
-
-    async function renderModalResponsables() {
-        const responsables = await filtrarUsuariosArea()
-        console.log("responsables necontrado por area: ", responsables)
     }
 
 })
