@@ -136,14 +136,16 @@ CREATE PROCEDURE sp_get_usuario_by_id
 )
 BEGIN
 	SELECT
-		P.apellidos,P.nombres AS dato, P.num_doc, P.genero, P.telefono, 
+		P.apellidos,P.nombres AS dato, P.num_doc, P.genero, P.telefono, P.id_persona,
         TP.tipodoc,
-        U.idusuario,U.nom_usuario, U.responsable_area, U.estado, U.perfil, U.idperfil,
-        A.area
+        U.idusuario,U.nom_usuario, U.responsable_area, U.estado, U.idperfil,
+        A.area,
+        PER.perfil
 		FROM usuarios U
         INNER JOIN areas A ON U.idarea = A.idarea
         INNER JOIN personas P ON U.idpersona = P.id_persona
         INNER JOIN tipo_doc TP ON P.idtipodoc = TP.idtipodoc
+        INNER JOIN perfiles PER ON U.idperfil = PER.idperfil
         WHERE idusuario = _idusuario;
 END $$
 -- CALL sp_get_usuario_by_id(2);

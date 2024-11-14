@@ -19,7 +19,9 @@ if(isset($_POST['operation'])){
   switch($_POST['operation']){
     case 'addNotifAsig':
       $cleanData=[
+        'idusuario_sup'=>$notifyAsig->limpiarCadena($_POST['idusuario_sup']),
         'idactivo_asig'=>$notifyAsig->limpiarCadena($_POST['idactivo_asig']),
+        'tipo'=>$notifyAsig->limpiarCadena($_POST['tipo']),
         'mensaje'=>$notifyAsig->limpiarCadena($_POST['mensaje']),
       ];
 

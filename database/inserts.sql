@@ -47,8 +47,9 @@ INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 -- SELECT*FROM vistas
 INSERT INTO perfiles (perfil, nombrecorto) VALUES
 	('Administrador', 'ADM'),
-	('Usuario', 'USR'),
-	('Tecnico', 'TNC');
+	('Supervisor', 'SUP'),
+	('Tecnico', 'TNC'),
+	('Usuario', 'USR');
     
 -- SELECT*FROM vistas;
 INSERT INTO permisos(idperfil, idvista) VALUES
@@ -79,6 +80,7 @@ INSERT INTO permisos(idperfil, idvista) VALUES
     (3,1),
 	(3,14),
     (3,16);
+-- ESPECIFICAR LA VISTA EN DONDE SE PUEDA HACER REPORTES DE ACTIVOS GENERALES(DETALLES BASICOS) PARA EL PERFIL DE USUARIO
 
 INSERT INTO tipo_doc(tipodoc) VALUES
 	('DNI'),
@@ -127,7 +129,7 @@ INSERT INTO PERSONAS (idtipodoc, num_doc, apellidos, nombres, genero, telefono)V
 -- Insertando en la tabla USUARIOS
 -- ALTER TABLE usuarios AUTO_INCREMENT = 1;
 INSERT INTO USUARIOS (idpersona, nom_usuario, claveacceso, perfil, idperfil, idarea, responsable_area)VALUES 
-(1, 'juan.gonzalez','1234', 'ADM', 1, 1, 0),
+(1, 'juan.gonzalez','1234', 'ADM', 5, 1, 0),
 (2, 'ana.martinez', '4567' , 'USR', 2, 2, 1),
  (3, 'luis.ramirez', '78910',  'TNC', 3, 3, 0);
  

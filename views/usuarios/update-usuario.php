@@ -35,13 +35,13 @@
             </div>
             <div class="col-md-2">
               <div class="form-floating">
-                <input type="text" class="form-control w-100" id="apellidos" placeholder="Apellidos" minlength="3" required>
+                <input type="text" class="form-control w-100 field-up" id="apellidos" placeholder="Apellidos" minlength="3" required>
                 <label for="apellidos" class="form-label">Apellidos</label>
               </div>
             </div>
             <div class="col-md-2">
               <div class="form-floating">
-                <input type="text" class="form-control w-100" id="nombres" placeholder="Nombres" required>
+                <input type="text" class="form-control w-100 field-up" id="nombres" placeholder="Nombres" required>
                 <label for="nombres" class="form-label">Nombres</label>
               </div>
             </div>
@@ -56,12 +56,12 @@
                   maxlength="9"
                   minlength="9"
                   title="Por favor ingresa solo números.">
-                <label for="telefono" class="form-label">Telefono</label>
+                <label for="telefono" class="form-label field-up">Telefono</label>
               </div>
             </div>
             <div class="col-md-2">
               <div class="form-floating">
-                <select name="genero" id="genero" class="form-select w-100" required>
+                <select name="genero" id="genero" class="form-select w-100 field-up" required>
                   <option value="">Selecciona Genero</option>
                   <option value="M">Masculino</option>
                   <option value="F">Femenino</option>
@@ -80,22 +80,20 @@
             </div>
             <div class="col-md-2">
               <div class="form-floating">
-                <select name="perfil" id="perfil" class="form-select w-100" required>
-                  <option value="">Selecciona Perfil</option>
-                </select>
+                <input type="text" id="perfil" class="form-control" disabled required>
                 <label for="perfil" class="form-label">Perfiles</label>
               </div>
             </div>
             <div class="col-md-2">
               <div class="form-floating">
-                <input type="text" class="form-control" id="area" disabled required>
+                <input type="text" class="form-control field-up" id="area" disabled required>
                 <label for="area" class="form-label">Area</label>
               </div>
             </div>
           </div>
           <div class="row g-2 mb-2 mt-2">
             <div class="col-md-3">
-              <button type="submit" class="form-control btn btn-primary w-50" id="btnEnviar">
+              <button type="submit" class="form-control btn btn-primary w-50" id="btnEnviar" disabled>
                 Registrar
               </button>
             </div>

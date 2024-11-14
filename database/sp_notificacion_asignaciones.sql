@@ -5,6 +5,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_add_notificacion_asignacion
 (
 	OUT _idnotificacion INT,
+    IN _idusuario_sup INT,
     IN _idactivo_asig INT,
     IN _tipo VARCHAR(50),
     IN _mensaje VARCHAR (250)
@@ -17,8 +18,8 @@ BEGIN
         SET existe_error = 1;
 	END;
     
-    INSERT INTO notificaciones_asignaciones(idactivo_asig, tipo,mensaje) VALUES
-    (_idactivo_asig,_tipo, _mensaje);
+    INSERT INTO notificaciones_asignaciones(idusuario_sup,idactivo_asig, tipo,mensaje) VALUES
+    (_idusuario_sup,_idactivo_asig,_tipo, _mensaje);
     
 	IF existe_error= 1 THEN
 		SET _idnotificacion = -1;

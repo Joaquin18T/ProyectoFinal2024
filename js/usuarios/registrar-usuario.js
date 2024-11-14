@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded",()=>{
   const host = "http://localhost/SIGEMAPRE/controllers/";
   let isReset= false;
-  let isTenico = false;
+  //let isTenico = false;
   let nomPerfil = "";
   blockCamps(true);
   function selector(value) {
@@ -22,11 +22,13 @@ document.addEventListener("DOMContentLoaded",()=>{
   //Areas
   (async()=>{
     const data = await getDatos(`area.controller.php`,"operation=getAll");
-    data.forEach(x=>{
-      const element = document.createElement("option");
-      element.textContent = x.area;
-      element.value = x.idarea;
-      selector("area").appendChild(element);
+    data.forEach((x,i)=>{
+      if(i<=3){
+        const element = document.createElement("option");
+        element.textContent = x.area;
+        element.value = x.idarea;
+        selector("area").appendChild(element);
+      }
     });
   })();
 
@@ -70,13 +72,13 @@ document.addEventListener("DOMContentLoaded",()=>{
   selector("perfil").addEventListener("change",()=>{
     const selectPerfil = selector("perfil");
     const textOption = selectPerfil.options[selectPerfil.selectedIndex].text;
-    if(textOption==="Tecnico" || textOption==="Administrador"){
-      selector("responsable").disabled= true;
-      nomPerfil = textOption;
-      isTenico=true;
-    }else{
-      selector("responsable").disabled= false;
+    if(textOption==="Supervisor"){
+      selector("responsable").value=1;
     }
+    if(textOption==="Tecnico" || textOption==="Administrador" ||textOption==="Usuario"){
+      selector("responsable").value=0;
+    }
+    selector("responsable").disabled= true;
     
   });
 
@@ -163,11 +165,9 @@ document.addEventListener("DOMContentLoaded",()=>{
       selector("password").value,
       selector("perfil").value,
       selector("area").value,
-      
+      selector("responsable").value
     ];
-    if(!isTenico){
-      data.push(selector("responsable").value);
-    }
+
     const dataNumber = [];
 
     let isValidate = data.every(x=>x.trim().length>0);
@@ -179,6 +179,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   //Registrar Persona
   selector("form-person-user").addEventListener("submit",async(e)=>{
     e.preventDefault();
+    
     isReset=true;
     await validateNumDoc(); //valida que el numero de caracteres y otras validaciones sean correctas
     const validateFields = validateData(); //Valida que los campos no esten vacios
@@ -195,12 +196,14 @@ document.addEventListener("DOMContentLoaded",()=>{
     //console.log(unikeUser);
 
     //Valida si existe un responsable en el area elegida
-    const responsableArea = await existeResponsableArea(selector("area").value);
+    let responsableArea = [{existe:0}];
+    if(selector("responsable").value==="1"){
+      responsableArea = await existeResponsableArea(selector("area").value);
+    }
     //const validNumDoc = validateNumDoc();
     // const idperfil = await getPerfil(2);
     //console.log(responsableArea);
 
-    const chooseSUP = (nomPerfil==="Supervisor" && parseInt(selector("responsable").value)===1);
     //preguntar si al elegir como sup si o si debe ser responsable de un area
     
     if(validateFields && isUnikeTelf.length===0 && unikeUser.length===0&&
@@ -223,18 +226,22 @@ document.addEventListener("DOMContentLoaded",()=>{
           if(data.idpersona>0){
             const usuario = await addUser(data.idpersona);
             if(usuario.idusuario>0){
-              alert("Se ha registrado correctamente");
-              isTenico=false;
+              const historialAgregado = await addHistorialAsg(usuario.idusuario,selector("area").value);
+              if(historialAgregado.idhis_user>0){
+                alert("Se ha registrado correctamente");
+                //isTenico=false;
+                isReset=false;
+                resetUI();
+                selector("numDoc").value="";
+                blockCamps(true);
+                selector("numDoc").focus();
+              }
             }
-            resetUI();
-            selector("numDoc").value="";
-            blockCamps(true);
-            selector("numDoc").focus();
+            
           }else{
             alert("Hubo un error al registrar los datos de la persona");
           }
         }
-        isReset=false;
     }else{
       let message = "";
       if(!validateFields){message="Completa los campos";}
@@ -246,6 +253,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       if(parseInt(responsableArea[0].existe)===1){message="Ya hay un responsable del area seleccionado";}
       alert(message);
     }
+    selector("responsable").disabled=true;
   });
 
   //registrar al usuario
@@ -259,7 +267,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     params.append("perfil", perfilData[0].nombrecorto);
     params.append("idperfil",parseInt(selector("perfil").value));
     params.append("idarea", parseInt(selector("area").value));
-    params.append("responsable_area",isTenico?0:parseInt(selector("responsable").value));
+    params.append("responsable_area",parseInt(selector("responsable").value));
 
     const resp = await fetch(`${host}usuario.controller.php`,{
       method:'POST',
@@ -324,6 +332,23 @@ document.addEventListener("DOMContentLoaded",()=>{
     params.append("idarea",parseInt(id));
 
     const data = await getDatos(`usuario.controller.php`,params);
+    return data;
+  }
+
+  async function addHistorialAsg(iduser,idarea){
+    const params = new FormData();
+    params.append("operation","addHisUser");
+    params.append("idusuario",iduser);
+    params.append("idarea",parseInt(idarea));
+    params.append("comentario","");
+    params.append("es_responsable",parseInt(selector("responsable").value));
+
+    const resp = await fetch(`${host}historialUsuario.controller.php`,{
+      method:'POST',
+      body:params
+    });
+
+    const data = await resp.json();
     return data;
   }
 

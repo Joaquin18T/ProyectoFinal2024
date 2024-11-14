@@ -27,8 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const optionSB = addOptions(data);
-    optionSB.forEach(x=>{
-      selector("sb-area").appendChild(x);
+    optionSB.forEach((x,i)=>{
+      if(i<=3){
+        selector("sb-area").appendChild(x);
+      }
     });
     
   })();
@@ -114,14 +116,16 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${x.estado===1?"Activo":"Baja"}</td>
           <td>${x.area}</td>
           <td>
-              ${parseInt(x.estado)===0?'Ninguna Accion':
-                `<button type="button" class="btn btn-sm btn-warning update-user" data-iduser=${x.idusuario}>Update</button>
-                <button type="button" class="btn btn-sm btn-danger dar-baja" data-iduser=${x.idusuario}>Dar baja</button>
-                <button type="button" class="btn btn-sm btn-info change-area" data-iduser=${x.idusuario} data-idarea=${x.idarea}>
-                  Areas
-                </button>
-                `
-              }
+            ${parseInt(x.estado)===0?
+              `<button type="button" class="btn btn-sm btn-success activate-user" data-iduser=${x.idusuario}>Reactivar</button>`
+              :
+              `<button type="button" class="btn btn-sm btn-warning update-user" data-iduser=${x.idusuario}>Update</button>
+              <button type="button" class="btn btn-sm btn-danger dar-baja" data-iduser=${x.idusuario}>Dar baja</button>
+              <button type="button" class="btn btn-sm btn-info change-area" data-iduser=${x.idusuario} data-idarea=${x.idarea}>
+                Areas
+              </button>
+              `
+            }
           </td>
         </tr>
       `;
@@ -176,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   function chargerEventButtons(){
-    document.querySelector(".table-responsive").addEventListener("click",(e)=>{
+    document.querySelector(".table-responsive").addEventListener("click",async(e)=>{
       if(e.target){
         if(e.target.classList.contains("update-user")){
 
@@ -189,6 +193,10 @@ document.addEventListener("DOMContentLoaded", () => {
           globals.idusuario = parseInt(e.target.getAttribute("data-iduser"));
           globals.idarea=parseInt(e.target.getAttribute("data-idarea"));
           changeArea(e);
+        }
+        if(e.target.classList.contains("activate-user")){
+          globals.iduserBaja = e;
+          await reactivarUser();
         }
       }
     });
@@ -217,16 +225,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   selector("aceptar-baja").addEventListener("click",async()=>{
-    await DarBajaUsuario();
+    await updateEstadoUser(0,"Se le ha dado de baja correctamente");
   });
 
-  async function DarBajaUsuario(){
+  async function updateEstadoUser(estado, msg){
     const iduser = globals.iduserBaja.target.getAttribute("data-iduser");
   
     const params = new FormData();
     params.append("operation","updateEstadoUser");
     params.append("idusuario",parseInt(iduser));
-    params.append("estado",0);
+    params.append("estado",estado);
 
     const data = await fetch(`${host}usuario.controller.php`, {
       method:'POST',
@@ -235,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const {update} = await data.json();
     if(update){
-      alert("Al usuario se le ha dado de baja correctamente");
+      alert(msg);
       
       await showUsuarios();
     }
@@ -247,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const nomArea = await getAreaId(globals.idarea);
 
-    selector("sb-show-current-area").innerHTML=`(Area actual: ${nomArea[0].area})`;
+    selector("sb-show-current-area").innerHTML=`<strong>(Area actual: ${nomArea[0].area})</strong>`;
 
     const modalImg = new bootstrap.Modal(selector("sb-change-area"));
     modalImg.show();
@@ -263,23 +271,64 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   selector("save-change-area").addEventListener("click",async()=>{
-    if(confirm("¿Estas seguro de actualizar el area del usuario?")){
-      const nuevaArea = selector("sb-area").value;
-      const resp = await updateArea(globals.idusuario, nuevaArea);
-      // let modal = new bootstrap.Modal(selector("sb-change-area"));
-      // modal.hide();
-      console.log(resp);
-      
-      //validar si es responsable anterior
-      if(resp.update){
-        await showUsuarios();
-        const myModal = bootstrap.Modal.getOrCreateInstance(selector("sb-change-area"));
-        myModal.hide();
-        alert("Se ha actualizado el area");
+    const nuevaArea = selector("sb-area").value; //almacena la nueva area
+
+    const existeRespArea = await existeResponsableArea(nuevaArea);
+    const dataUser = await getDataUser(globals.idusuario);
+    console.log(dataUser[0].perfil);
+    
+    let isSupervisor = false;
+    if(dataUser[0].perfil==="Supervisor"){
+      if(existeRespArea[0].existe===0){
+        isSupervisor=true;
+      }else{
+        alert("Ya existe un supervisor en el area seleccionada");
+        return;
+      }
+    }
+
+    if(!isSupervisor ||isSupervisor){
+      if(confirm("¿Estas seguro de actualizar el area del usuario?")){
+        //Dos caminos (SUPERVISOR - USUARIO, TECNICO)
+
+        //Paso 1: VERIFICAR EL HISTORIAL DE USUARIOS
+        const validaHistorial = await validateHistorialUsres(globals.idusuario); //verifica si existe historial del usuario
+        if(validaHistorial || !validaHistorial){
+
+          //PASO 2: AGREGAR EL REGISTRO DE DESIGNACION DE AREA AL HISTORIAL
+          const historialAdd = await addHistorialAsg(globals.idarea, "Cambio de Area"); 
+          if(historialAdd.idhis_user>0){
+            //PASO 3: ACTUALIZAR A SU NUEVA AREA
+            const resp = await updateArea(globals.idusuario, nuevaArea);  
+            if(resp.update){
+              //PASO 4: REGISTRAR AL HISTORIAL AL NUEVO SUPERVISOR DEL AREA SELECCIONADA
+              const historialAdd = await addHistorialAsg(nuevaArea, selector("comentario").value);
+              if(historialAdd.idhis_user>0){
+                selector("sb-area").value="";
+                selector("comentario").value="";
+                await showUsuarios();
+                const myModal = bootstrap.Modal.getOrCreateInstance(selector("sb-change-area"));
+                myModal.hide();
+                alert("Se ha actualizado el area");
+              }
+            }
+          }
+        }
       }
     }
   });
 
+  //Valida si ya existe un supervisor en el area elegida
+  async function existeResponsableArea(id){
+    const params = new URLSearchParams();
+    params.append("operation","existeResponsableArea");
+    params.append("idarea",parseInt(id));
+
+    const data = await getDatos(`${host}usuario.controller.php`,params);
+    return data;
+  }
+
+  //Actualiza el area del usuario ubicado (t. users)
   async function updateArea(iduser, idarea){
     const params = new FormData();
     params.append("operation","cambiarAreaUser");
@@ -293,4 +342,110 @@ document.addEventListener("DOMContentLoaded", () => {
     const resp = await data.json();
     return resp;
   }
+
+  //Obtiene datos del usuario
+  async function getDataUser(iduser){
+    const params = new URLSearchParams();
+    params.append("operation", "getUserById");
+    params.append("idusuario", iduser);
+
+    const data = await getDatos(`${host}usuario.controller.php`, params);
+    return data;
+  }
+
+  //Agrega el cambio de area al historial (getDataUser)
+  async function addHistorialAsg(idarea, comentario){
+    const dataUser = await getDataUser(globals.idusuario);
+    console.log(dataUser);
+    
+    const params = new FormData();
+    params.append("operation","addHisUser");
+    params.append("idusuario",globals.idusuario);
+    params.append("idarea",parseInt(idarea));
+    params.append("comentario",comentario);
+    params.append("es_responsable",dataUser[0].responsable_area);
+
+    const resp = await fetch(`${host}historialUsuario.controller.php`,{
+      method:'POST',
+      body:params
+    });
+
+    const data = await resp.json();
+    return data;
+  }
+
+  //Valida y actualiza si hubo mas cambios de areas del usuario (verificarHisUsuario, updateFechaFinusers)
+  async function validateHistorialUsres(iduser){
+    let isValidate=false;
+    const dataHistorial = await verificarHisUsuario(iduser);
+    console.log(dataHistorial);
+    
+    if(dataHistorial.length>0){
+      const updateFin = await updateFechaFinUsers(iduser);
+      if(updateFin.update){
+        isValidate = true;
+      }else{
+        alert("Hubo un error al actualizar fecha");
+        return;
+      }
+    }
+    return isValidate;
+  }
+  //Verifica si hubo mas cambios del usuario
+  async function verificarHisUsuario(iduser){
+    const params = new URLSearchParams();
+    params.append("operation","verificarHisUser");
+    params.append("idusuario",iduser);
+
+    const data = await getDatos(`${host}historialUsuario.controller.php`, params);
+    return data;
+  }
+
+  //Si hubo mas cambios del usuario.. Actualiza la fecha de fin en el historial
+  async function updateFechaFinUsers(iduser){
+    const params = new FormData();
+    params.append("operation", "updateFechaFinByUser");
+    params.append("idusuario", iduser);
+
+    const data = await fetch(`${host}historialUsuario.controller.php`,{
+      method:'POST',
+      body:params
+    });
+
+    const resp = await data.json();
+    return resp;
+  }
+
+  async function actualizarResponsabilidad(iduser, es_responsable){
+    const params = new FormData();
+    params.append("operation","designarReponsableArea");
+    params.append("idusuario",iduser);
+    params.append("responsable_area",es_responsable);
+
+    const resp = await fetch(`${fetch}usuario.controller.php`,{
+      method:'POST',
+      body:params
+    });
+
+    const data = await resp.json();
+    return data;
+  }
+
+  async function reactivarUser(){
+    if(await ask("¿Estas seguro de reactivar al usuario")){
+      //console.log("aaaa");
+      
+      updateEstadoUser(1,"Se ha reactivado al usuario correctamete");
+    }
+  }
+
+  async function addNotificacion(){
+    const params = new FormData();
+    params.append("operation", "addNotifAsig");
+    params.append("idusuario_sup", "usuario supervisor");
+    params.append("idactivo_asig", "null por ahora");
+    params.append("tipo", "pasar como parametro");
+    params.append("mensaje", "pasar como parametro");
+  }
+
 });

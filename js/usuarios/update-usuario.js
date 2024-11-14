@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded",()=>{
   const host = "http://localhost/SIGEMAPRE/controllers/";
-
+  let idpersona = 0;
+  let copyTelf="";
   //console.log(localStorage.getItem("iduser"));
 
   function selector(value) {
@@ -33,6 +34,24 @@ document.addEventListener("DOMContentLoaded",()=>{
       selector("perfil").appendChild(element);
     });
   })();
+
+  function allFields(){
+    const fields = document.querySelectorAll(".field-up");
+    fields.forEach(x=>{
+      x.addEventListener("change",()=>{
+        console.log("a");
+        
+        selector("btnEnviar").disabled=false;
+      });
+      x.addEventListener("keyup",()=>{
+        selector("btnEnviar").disabled=false;
+      });
+      // if(x.tagName === "SELECT"){
+      // }else if(x.tagName==="INPUT"){
+
+      // }
+    });
+  }
   
   //Obtener los datos del usuario
   async function getDataUser(){
@@ -49,8 +68,9 @@ document.addEventListener("DOMContentLoaded",()=>{
   //Funcion anonima que ejecuta dos funciones para que muestre datos del usuario en la vista
   (async()=>{
     const data = await getDataUser();
-    //console.log(data);
+    console.log(data);
     
+    allFields();
     showDatos(data[0]);
   })();
 
@@ -62,8 +82,9 @@ document.addEventListener("DOMContentLoaded",()=>{
     selector("nombres").value=data.dato;
     selector("telefono").value=data.telefono;
     selector("genero").value=data.genero;
-    //selector("password").value = data.claveacceso;
-    selector("perfil").value=data.idperfil;
+    idpersona = data.id_persona;
+    copyTelf = data.telefono;
+    selector("perfil").value=data.perfil;
     selector("usuario").value=data.nom_usuario;
     selector("area").value=data.area;
     //selector("responsable").value = data.responsable_area;
@@ -99,33 +120,36 @@ document.addEventListener("DOMContentLoaded",()=>{
   selector("form-update-user").addEventListener("submit",async(e)=>{
     e.preventDefault();
 
-    const unikeTelf = await searchTelf(selector("telefono").value);
+    let unikeTelf = [];
+    if(copyTelf!==selector("telefono").value){
+      unikeTelf = await searchTelf(selector("telefono").value)
+    }
     const validarAllData = validateData();
 
     if(unikeTelf.length===0 && validarAllData){
       if(confirm("¿Estas seguro de actualizar los datos?")){
         //console.log(parseInt(selector("perfil").value));
-        
-        const params = new FormData();
-        params.append("operation", "updateUser");
-        params.append("idusuario", parseInt(localStorage.getItem("iduser")));
-        params.append("idperfil", parseInt(selector("perfil").value));
-
-        const resp = await fetch(`${host}usuario.controller.php`,{
-          method:'POST',
-          body:params
-        });
-
-        const data = await resp.json();
-        console.log(data);
-        
-        if(data.idpersona>0){
-          const msg = await updateDataPersona(data.idpersona);
-          if(msg.update){
-            alert("datos actualizados correctamente");
-            resetUI();
-          }
+        const msg = await updateDataPersona(idpersona);
+        if(msg.update){
+          alert("datos actualizados correctamente");
+          resetUI();
         }
+        // const params = new FormData();
+        // params.append("operation", "updateUser");
+        // params.append("idusuario", parseInt(localStorage.getItem("iduser")));
+        // params.append("idperfil", parseInt(selector("perfil").value));
+
+        // const resp = await fetch(`${host}usuario.controller.php`,{
+        //   method:'POST',
+        //   body:params
+        // });
+
+        // const data = await resp.json();
+        // console.log(data);
+        
+        // if(data.idpersona>0){
+
+        // }
       }
     }else{
       let mensaje="";
