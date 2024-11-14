@@ -363,5 +363,7 @@ INSERT INTO tareas_mantenimiento (idtarea, descripcion, fecha_inicio, hora_inici
     (4, 'Inspección de cables y conexiones', '2024-11-07', '07:30:00', '2024-11-07', '09:00:00', '01:30:00'),
     (5, 'Prueba de red y conectividad', '2024-11-08', '11:00:00', '2024-11-08', '12:30:00', '01:30:00'),
     (6, 'Revisión de batería', '2024-11-09', '08:45:00', '2024-11-09', '10:15:00', '01:30:00');
+    
+INSERT INTO mantenimiento_activos_responsables (idtm, idactivo, idusuario) values (1, 14, 11),(2, 14, 12),(3, 14, 10);
 
-select * from tareas;
+select * from tareas_mantenimiento;

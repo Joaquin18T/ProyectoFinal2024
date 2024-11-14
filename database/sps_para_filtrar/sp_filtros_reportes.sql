@@ -74,21 +74,29 @@ CREATE PROCEDURE `sp_filtrar_mantenimientos_activos` (
 )
 BEGIN
     SELECT 
-        ACTAR.idactivos_tarea,
-        ACTAR.idactivo,
-        ACTAR.idtarea,
+        MAR.idatm AS id_mantenimiento_activo,
+        MAR.idactivo,
+        MAR.idtm AS id_tarea_mantenimiento,
         ACT.descripcion AS activo,
-        TARM.descripcion,
-        TARM.tiempo_ejecutado,
-        TARM.fecha_inicio,
-        TARM.fecha_finalizado
-    FROM activos_tarea ACTAR
-    INNER JOIN activos ACT ON ACT.idactivo = ACTAR.idactivo
-    INNER JOIN tareas TAR ON TAR.idtarea = ACTAR.idtarea
-    INNER JOIN tareas_mantenimiento TARM ON TARM.idtarea = TAR.idtarea
-    WHERE (_idactivo IS NULL OR ACTAR.idactivo = _idactivo)
-      AND (_fecha_inicio IS NULL OR TARM.fecha_inicio >= _fecha_inicio)
-      AND (_fecha_fin IS NULL OR TARM.fecha_finalizado <= _fecha_fin);
+        TM.descripcion AS descripcion_mantenimiento,
+        TM.tiempo_ejecutado,
+        TM.fecha_inicio,
+        TM.fecha_finalizado,
+        U.idusuario,
+        P.nombres AS nombre_responsable,
+        P.apellidos AS apellido_responsable,
+        P.telefono AS telefono_responsable
+    FROM mantenimiento_activos_responsables MAR
+    INNER JOIN activos ACT ON ACT.idactivo = MAR.idactivo
+    INNER JOIN tareas_mantenimiento TM ON TM.idtm = MAR.idtm
+    INNER JOIN usuarios U ON U.idusuario = MAR.idusuario
+    INNER JOIN personas P ON P.id_persona = U.idpersona
+    WHERE (_idactivo IS NULL OR MAR.idactivo = _idactivo)
+      AND (_fecha_inicio IS NULL OR TM.fecha_inicio >= _fecha_inicio)
+      AND (_fecha_fin IS NULL OR TM.fecha_finalizado <= _fecha_fin);
 END $$
+DELIMITER ;
 
--- call sp_filtrar_mantenimientos_activos(null,'2024-11-04',null)
+
+select * from tareas_mantenimiento;
+-- call sp_filtrar_mantenimientos_activos(14,'2024-11-04',null)

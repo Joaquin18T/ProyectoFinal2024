@@ -25,8 +25,8 @@ $(document).ready(async function () {
     const tbodyActivos = $q("#activoBodyTable")
     const tbodyResponsables = $q("#responsableBodyTable")
     const btnAsignarResponsables = $q("#btnAsignarResponsables")
-    const btnConfirmarAsignacion = $q("#btnConfirmarAsignacion")
-
+    //const btnConfirmarAsignacion = $q("#btnConfirmarAsignacion")
+    const btnOrdenarTarea = $q("#btnOrdenarTarea")
     //LISTAS
     let activosElegidos = []
     let responsablesElegidos = []
@@ -79,7 +79,6 @@ $(document).ready(async function () {
         return data
     }
 
-
     async function filtrarActivosAsignados() {
         //fetch
         const params = new URLSearchParams()
@@ -90,12 +89,21 @@ $(document).ready(async function () {
     }
 
     async function filtrarUsuariosArea() {
-        //fetch
         console.log("selectArea.value: ", selectArea.value)
         const params = new URLSearchParams()
         params.append("operation", "filtrarUsuariosArea")
         params.append("idarea", selectArea.value)
         const data = await getDatos(`${host}usuario.controller.php`, params)
+        return data
+    }
+
+    async function filtrarMantenimientosActivos(idactivo, fechainicio, fechafin) {
+        const params = new URLSearchParams()
+        params.append("operation", "filtrarMantenimientosActivos")
+        params.append("idactivo", idactivo)
+        params.append("fechainicio", (fechainicio === "" || fechainicio == -1) ? "" : fechainicio)
+        params.append("fechafin", (fechafin === "" || fechafin == -1) ? "" : fechafin)
+        const data = await getDatos(`${host}reporte.controller.php`, params)
         return data
     }
 
@@ -181,7 +189,7 @@ $(document).ready(async function () {
         btnAsignarResponsables.disabled = true
     })
 
-    // obtiene las SUBCATEGORIAS
+    // obtiene las SUBCATEGORIAS y MANIPULAMOS LOS CHECKBOXES DE LA TABLA
     selectSubcategoria.addEventListener("change", async () => {
         const activosAsignados = await filtrarActivosAsignados(selectSubcategoria.value)
         console.log("actios asignados: -> ", activosAsignados)
@@ -199,12 +207,22 @@ $(document).ready(async function () {
                 <td>${actas.marca}</td>
                 <td>${actas.modelo}</td>
                 <td>
-                    <button class="btn btn-primary">Ver Mantenimientos</button>
+                    <button class="btn btn-primary btnVerMantenimientos" data-idactivo="${actas.idactivo}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightMantenimientos">Ver Mantenimientos</button>
                 </td>
             </tr>
             `;
         });
 
+        $all(".btnVerMantenimientos").forEach(chk => {
+            const idactivo = chk.getAttribute("data-idactivo")
+            console.log("idactivo zz ", idactivo)
+            chk.addEventListener("click", async () => {
+                console.log("clicaaaaa");
+                await abrirModalSidebar(idactivo)
+
+
+            })
+        })
 
         // Selecciona todos los checkboxes después de renderizar la tabla
         const checkboxes = $all(".activo-checkbox");
@@ -243,11 +261,12 @@ $(document).ready(async function () {
 
                 // Verifica si al menos uno está marcado y habilita/deshabilita el botón
                 btnAsignarResponsables.disabled = activosElegidos.length === 0;
+                btnAsignarResponsables.focus()
             });
         });
 
         btnAsignarResponsables.disabled = activosElegidos.length === 0;
-
+        btnAsignarResponsables.focus()
     });
 
     btnAsignarResponsables.addEventListener("click", async () => {
@@ -255,21 +274,35 @@ $(document).ready(async function () {
     })
 
     //este evento EJECUTARÁ registrar tarea, registrar activos tarea, registrar responsables tareas
-    btnConfirmarAsignacion.addEventListener("click", async ()=>{
-        const tareaRegistrada = await registrarTarea() // ESTO ME DEVOLVERA SU ID DE REGISTRO
-        console.log("tareaRegistrada -> ", tareaRegistrada)
-        for (let i = 0; i < activosElegidos.length; i++) {
-            const atRegistrado = await registrarActivoTarea(tareaRegistrada.id, activosElegidos[i].idactivo)
-            console.log("atRegistrado -> ", atRegistrado);            
+    /*  btnConfirmarAsignacion.addEventListener("click", async () => {
+ 
+     }) */
+
+    btnOrdenarTarea.addEventListener("click", async () => {
+        if (activosElegidos.length == 0) {
+            showToast("Aun no ha seleccionado activos.", "ERROR", 2000)
+            return
+        } else if (responsablesElegidos.length == 0) {
+            showToast("Aun no ha seleccionado responsables.", "ERROR", 2000)
+            return
         }
-        for (let e = 0; e < responsablesElegidos.length; e++) {
-            const rtRegistrado = await registrarResponsableTarea(tareaRegistrada.id, responsablesElegidos[e].idusuario)
-            console.log("rtRegistrado -> ", rtRegistrado);            
+        else {
+            const tareaRegistrada = await registrarTarea() // ESTO ME DEVOLVERA SU ID DE REGISTRO
+            console.log("tareaRegistrada -> ", tareaRegistrada)
+            for (let i = 0; i < activosElegidos.length; i++) {
+                const atRegistrado = await registrarActivoTarea(tareaRegistrada.id, activosElegidos[i].idactivo)
+                console.log("atRegistrado -> ", atRegistrado);
+            }
+            for (let e = 0; e < responsablesElegidos.length; e++) {
+                const rtRegistrado = await registrarResponsableTarea(tareaRegistrada.id, responsablesElegidos[e].idusuario)
+                console.log("rtRegistrado -> ", rtRegistrado);
+            }
+            console.log("TAREA ORDENADA!!!!")
+            showToast(`Tarea ordenada correctamente`, 'SUCCESS', 3000, 'http://localhost/SIGEMAPRE/views/tareas/listar-tareas');
+
         }
-        
-        console.log("TAREA ORDENADA!!!!")
-        showToast(`Tarea ordenada correctamente`, 'SUCCESS', 3000);
-        window.location.href = `http://localhost/SIGEMAPRE/views/tareas/listar-tareas`
+
+
     })
 
     // ******************************** RENDER TABLES ************************************************
@@ -337,12 +370,13 @@ $(document).ready(async function () {
 
                 console.log("responsablesElegidos después del cambio:", responsablesElegidos);
 
-                btnConfirmarAsignacion.disabled = responsablesElegidos.length === 0
+                btnOrdenarTarea.disabled = responsablesElegidos.length === 0
+                btnOrdenarTarea.focus()
             })
         })
 
-        btnConfirmarAsignacion.disabled = responsablesElegidos.length === 0
-
+        btnOrdenarTarea.disabled = responsablesElegidos.length === 0
+        btnOrdenarTarea.focus()
     }
 
     function renderTablaResponsables() {
@@ -371,6 +405,70 @@ $(document).ready(async function () {
 
 
     }
+
+    // ******************************** RENDER MODAL SIDEBAR ***********************************************
+
+    async function abrirModalSidebar(idactivo) {
+        const bodyModal = $q(".offcanvas-body");
+
+        // Construir el contenido HTML inicial (estructura de los inputs de fecha)
+        bodyModal.innerHTML = `
+            <h2>Mantenimientos</h2>
+            <div class="card mb-3">
+                <div class="card-header row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control filtro-fecha" id="txtFechaInicio" placeholder="Fecha Inicio">
+                            <label for="txtFechaInicio" class="form-label">Fecha Inicio</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control filtro-fecha" id="txtFechaFin" placeholder="Fecha Fin">
+                            <label for="txtFechaFin" class="form-label">Fecha Fin</label>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+            <div id="mantenimientos-container"></div> <!-- Contenedor para los mantenimientos filtrados -->
+        `;
+
+        const txtFechaInicio = document.querySelector("#txtFechaInicio");
+        const txtFechaFin = document.querySelector("#txtFechaFin");
+
+        // Función para mostrar mantenimientos en el contenedor sin borrar los inputs de fecha
+        async function mostrarMantenimientos(fechaInicio = "", fechaFin = "") {
+            const mantenimientos = await filtrarMantenimientosActivos(idactivo, fechaInicio, fechaFin);
+            console.log("mantenimientos del activo:", mantenimientos);
+
+            // Generar el HTML para los mantenimientos
+            let mantenimientosHtml = mantenimientos.length > 0
+                ? mantenimientos.map(m => `
+                    <div class="card mb-3">                    
+                        <div class="card-body">
+                            <p class="card-text"><strong>Descripción: </strong>${m.descripcion_mantenimiento}</p>             
+                            <p class="card-text"><strong>Fecha comienzo: </strong>${m.fecha_inicio}</p>
+                            <p class="card-text"><strong>Fecha finalizado: </strong>${m.fecha_finalizado}</p>
+                        </div>
+                    </div>
+                `).join('')
+                : `<h2>No hay mantenimientos en estas fechas</h2>`;
+
+            // Asignar el HTML generado al contenedor de mantenimientos
+            document.getElementById("mantenimientos-container").innerHTML = mantenimientosHtml;
+        }
+
+        // Llamar a la función inicialmente para cargar todos los mantenimientos
+        await mostrarMantenimientos();
+
+        // Asignar eventos de cambio a los inputs de fecha para actualizar los mantenimientos al filtrar
+        $all(".filtro-fecha").forEach(input => {
+            input.addEventListener("change", async () => {
+                await mostrarMantenimientos(txtFechaInicio.value || "", txtFechaFin.value || "");
+            });
+        });
+    }
+
 
 })
 

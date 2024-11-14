@@ -16,6 +16,8 @@ if (isset($_GET['operation'])) {
       ];
       echo json_encode($activo_asig->filtrarActivosAsignados($valoresBuscar));
       break;
+
+    
   }
 }
 

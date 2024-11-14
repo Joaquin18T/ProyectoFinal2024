@@ -104,7 +104,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <button id="btnCrearTarea" class="mb-3 btn btn-primary">Generar Tarea</button>
+        <button id="btnOrdenarTarea" class="mb-3 btn btn-primary" disabled>Ordenar Tarea</button>
     </div>
     <!-- MODAL DE MOSTRAR RESPONSABLES -->
     <!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightResponsables" aria-labelledby="offcanvasRightResponsablesLabel">
@@ -153,12 +153,26 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="btnConfirmarAsignacion" disabled>Hecho</button>
-                </div>
+<!--                     <button type="button" class="btn btn-primary" id="btnConfirmarAsignacion" disabled>Hecho</button>
+ -->                </div>
             </div>
         </div>
     </div>
 
+</div>
+
+<!-- MODAL DE MOSTRAR EVIDENCIAS -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightMantenimientos"
+    aria-labelledby="offcanvasRightMantenimientosLabel">
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <h2>Mantenimientos</h2>
+        <div id="modal-container">
+
+        </div>
+    </div>
 </div>
 
 

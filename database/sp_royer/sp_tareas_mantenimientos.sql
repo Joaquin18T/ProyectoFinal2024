@@ -41,6 +41,8 @@ BEGIN
     where ACT.idactivo = _idactivo;
 END //
 
+call obtenerMantenimientosActivo(1);
+
 DROP PROCEDURE IF EXISTS `obtenerMantenimientosActivosPorFecha`
 DELIMITER //
 CREATE PROCEDURE `obtenerMantenimientosActivosPorFecha`(

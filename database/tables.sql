@@ -314,6 +314,18 @@ CREATE TABLE tareas_mantenimiento
     CONSTRAINT fk_idtareaTM	FOREIGN KEY (idtarea) REFERENCES tareas (idtarea)
 )ENGINE=INNODB;
 
+CREATE TABLE mantenimiento_activos_responsables (
+    idatm              INT AUTO_INCREMENT PRIMARY KEY,
+    idtm               INT NOT NULL,  -- Referencia a la tarea de mantenimiento
+    idactivo           INT NOT NULL,  -- Referencia al activo específico
+    idusuario           INT NOT NULL,  -- ID del usuario responsable
+    fecha_registro      DATETIME NOT NULL DEFAULT NOW(), -- Fecha de registro (opcional)
+    CONSTRAINT fk_idtm FOREIGN KEY (idtm) REFERENCES tareas_mantenimiento (idtm),
+    CONSTRAINT fk_idactivo FOREIGN KEY (idactivo) REFERENCES activos (idactivo),
+    CONSTRAINT fk_idusuario FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
+) ENGINE = INNODB;
+
+
 CREATE TABLE evidencias
 (
 	idevidencia		INT auto_increment primary key,
