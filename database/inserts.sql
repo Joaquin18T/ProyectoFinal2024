@@ -13,7 +13,7 @@ INSERT INTO modulos (modulo) VALUES
 INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 	(null, 'home',1,'Inicio',''),
     
-    -- USUARIOS
+    -- USUARIOS (TERMINADO)
 	(1,'listar-usuario', '1', 'Usuario', ''),
 	(1,'registrar-usuario', '0', 'Usuario', ''),
 	(1,'update-usuario', '0', 'Usuario', ''),
@@ -47,8 +47,9 @@ INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 -- SELECT*FROM vistas
 INSERT INTO perfiles (perfil, nombrecorto) VALUES
 	('Administrador', 'ADM'),
-	('Usuario', 'USR'),
-	('Tecnico', 'TNC');
+	('Supervisor', 'SUP'),
+	('Tecnico', 'TNC'),
+	('Usuario', 'USR');
     
 -- SELECT*FROM permisos;
 INSERT INTO permisos(idperfil, idvista) VALUES
@@ -70,16 +71,22 @@ INSERT INTO permisos(idperfil, idvista) VALUES
     (1,15),
     (1,16),
     (1,17),
--- USUARIOS
+-- SUPERVISOR
 	(2,1),
 	(2,10),
 	(2,11),
 	(2,12),
+	(2,14),
+    (2,15),
     
 -- TECNICO
     (3,1),
 	(3,14),
-    (3,16);
+    (3,16),
+-- ESPECIFICAR LA VISTA EN DONDE SE PUEDA HACER REPORTES DE ACTIVOS GENERALES(DETALLES BASICOS) PARA EL PERFIL DE USUARIO
+	(4,1),
+    (4,10),
+    (4,11); -- REPORTES DE ACTIVOS EN GENERAL QUE MUESTRE DETALLES BASICOS
 
 INSERT INTO tipo_doc(tipodoc) VALUES
 	('DNI'),
@@ -118,38 +125,38 @@ INSERT INTO estados (idtipo_estado, nom_estado) VALUES
 
 -- Insertando en la tabla PERSONAS
 INSERT INTO PERSONAS (idtipodoc, num_doc, apellidos, nombres, genero, telefono)VALUES 
-(1, '12345678', 'Gonzalez', 'Juan', 'M', '555-1001'),
-(1, '23456789', 'Martinez', 'Ana', 'F', '555-2002'),
-(1, '34567890', 'Ramirez', 'Luis', 'M', '555-3003'),
-(1, '56789012', 'Lopez', 'Carlos', 'M', '555-4004'),
-(1, '67890123', 'Perez', 'Maria', 'F', '555-5005'),
-(1, '78901234', 'Gomez', 'Pedro', 'M', '555-6006'),
-(1, '89012345', 'Sanchez', 'Laura', 'F', '555-7007'),
-(1, '90123456', 'Hernandez', 'Javier', 'M', '555-8008'),
-(1, '11223344', 'Diaz', 'Carmen', 'F', '555-9009'),
-(1, '22334455', 'Torres', 'Ricardo', 'M', '555-1010'),
-(1, '33445566', 'Mendoza', 'Patricia', 'F', '555-2020'),
-(1, '44556677', 'Ruiz', 'Antonio', 'M', '555-3030'),
-(1, '55667788', 'Alvarez', 'Fernanda', 'F', '555-4040'),
-(1, '66778899', 'Castro', 'Eduardo', 'M', '555-5050'),
-(1, '77889900', 'Morales', 'Rosa', 'F', '555-6060'),
-(1, '88990011', 'Jimenez', 'Oscar', 'M', '555-7070'),
-(1, '99001122', 'Soto', 'Elena', 'F', '555-8080'),
-(1, '10223344', 'Vargas', 'Hector', 'M', '555-9090'),
-(1, '21334455', 'Fernandez', 'Liliana', 'F', '555-1111');
-
+(1, '12345678', 'Gonzalez', 'Juan', 'M', '5551001'),
+(1, '23456789', 'Martinez', 'Ana', 'F', '5552002'),
+(1, '34567890', 'Ramirez', 'Luis', 'M', '5553003'),
+(1, '56789012', 'Lopez', 'Carlos', 'M', '5554004'),
+(1, '67890123', 'Perez', 'Maria', 'F', '5555005'),
+(1, '78901234', 'Gomez', 'Pedro', 'M', '5556006'),
+(1, '89012345', 'Sanchez', 'Laura', 'F', '5557007'),
+(1, '90123456', 'Hernandez', 'Javier', 'M', '5558008'),
+(1, '11223344', 'Diaz', 'Carmen', 'F', '5559009'),
+(1, '22334455', 'Torres', 'Ricardo', 'M', '5551010'),
+(1, '33445566', 'Mendoza', 'Patricia', 'F', '5552020'),
+(1, '44556677', 'Ruiz', 'Antonio', 'M', '5553030'),
+(1, '55667788', 'Alvarez', 'Fernanda', 'F', '5554040'),
+(1, '66778899', 'Castro', 'Eduardo', 'M', '5555050'),
+(1, '77889900', 'Morales', 'Rosa', 'F', '5556060'),
+(1, '88990011', 'Jimenez', 'Oscar', 'M', '5557070'),
+(1, '99001122', 'Soto', 'Elena', 'F', '5558080'),
+(1, '10223344', 'Vargas', 'Hector', 'M', '5559090'),
+(1, '21334455', 'Fernandez', 'Liliana', 'F', '5551111'),
+(1,'67823435','Cacerez', 'Carlos','M','574456344');
 
 
 -- Insertando en la tabla USUARIOS
 -- clave acceso enncriptada = 1234	
 INSERT INTO USUARIOS (idpersona, nom_usuario, claveacceso, perfil, idperfil, idarea, responsable_area)VALUES 
-(1, 'juan.gonzalez','$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'ADM', 1, 1, 0),
+(1, 'juan.gonzalez','$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'ADM', 1, 5, 0),
 (2, 'ana.martinez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK' , 'USR', 2, 2, 0),
  (3, 'luis.ramirez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK',  'TNC', 3, 3, 0),
  (4, 'carlos.lopez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0),
 (5, 'maria.perez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 3, 0),
 (6, 'pedro.gomez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 1, 0),
-(7, 'laura.sanchez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 1),
+(7, 'laura.sanchez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0),
 (8, 'javier.hernandez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 3, 0),
 (9, 'carmen.diaz', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 1, 0),
 (10, 'ricardo.torres', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0),
@@ -161,7 +168,8 @@ INSERT INTO USUARIOS (idpersona, nom_usuario, claveacceso, perfil, idperfil, ida
 (16, 'oscar.jimenez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0),
 (17, 'elena.soto', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 3, 0),
 (18, 'hector.vargas', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 1, 0),
-(19, 'liliana.fernandez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0);
+(19, 'liliana.fernandez', '$2y$10$6xR96yE7ZjdXXVqIdEOhRey/oCchdfDJgTZ.tunBNldYmMSIuvDpK', 'TNC', 3, 2, 0),
+(20, 'carlos45','$2y$10$T3nyPSXoIG8p0icaLUMuEOkaj0iGD7ZfOWXaFGQt3OMf5iwGUQwFa','SUP',2,1,1);
 
 INSERT INTO categorias(idarea,categoria)
 	VALUES
@@ -289,26 +297,26 @@ VALUES
     (4, 8, 'Asignado al área de Logística y Transporte para patrullaje', '{"img6": "motocicleta_patrullaje.jpg"}', 14),
     (4, 20, 'Asignado al área de Logística y Transporte para carga pesada', '{"img7": "camion_carga_pesada.jpg"}', 14);
 
-INSERT INTO historial_areas_usuarios (idusuario, idarea, fecha_inicio, fecha_fin, comentario) VALUES
-(1, 1, '2024-01-01', '2024-12-31', 'Usuario asignado al Departamento de TI'),
-(2, 2, '2024-02-01', '2024-12-31', 'Usuario asignado al Área Administrativa'),
-(3, 3, '2024-03-01', '2024-12-31', 'Usuario asignado al Área Contable'),
-(4, 4, '2024-04-01', '2024-12-31', 'Usuario asignado a Logística y Transporte'),
-(5, 5, '2024-05-01', '2024-12-31', 'Usuario no asignado a un área específica'),
-(6, 1, '2024-06-01', '2024-12-31', 'Usuario asignado al Departamento de TI'),
-(7, 2, '2024-07-01', '2024-12-31', 'Usuario asignado al Área Administrativa'),
-(8, 3, '2024-08-01', '2024-12-31', 'Usuario asignado al Área Contable'),
-(9, 4, '2024-09-01', '2024-12-31', 'Usuario asignado a Logística y Transporte'),
-(10, 5, '2024-10-01', '2024-12-31', 'Usuario no asignado a un área específica'),
-(11, 1, '2024-11-01', '2024-12-31', 'Usuario asignado al Departamento de TI'),
-(12, 2, '2024-12-01', '2024-12-31', 'Usuario asignado al Área Administrativa'),
-(13, 3, '2024-01-01', '2024-12-31', 'Usuario asignado al Área Contable'),
-(14, 4, '2024-02-01', '2024-12-31', 'Usuario asignado a Logística y Transporte'),
-(15, 5, '2024-03-01', '2024-12-31', 'Usuario no asignado a un área específica'),
-(16, 1, '2024-04-01', '2024-12-31', 'Usuario asignado al Departamento de TI'),
-(17, 2, '2024-05-01', '2024-12-31', 'Usuario asignado al Área Administrativa'),
-(18, 3, '2024-06-01', '2024-12-31', 'Usuario asignado al Área Contable'),
-(19, 4, '2024-07-01', '2024-12-31', 'Usuario asignado a Logística y Transporte');
+INSERT INTO historial_areas_usuarios (idusuario, idarea, fecha_inicio, comentario) VALUES
+(1, 1, '2024-01-01', 'Usuario asignado al Departamento de TI'),
+(2, 2, '2024-02-01', 'Usuario asignado al Área Administrativa'),
+(3, 3, '2024-03-01',  'Usuario asignado al Área Contable'),
+(4, 4, '2024-04-01',  'Usuario asignado a Logística y Transporte'),
+(5, 5, '2024-05-01', 'Usuario no asignado a un área específica'),
+(6, 1, '2024-06-01', 'Usuario asignado al Departamento de TI'),
+(7, 2, '2024-07-01',  'Usuario asignado al Área Administrativa'),
+(8, 3, '2024-08-01', 'Usuario asignado al Área Contable'),
+(9, 4, '2024-09-01',  'Usuario asignado a Logística y Transporte'),
+(10, 5, '2024-10-01',  'Usuario no asignado a un área específica'),
+(11, 1, '2024-11-01',  'Usuario asignado al Departamento de TI'),
+(12, 2, '2024-12-01',  'Usuario asignado al Área Administrativa'),
+(13, 3, '2024-01-01',  'Usuario asignado al Área Contable'),
+(14, 4, '2024-02-01',  'Usuario asignado a Logística y Transporte'),
+(15, 5, '2024-03-01',  'Usuario no asignado a un área específica'),
+(16, 1, '2024-04-01',  'Usuario asignado al Departamento de TI'),
+(17, 2, '2024-05-01',  'Usuario asignado al Área Administrativa'),
+(18, 3, '2024-06-01', 'Usuario asignado al Área Contable'),
+(19, 4, '2024-07-01', 'Usuario asignado a Logística y Transporte');
 
 select * from historial_areas_usuarios;
 select * from usuarios;
@@ -318,11 +326,11 @@ VALUES
     (2, 1, 'Reasignado para trabajos administrativos'),
     (3, 1, 'Enviado a mantenimiento preventivo');
 
-INSERT INTO notificaciones_asignaciones (idactivo_asig,tipo, mensaje)
+INSERT INTO notificaciones_asignaciones (idusuario_sup, idactivo_asig,tipo, mensaje)
 VALUES
-    (1, 'asignacion','Activo asignado a departamento de TI'),
-    (2, 'movimiento','Activo movido a área administrativa'),
-    (3, 'mantenimiento','Activo enviado a mantenimiento preventivo');
+    (20,1, 'asignacion','Activo asignado a departamento de TI'),
+    (20,2, 'movimiento','Activo movido a área administrativa'),
+    (20,3, 'mantenimiento','Activo enviado a mantenimiento preventivo');
 
 INSERT INTO bajas_activo (idactivo, motivo, coment_adicionales, ruta_doc, idusuario_aprobacion)
 VALUES

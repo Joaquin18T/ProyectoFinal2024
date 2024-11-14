@@ -123,6 +123,7 @@
   </div>
   <!-- ./Modal actualizar usuario -->
 
+  <!-- Modal para dar de baja al usuario -->
   <div class="modal fade" id="modal-baja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -131,7 +132,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <h2>¿Estas seguro de dar de baja al usuario?</h2>
+          <h4>¿Estas seguro de dar de baja al usuario?</h2>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" id="aceptar-baja">Aceptar</button>
@@ -139,6 +140,45 @@
       </div>
     </div>
   </div>
+  <!-- ./Modal para dar de baja al usuario -->
+
+  <!-- Modal de cambiar el area -->
+  <div class="modal fade" id="sb-change-area" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Cambiar de area</h1>
+          <button type="button" class="btn-close" ></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <p>Elige una nueva area <span id="sb-show-current-area"></span></p>
+            <div class="col-md-6">
+              <div class="form-floating">
+                <select name="sb-area" id="sb-area" class="form-select">
+                  <option value="">Selecciona</option>
+                </select>
+                <label for="sb-area">Areas</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-12">
+              <div class="form-floating">
+                <textarea name="comentario" id="comentario" class="form-control" cols="5" rows="5" style="resize: none; height: 90px;"></textarea>
+                <label for="comentario">Comentario (Opcional)</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="save-change-area">Actualizar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ./Modal de cambiar el area -->
 </div>
 
 <?php require_once '../footer.php' ?>

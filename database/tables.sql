@@ -117,6 +117,7 @@ CREATE TABLE USUARIOS
   idarea		INT NOT NULL,
   responsable_area TINYINT DEFAULT 0, -- 1 Y 0
   create_at		DATETIME NOT NULL DEFAULT NOW(),
+  update_at 	DATETIME NULL,
   CONSTRAINT fk_persona_user FOREIGN KEY (idpersona) REFERENCES personas(id_persona),
   CONSTRAINT uk_idpersona_user UNIQUE(idpersona,nom_usuario),
   CONSTRAINT fk_idperfil_user FOREIGN KEY (idperfil) REFERENCES perfiles(idperfil),
@@ -225,9 +226,24 @@ CREATE TABLE historial_areas_usuarios
     fecha_inicio		DATETIME NOT NULL DEFAULT NOW(),
     fecha_fin			DATETIME NULL,
     comentario			VARCHAR(500) NULL,
+    es_responsable 		TINYINT NOT NULL,
     CONSTRAINT fk_usuario_his FOREIGN KEY (idusuario)REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idarea_his FOREIGN KEY (idarea) REFERENCES areas(idarea)
 )ENGINE = INNODB;
+
+CREATE TABLE notificaciones_usuarios
+(
+	idnotificacion_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    idusuario		INT NOT NULL,
+    idarea 			INT NULL,
+    tipo			VARCHAR(40) NOT NULL,
+    mensaje			VARCHAR(250) NOT NULL,
+	fecha_creacion			DATETIME NOT NULL DEFAULT NOW(),
+    visto					TINYINT(1) NOT NULL DEFAULT 0,
+    CONSTRAINT fk_usuario_notf_usuario FOREIGN KEY (idusuario) REFERENCES usuarios(idusuario),
+    CONSTRAINT chk_visto CHECK (visto IN(1,0)),
+    CONSTRAINT fk_idarea_notf_user FOREIGN KEY (idarea) REFERENCES areas(idarea)
+)ENGINE=INNODB;
 
 CREATE TABLE notificaciones_asignaciones
 (
@@ -241,10 +257,7 @@ CREATE TABLE notificaciones_asignaciones
     create_at	DATETIME NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_idasignacion_nof FOREIGN KEY(idactivo_asig) REFERENCES activos_asignados (idactivo_asig),
     CONSTRAINT chk_visto CHECK (visto IN(1,0))
-    -- CONSTRAINT fk_idactivo_noti_activo FOREIGN KEY(idactivo) REFERENCES activos(idactivo)
-    
 )ENGINE = INNODB;
-
 
 CREATE TABLE bajas_activo
 (

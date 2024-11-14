@@ -109,7 +109,7 @@ BEGIN
 		CONCAT(P.apellidos, ' ', P.nombres) AS dato, P.num_doc, P.genero, P.telefono, 
         TP.tipodoc,
         U.idusuario,U.nom_usuario, U.responsable_area, U.estado,
-        A.area,
+        A.area,A.idarea,
         PER.perfil
         FROM usuarios U
         INNER JOIN areas A ON U.idarea = A.idarea
@@ -136,14 +136,16 @@ CREATE PROCEDURE sp_get_usuario_by_id
 )
 BEGIN
 	SELECT
-		P.apellidos,P.nombres AS dato, P.num_doc, P.genero, P.telefono, 
+		P.apellidos,P.nombres AS dato, P.num_doc, P.genero, P.telefono, P.id_persona,
         TP.tipodoc,
-        U.idusuario,U.nom_usuario, U.responsable_area, U.estado, U.perfil, U.idperfil,
-        A.area
+        U.idusuario,U.nom_usuario, U.responsable_area, U.estado, U.idperfil,
+        A.area,
+        PER.perfil
 		FROM usuarios U
         INNER JOIN areas A ON U.idarea = A.idarea
         INNER JOIN personas P ON U.idpersona = P.id_persona
         INNER JOIN tipo_doc TP ON P.idtipodoc = TP.idtipodoc
+        INNER JOIN perfiles PER ON U.idperfil = PER.idperfil
         WHERE idusuario = _idusuario;
 END $$
 -- CALL sp_get_usuario_by_id(2);
@@ -188,6 +190,18 @@ END $$
 
 -- CALL sp_existe_responsable_area(1);
 
+DROP PROCEDURE IF EXISTS sp_get_idsupervisor_area;
+DELIMITER $$
+CREATE PROCEDURE sp_get_idsupervisor_area
+(
+	IN _idarea INT
+)
+BEGIN
+	SELECT idusuario  FROM usuarios
+    WHERE responsable_area = 1 AND idarea = _idarea;
+END $$;
+-- CALL sp_get_idsupervisor_area(2)
+
 DROP PROCEDURE IF EXISTS sp_designar_responsable_area;
 DELIMITER $$
 CREATE PROCEDURE sp_designar_responsable_area
@@ -219,5 +233,18 @@ BEGIN
         where HAU.idarea = _idarea AND USU.idperfil = 3 AND USU.estado = 1;
 END $$
 -- call sp_filtrar_usuarios_area(1)
-select * from perfiles;
-select * from usuarios;
+-- select * from perfiles;
+-- select * from usuarios;
+
+DROP PROCEDURE IF EXISTS sp_get_user_admin;
+DELIMITER $$
+CREATE PROCEDURE sp_get_user_admin
+(
+
+)
+BEGIN
+	SELECT idusuario FROM usuarios
+    WHERE idperfil = 1 AND estado = 1
+    ORDER BY idusuario ASC
+    LIMIT 1;
+END $$

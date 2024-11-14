@@ -38,14 +38,14 @@ CREATE PROCEDURE sp_listar_notificacion_by_responsable_area
 )
 BEGIN 
 	SELECT 
-		N.idnotificacion_asig, N.mensaje, N.tipo, N.fecha_creacion, N.visto,
+		N.idnotificacion_activo, N.mensaje, N.tipo, N.fecha_creacion, N.visto,
         A.descripcion
         FROM notificaciones_asignaciones N
         INNER JOIN activos_asignados AA ON N.idactivo_asig = AA.idactivo_asig
         INNER JOIN activos A ON AA.idactivo = A.idactivo
         INNER JOIN areas AR ON AA.idarea = AR.idarea
         INNER JOIN usuarios U ON AR.idarea = U.idarea
-        WHERE U.responsable_area = 1 AND idusuario = _idusuario 
+        WHERE U.responsable_area = 1 AND U.idusuario = 20 
         ORDER BY N.fecha_creacion DESC;
 END $$
 

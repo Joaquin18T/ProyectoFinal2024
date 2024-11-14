@@ -54,9 +54,8 @@ class Usuario extends ExecQuery
     }
   }
 
-  public function updateUsuario($params = []): bool
-  {
-    try {
+  public function updateUsuario($params=[]):int{
+    try{
       $pdo = parent::getConexion();
       $cmd = $pdo->prepare("CALL sp_update_usuario(@idpersona, ?, ?)");
       $cmd->execute(
@@ -217,8 +216,32 @@ class Usuario extends ExecQuery
       return false;
     }
   }
+
+  public function getIdAdmin():array{
+    return parent::getData("sp_get_user_admin");
+  }
+
+  public function getIdSupervisorArea($params=[]):array{
+    try{
+      $cmd = parent::execQ("CALL sp_get_idsupervisor_area(?)");
+      $cmd->execute(
+        array(
+          $params['idarea']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      error_log("Error: " . $e->getMessage());
+      return [];
+    }
+  }
 }
 // $user = new Usuario();
+// echo json_encode($user->getIdSupervisorArea(['idarea'=>2]));
+// echo json_encode($user->getIdAdmin());
+
+// $up = $user->cambiarAreaUsuario(['idusuario'=>4, 'idarea'=>3]);
+// echo $up;
 
 // echo json_encode($user->filtrarUsuarios([
 //   'dato' => null,
@@ -229,7 +252,7 @@ class Usuario extends ExecQuery
 //   'idarea' => null,
 //   'idperfil' => null
 // ]));
-//  echo json_encode($user->existeResponsableArea(['idarea'=>1]));
+//echo json_encode($user->existeResponsableArea(['idarea'=>1]));
 // $up = $user->cambiarAreaUsuario(['idusuario'=>3, 'idarea'=>2]);
 // echo $up;
 
@@ -244,7 +267,7 @@ class Usuario extends ExecQuery
 // ]);
 // echo $id;
 
-// $up = $user->updateUsuario(['idusuario'=>7, 'idperfil'=>3]);
+// $up = $user->updateUsuario(['idusuario'=>1, 'idperfil'=>1]);
 // echo $up;
 
 // echo json_encode($user->login(['nom_usuario'=>'ana.martinez']));

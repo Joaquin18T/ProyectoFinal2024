@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded",()=>{
   const host = "http://localhost/SIGEMAPRE/controllers/";
   let isReset= false;
-  let isTenico = false;
+  let mensaje = "";
+  let nomPerfil = "";
   blockCamps(true);
   function selector(value) {
     return document.querySelector(`#${value}`);
@@ -21,11 +22,13 @@ document.addEventListener("DOMContentLoaded",()=>{
   //Areas
   (async()=>{
     const data = await getDatos(`area.controller.php`,"operation=getAll");
-    data.forEach(x=>{
-      const element = document.createElement("option");
-      element.textContent = x.area;
-      element.value = x.idarea;
-      selector("area").appendChild(element);
+    data.forEach((x,i)=>{
+      if(i<=3){
+        const element = document.createElement("option");
+        element.textContent = x.area;
+        element.value = x.idarea;
+        selector("area").appendChild(element);
+      }
     });
   })();
 
@@ -69,15 +72,32 @@ document.addEventListener("DOMContentLoaded",()=>{
   selector("perfil").addEventListener("change",()=>{
     const selectPerfil = selector("perfil");
     const textOption = selectPerfil.options[selectPerfil.selectedIndex].text;
-    if(textOption==="Tecnico"){
-      selector("responsable").disabled= true;
-      isTenico=true;
-    }else{
-      selector("responsable").disabled= false;
-
+    if(textOption==="Supervisor"){
+      selector("responsable").value=1;
     }
+    if(textOption==="Tecnico" || textOption==="Administrador" ||textOption==="Usuario"){
+      selector("responsable").value=0;
+    }
+    nomPerfil = textOption;
+    
+    selector("responsable").disabled= true;
     
   });
+
+  //Mensaje de la notificacion segun el perfil
+  function perfilSelected(){
+    switch(nomPerfil){
+      case 'Supervisor':
+        mensaje = "Han asignado a un supervisor a un area";
+        break;
+      case 'Tecnico':
+        mensaje ="Han asignado a un tecnico a un area";
+        break;
+      case 'Usuario':
+        mensaje = "Han asignado a un usuario a un area";
+        break;
+    }
+  }
 
   //Valida que el num. doc sea unico y cumpla ciertos parametros
   async function validateNumDoc(){
@@ -162,11 +182,9 @@ document.addEventListener("DOMContentLoaded",()=>{
       selector("password").value,
       selector("perfil").value,
       selector("area").value,
-      
+      selector("responsable").value
     ];
-    if(!isTenico){
-      data.push(selector("responsable").value);
-    }
+
     const dataNumber = [];
 
     let isValidate = data.every(x=>x.trim().length>0);
@@ -176,8 +194,9 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   //Registrar Persona
-  selector("btnEnviar").addEventListener("click",async(e)=>{
+  selector("form-person-user").addEventListener("submit",async(e)=>{
     e.preventDefault();
+    
     isReset=true;
     await validateNumDoc(); //valida que el numero de caracteres y otras validaciones sean correctas
     const validateFields = validateData(); //Valida que los campos no esten vacios
@@ -188,16 +207,24 @@ document.addEventListener("DOMContentLoaded",()=>{
     const validarClaveAcceso = validarClave(selector("password").value); //valida la clave de acceso
     //console.log(validarClaveAcceso);
     const validarTipoNumDoc = validateTipoDocNumDoc(); //valida la cantidad de num doc con el tipodoc
-    console.log(validarTipoNumDoc);
+    //console.log(validarTipoNumDoc);
     //console.log(selector("tipodoc").value);
     const unikeUser = await searchNomUser(selector("usuario").value);// valida que el nom usuario sea unico
     //console.log(unikeUser);
+
+    //Valida si existe un responsable en el area elegida
+    let responsableArea = [{existe:0}];
+    if(selector("responsable").value==="1"){
+      responsableArea = await existeResponsableArea(selector("area").value);
+    }
     //const validNumDoc = validateNumDoc();
     // const idperfil = await getPerfil(2);
-    // console.log(idperfil);
+    //console.log(responsableArea);
+
+    //preguntar si al elegir como sup si o si debe ser responsable de un area
     
     if(validateFields && isUnikeTelf.length===0 && unikeUser.length===0&&
-      validarClaveAcceso && validarTipoNumDoc && numericTelefono){
+      validarClaveAcceso && validarTipoNumDoc && numericTelefono && parseInt(responsableArea[0].existe)===0){
         if(confirm("¿Estas seguro de registrar?")){
           const params = new FormData();
           params.append("operation", "addPersona");
@@ -216,18 +243,26 @@ document.addEventListener("DOMContentLoaded",()=>{
           if(data.idpersona>0){
             const usuario = await addUser(data.idpersona);
             if(usuario.idusuario>0){
-              alert("Se ha registrado correctamente");
-              isTenico=false;
+              const historialAgregado = await addHistorialAsg(usuario.idusuario,selector("area").value);
+              if(historialAgregado.idhis_user>0){
+                //perfilSelected();
+                const addNotf = await addNotificacion(usuario.idusuario,selector("area").value,"Asignacion", "Han asignado a un nuevo usuario al area");
+                if(addNotf.idnotf>0){
+                  alert("Se ha registrado correctamente");
+                  //isTenico=false;
+                  isReset=false;
+                  resetUI();
+                  selector("numDoc").value="";
+                  blockCamps(true);
+                  selector("numDoc").focus();
+                }
+              }
             }
-            //console.log(usuario.idusuario);
-            resetUI();
-            selector("numDoc").value="";
-            blockCamps(true);
+            
           }else{
             alert("Hubo un error al registrar los datos de la persona");
           }
         }
-        isReset=false;
     }else{
       let message = "";
       if(!validateFields){message="Completa los campos";}
@@ -236,8 +271,10 @@ document.addEventListener("DOMContentLoaded",()=>{
       if(!validarClaveAcceso){message="el minimo de caracteres para la clave es de 8";}
       if(!validarTipoNumDoc){message="El tipo de documento elegido no coincide con los caracteres de tu numero de doc.";}
       if(unikeUser.length>0){message="el nombre de usuario ya existe";}
+      if(parseInt(responsableArea[0].existe)===1){message="Ya hay un responsable del area seleccionado";}
       alert(message);
     }
+    selector("responsable").disabled=true;
   });
 
   //registrar al usuario
@@ -251,7 +288,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     params.append("perfil", perfilData[0].nombrecorto);
     params.append("idperfil",parseInt(selector("perfil").value));
     params.append("idarea", parseInt(selector("area").value));
-    params.append("responsable_area",isTenico?0:parseInt(selector("responsable").value));
+    params.append("responsable_area",parseInt(selector("responsable").value));
 
     const resp = await fetch(`${host}usuario.controller.php`,{
       method:'POST',
@@ -308,6 +345,72 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     const data = await getDatos("usuario.controller.php", params);
     return data;
+  }
+
+  //Valida si existe un supervisor del area
+  async function existeResponsableArea(id){
+    const params = new URLSearchParams();
+    params.append("operation","existeResponsableArea");
+    params.append("idarea",parseInt(id));
+
+    const data = await getDatos(`usuario.controller.php`,params);
+    return data;
+  }
+
+  //Agrega al historial la asignacion
+  async function addHistorialAsg(iduser,idarea){
+    const params = new FormData();
+    params.append("operation","addHisUser");
+    params.append("idusuario",iduser);
+    params.append("idarea",parseInt(idarea));
+    params.append("comentario","");
+    params.append("es_responsable",parseInt(selector("responsable").value));
+
+    const resp = await fetch(`${host}historialUsuario.controller.php`,{
+      method:'POST',
+      body:params
+    });
+
+    const data = await resp.json();
+    return data;
+  }
+
+  //Crea la notificacion de la nueva asignacion al area elegida
+  async function addNotificacion(iduser,idarea, tipo, msg){
+
+    const params = new FormData();
+    params.append("operation", "addNotfUsers");
+    params.append("idusuario", iduser);
+    params.append("idarea", idarea);
+    params.append("tipo", tipo);
+    params.append("mensaje", msg);
+
+    const resp = await fetch(`${host}notificacionUser.controller.php`,{
+      method:'POST',
+      body:params
+    });
+
+    const data = await resp.json();
+    return data;
+  }
+
+  //Obtiene el id del supervisor del area a asignar
+  async function getIdSupervisor(idarea) {
+    const params = new URLSearchParams();
+    params.append("operation","getIdSupervisorArea");
+    params.append("idarea",parseInt(idarea));
+
+    const data = await getDatos(`usuario.controller.php`,params);
+    return data;
+  }
+
+  //Obtiene el id del admin
+  async function getAdmin(){
+    const params = new URLSearchParams();
+    params.append("operation", "getIdAdmin");
+
+    const data = await getDatos(`usuario.controller.php`, params);
+    return data[0];
   }
 
   //resetea los campos

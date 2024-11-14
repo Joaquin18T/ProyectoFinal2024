@@ -112,13 +112,13 @@
                   <option value="1">Si</option>
                   <option value="0">No</option>
                 </select>
-                <label for="responsable">Responsable del area</label>
+                <label for="responsable">Responsable area</label>
               </div>
             </div>
           </div>
           <div class="row g-3 md-3">
             <div class="col-md-2 ms-auto">
-              <button type="button" class="form-control btn btn-primary w-75" id="btnEnviar" disabled>
+              <button type="submit" class="form-control btn btn-primary w-75" id="btnEnviar" disabled>
                 Registrar
               </button>
             </div>

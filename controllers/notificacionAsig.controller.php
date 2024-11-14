@@ -19,8 +19,9 @@ if(isset($_POST['operation'])){
   switch($_POST['operation']){
     case 'addNotifAsig':
       $cleanData=[
-        'idactivo_asig'=>$notifyAsig->limpiarCadena($_POST['idactivo_asig']),
-        'mensaje'=>$notifyAsig->limpiarCadena($_POST['mensaje']),
+        'idactivo_asig'=>$_POST['idactivo_asig']==0?null:$notifyAsig->limpiarCadena($_POST['idactivo_asig']),
+        'tipo'=>$notifyAsig->limpiarCadena($_POST['tipo']),
+        'mensaje'=>$notifyAsig->limpiarCadena($_POST['mensaje'])
       ];
 
       $respuesta = ['idnotf'=>-1];
