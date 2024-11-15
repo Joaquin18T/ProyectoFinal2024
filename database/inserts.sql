@@ -51,7 +51,7 @@ INSERT INTO perfiles (perfil, nombrecorto) VALUES
 	('Tecnico', 'TNC');
 	-- ('Usuario', 'USR');
     
--- SELECT*FROM vistas;
+-- SELECT*FROM permisos;
 INSERT INTO permisos(idperfil, idvista) VALUES
 -- ADMINISTRADOR
 	(1,1),
@@ -69,6 +69,7 @@ INSERT INTO permisos(idperfil, idvista) VALUES
     (1,13),
     (1,14),
     (1,15),
+    (1,16),
     (1,17),
 -- SUPERVISOR
 	(2,1),

@@ -26,6 +26,8 @@ $(document).ready(async function () {
     const tbodyResponsables = $q("#responsableBodyTable")
     const btnAsignarResponsables = $q("#btnAsignarResponsables")
     //const btnConfirmarAsignacion = $q("#btnConfirmarAsignacion")
+    const txtFechaProgramada = $q("#txtFechaProgramada")
+    const txtHoraProgramada = $q("#txtHoraProgramada")
     const btnOrdenarTarea = $q("#btnOrdenarTarea")
     //LISTAS
     let activosElegidos = []
@@ -287,18 +289,36 @@ $(document).ready(async function () {
             return
         }
         else {
-            const tareaRegistrada = await registrarTarea() // ESTO ME DEVOLVERA SU ID DE REGISTRO
-            console.log("tareaRegistrada -> ", tareaRegistrada)
-            for (let i = 0; i < activosElegidos.length; i++) {
-                const atRegistrado = await registrarActivoTarea(tareaRegistrada.id, activosElegidos[i].idactivo)
-                console.log("atRegistrado -> ", atRegistrado);
+            if (txtFechaProgramada.value == '' || txtFechaProgramada.value == null) {
+                showToast("Aun no ha programado la fecha", 'ERROR', 2000)
+                return
+            } else if (txtHoraProgramada.value == '' || txtHoraProgramada.value == null) {
+                showToast("Aun no ha programado la hora", 'ERROR', 2000)
+                return
+            } else {
+                const fechaActual = new Date();
+                const fechaProgramada = new Date(`${txtFechaProgramada.value}T${txtHoraProgramada.value}`);
+                console.log("fechaProgramada: ", fechaProgramada)
+                // Validar que la fecha y hora programada no sea anterior a la fecha y hora actual
+                if (fechaProgramada < fechaActual) {
+                    showToast("La fecha u hora programada no pueden ser anteriores a la fecha y hora actuales.", "ERROR", 3000);
+                    return;
+                }
+               
+                const tareaRegistrada = await registrarTarea(txtFechaProgramada.value, txtHoraProgramada.value) // ESTO ME DEVOLVERA SU ID DE REGISTRO
+                console.log("tareaRegistrada -> ", tareaRegistrada)
+                for (let i = 0; i < activosElegidos.length; i++) {
+                    const atRegistrado = await registrarActivoTarea(tareaRegistrada.id, activosElegidos[i].idactivo)
+                    console.log("atRegistrado -> ", atRegistrado);
+                }
+                for (let e = 0; e < responsablesElegidos.length; e++) {
+                    const rtRegistrado = await registrarResponsableTarea(tareaRegistrada.id, responsablesElegidos[e].idusuario)
+                    console.log("rtRegistrado -> ", rtRegistrado);
+                }
+                console.log("TAREA ORDENADA!!!!")
+                showToast(`Tarea ordenada correctamente`, 'SUCCESS', 3000, 'http://localhost/SIGEMAPRE/views/tareas/listar-tareas');
+
             }
-            for (let e = 0; e < responsablesElegidos.length; e++) {
-                const rtRegistrado = await registrarResponsableTarea(tareaRegistrada.id, responsablesElegidos[e].idusuario)
-                console.log("rtRegistrado -> ", rtRegistrado);
-            }
-            console.log("TAREA ORDENADA!!!!")
-            showToast(`Tarea ordenada correctamente`, 'SUCCESS', 3000, 'http://localhost/SIGEMAPRE/views/tareas/listar-tareas');
 
         }
 

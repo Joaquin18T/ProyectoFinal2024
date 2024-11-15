@@ -35,7 +35,39 @@ CREATE PROCEDURE `obtenerTareasPorEstado`(
 	IN _idestado	INT
 )
 BEGIN
-	SELECT * FROM tareas where idestado = _idestado;
+	SELECT 
+		TAR.idtarea,
+		TAR.fecha_programada,
+		TAR.hora_programada,
+		TAR.idestado,
+		GROUP_CONCAT(DISTINCT CONCAT(PER.nombres, ' ', PER.apellidos) ORDER BY PER.nombres) AS nombres_responsables,
+		GROUP_CONCAT(DISTINCT ACTI.descripcion ORDER BY ACTI.descripcion) AS descripcion_activos
+	FROM tareas TAR
+	LEFT JOIN activos_tarea ACT ON ACT.idtarea = TAR.idtarea
+	LEFT JOIN responsables_tarea RT ON RT.idtarea = TAR.idtarea
+	LEFT JOIN activos ACTI ON ACTI.idactivo = ACT.idactivo
+	LEFT JOIN usuarios USU ON USU.idusuario = RT.idusuario
+	LEFT JOIN personas PER ON PER.id_persona = USU.idpersona
+	WHERE TAR.idestado = _idestado
+	GROUP BY TAR.idtarea, TAR.fecha_programada, TAR.hora_programada, TAR.idestado;
+
 END //
 
 call obtenerTareasPorEstado(10);
+
+
+DROP PROCEDURE IF EXISTS `actualizarEstadoTarea`
+DELIMITER $$
+CREATE PROCEDURE `actualizarEstadoTarea`(
+    IN _idtarea INT,
+    IN _idestado INT
+)
+BEGIN
+    UPDATE tareas 
+    SET 
+		idestado = _idestado
+    WHERE idtarea = _idtarea;
+    
+END $$
+
+

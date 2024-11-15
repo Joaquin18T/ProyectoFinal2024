@@ -25,6 +25,19 @@ if (isset($_POST['operation'])) {
 
             $id = $tarea->registrarTarea($datosEnviar);
             echo json_encode(["id" => $id]);
-            break;        
+            break;   
+
+        case 'actualizarEstadoTarea':
+            $id = -1;
+            $datosEnviar = [
+                "idtarea"          => $_POST["idtarea"],
+                "idestado"               => $_POST["idestado"]
+            ];
+
+            $actualizado = $tarea->actualizarEstadoTarea($datosEnviar);
+            echo json_encode(["actualizado" => $actualizado]);
+            break;   
+            
+            
     }
 }

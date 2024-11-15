@@ -35,4 +35,21 @@ class Tarea extends ExecQuery
       die($e->getMessage());
     }
   } // INTEGRADO ✔
+
+  public function actualizarEstadoTarea($params = []): bool
+  {
+    try {
+      $status = false;
+      $sp = parent::execQ("CALL actualizarEstadoTarea(?,?)");
+      $status = $sp->execute(
+        array(
+          $params['idtarea'],
+          $params['idestado']
+        )
+      );
+      return $status;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  } // INTEGRADO ✔
 }

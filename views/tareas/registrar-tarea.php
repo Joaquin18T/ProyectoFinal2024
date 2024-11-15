@@ -91,11 +91,7 @@
 
                         <div class="card">
                             <div class="card-body">
-                                <div class="contenedor-responsables-asignados">
-                                    <ul>
 
-                                    </ul>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -138,7 +134,7 @@
                     <h5 class="modal-title" id="staticBackdropLabel">Asignar responsable</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-responsable-container card">
+                <div class="modal-body modal-responsable-container ">
                     <div class="table-responsive">
                         <table id="tablaResponsables" class="stripe row-border order-column nowrap table-hover px-4" style="width:100%">
                             <thead>
@@ -147,14 +143,35 @@
                                     <th>Usuario</th>
                                 </tr>
                             </thead>
-                            <tbody id="responsableBodyTable"></tbody>
+                            <tbody id="responsableBodyTable" class="mb-3"></tbody>
                         </table>
+                    </div>
+                    <div class="contenedor-fechas row">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="date" class="form-control" id="txtFechaProgramada" placeholder="Programar Fecha">
+                                            <label for="txtFechaProgramada" class="form-label">Programar Fecha</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="time" class="form-control" id="txtHoraProgramada" placeholder="Programar Hora">
+                                            <label for="txtHoraProgramada" class="form-label">Programar Hora</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-<!--                     <button type="button" class="btn btn-primary" id="btnConfirmarAsignacion" disabled>Hecho</button>
- -->                </div>
+                    <!--                     <button type="button" class="btn btn-primary" id="btnConfirmarAsignacion" disabled>Hecho</button>
+ -->
+                </div>
             </div>
         </div>
     </div>
