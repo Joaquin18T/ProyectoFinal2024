@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(textOption==="Supervisor"){
       selector("responsable").value=1;
     }
-    if(textOption==="Tecnico" || textOption==="Administrador" ||textOption==="Usuario"){
+    if(textOption==="Tecnico" || textOption==="Administrador"){
       selector("responsable").value=0;
     }
     nomPerfil = textOption;
@@ -93,9 +93,9 @@ document.addEventListener("DOMContentLoaded",()=>{
       case 'Tecnico':
         mensaje ="Han asignado a un tecnico a un area";
         break;
-      case 'Usuario':
-        mensaje = "Han asignado a un usuario a un area";
-        break;
+      // case 'Usuario':
+      //   mensaje = "Han asignado a un usuario a un area";
+      //   break;
     }
   }
 
@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded",()=>{
               const historialAgregado = await addHistorialAsg(usuario.idusuario,selector("area").value);
               if(historialAgregado.idhis_user>0){
                 //perfilSelected();
-                const addNotf = await addNotificacion(usuario.idusuario,selector("area").value,"Asignacion", "Han asignado a un nuevo usuario al area");
+                const addNotf = await addNotificacion(usuario.idusuario,selector("area").value,"Asignacion", mensaje);
                 if(addNotf.idnotf>0){
                   alert("Se ha registrado correctamente");
                   //isTenico=false;

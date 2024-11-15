@@ -8,15 +8,15 @@ if(isset($_GET['operation'])){
   switch($_GET['operation']){
     case 'filtradoActivos':
       $cleanData=[
-        'idestado'=>$_GET['idestado']==""?null:$activo->limpiarCadena($_GET['idestado']),
-        'idcategoria'=>$_GET['idcategoria']==""?null:$activo->limpiarCadena($_GET['idcategoria']),
+        'idestado'=>$_GET['idestado']===""?null:$activo->limpiarCadena($_GET['idestado']),
+        'idcategoria'=>$_GET['idcategoria']===""?null:$activo->limpiarCadena($_GET['idcategoria']),
         'idsubcategoria'=>$_GET['idsubcategoria']==""?null:$activo->limpiarCadena($_GET['idsubcategoria']),
-        'idmarca'=>$_GET['idmarca']==""?null:$activo->limpiarCadena($_GET['idmarca']),
-        'modelo'=>$_GET['modelo']==""?null:$activo->limpiarCadena($_GET['modelo']),
-        'cod_identificacion'=>$_GET['cod_identificacion']==""?null:$activo->limpiarCadena($_GET['cod_identificacion']),
-        'idarea'=>$_GET['idarea']==""?null:$activo->limpiarCadena($_GET['idarea']),
-        'fecha_adquisicion'=>$_GET['fecha_adquisicion']==""?null:$activo->limpiarCadena($_GET['fecha_adquisicion']),
-        'fecha_adquisicion_fin'=>$_GET['fecha_adquisicion_fin']==""?null:$activo->limpiarCadena($_GET['fecha_adquisicion_fin'])
+        'idmarca'=>$_GET['idmarca']===""?null:$activo->limpiarCadena($_GET['idmarca']),
+        'modelo'=>$_GET['modelo']===""?null:$activo->limpiarCadena($_GET['modelo']),
+        'cod_identificacion'=>$_GET['cod_identificacion']===""?null:$activo->limpiarCadena($_GET['cod_identificacion']),
+        'idarea'=>$_GET['idarea']===""?null:$activo->limpiarCadena($_GET['idarea']),
+        'fecha_adquisicion'=>$_GET['fecha_adquisicion']===""?null:$activo->limpiarCadena($_GET['fecha_adquisicion']),
+        'fecha_adquisicion_fin'=>$_GET['fecha_adquisicion_fin']===""?null:$activo->limpiarCadena($_GET['fecha_adquisicion_fin'])
       ];
 
       echo json_encode($activo->listOfFilters($cleanData));

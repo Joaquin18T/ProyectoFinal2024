@@ -10,7 +10,8 @@ CREATE PROCEDURE sp_filter_estados
 )
 BEGIN
 	SELECT idestado, nom_estado FROM estados
-    WHERE (idestado != _idestado OR _idestado IS NULL) AND (idestado>_min AND idestado<_max);
+    WHERE (idestado != _idestado OR _idestado IS NULL) AND (idestado>_min AND idestado<_max)
+    ORDER BY idestado ASC;
 END $$
 
--- CALL sp_filter_estados (null, 2,7);
+-- CALL sp_filter_estados (null, 1,8);

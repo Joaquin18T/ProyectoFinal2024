@@ -48,8 +48,8 @@ INSERT INTO vistas(idmodulo, ruta, isVisible, texto, icono) VALUES
 INSERT INTO perfiles (perfil, nombrecorto) VALUES
 	('Administrador', 'ADM'),
 	('Supervisor', 'SUP'),
-	('Tecnico', 'TNC'),
-	('Usuario', 'USR');
+	('Tecnico', 'TNC');
+	-- ('Usuario', 'USR');
     
 -- SELECT*FROM vistas;
 INSERT INTO permisos(idperfil, idvista) VALUES
@@ -211,7 +211,7 @@ VALUES
     ('IKEA'),             -- Relacionado con mobiliario de oficina (escritorios, sillas, y estanterías).
     ('Steelcase')         -- Relacionado con mobiliario de oficina (escritorios y estaciones de trabajo).
 ;
-
+-- SELECT*FROM detalles_marca_subcategoria;
 INSERT INTO detalles_marca_subcategoria (idsubcategoria, idmarca)
 VALUES
     -- Equipos de Computo

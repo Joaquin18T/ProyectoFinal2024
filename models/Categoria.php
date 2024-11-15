@@ -25,6 +25,21 @@ class Categoria extends ExecQuery{
       die($e->getMessage());
     }
   }
+
+  public function obtenerSubcategoriasPorCategorias($params=[]):array{
+    try{  
+      $cmd = parent::execQ("CALL sp_filtrar_subcategorias_by_categorias(?)");
+      $cmd->execute(
+        array(
+          $params['idcategoria']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    }catch(Exception $e){
+      die($e->getMessage());
+      return [];
+    }
+  }
 }
 
 // $test = new Categoria();
