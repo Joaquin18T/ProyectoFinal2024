@@ -26,5 +26,25 @@ BEGIN
     END IF;
 END //
 
-call registrarActivoTarea(@idacttar, 18, 15);
-SELECT @idacttar as idactivos_tarea
+-- call registrarActivoTarea(@idacttar, 18, 15);
+-- SELECT @idacttar as idactivos_tarea
+
+DROP PROCEDURE IF EXISTS obtenerActivosPorTarea;
+DELIMITER $$
+CREATE PROCEDURE obtenerActivosPorTarea
+(
+	IN _idtarea INT
+)
+BEGIN
+	SELECT
+		ACT.idactivos_tarea,
+        ACTI.idactivo,
+        ACTI.descripcion
+        FROM activos_tarea ACT
+        LEFT JOIN tareas T ON ACT.idtarea = T.idtarea 
+        LEFT JOIN activos ACTI ON ACT.idactivo = ACTI.idactivo
+        WHERE T.idtarea = _idtarea
+        ORDER BY ACT.idactivos_tarea DESC;
+END $$
+
+call obtenerActivosPorTarea(5)

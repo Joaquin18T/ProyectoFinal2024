@@ -20,4 +20,19 @@ class ActivosTarea extends ExecQuery
       die($e->getMessage());
     }
   } // INTEGRADO ✔
+
+  public function obtenerActivosPorTarea($params=[]):array{
+    try{
+      $cmd = parent::execQ("CALL obtenerActivosPorTarea(?)");
+      $cmd->execute(
+        array(
+          $params['idtarea']
+        )
+      );
+      return $cmd->fetchAll(PDO::FETCH_ASSOC);
+    }catch(Exception $e){
+      error_log("Error: ".$e->getMessage());
+      return [];
+    }
+  }
 }

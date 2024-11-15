@@ -49,6 +49,16 @@ $(document).ready(async function () {
         return tareas
     }
 
+    async function obtenerTareaPorId(idtarea) {
+        const params = new URLSearchParams()
+        params.append("operation", "obtenerTareaPorId")
+        params.append("idtarea", idtarea)
+        const tarea = await getDatos(`${host}tarea.controller.php`, params)
+        console.log("tarea: ", tarea)
+        return tarea
+    }
+
+
     // ***************************** RENDERIZAR KANBAN ************************************************
 
     var kanban = new jKanban({
@@ -248,8 +258,15 @@ $(document).ready(async function () {
         click: async function (el) {
             var cardId = el.getAttribute('data-eid'); // ID de la tarjeta
             console.log('Tarjeta ' + cardId + ' fue clikeada');
-            window.localStorage.setItem("idtarea", cardId)
-            window.location.href = `http://localhost/SIGEMAPRE/views/tareas/ejecutar-tarea`
+            const tarea = await obtenerTareaPorId(cardId)
+            if (tarea[0].idestado == 11) {
+                window.localStorage.setItem("idtarea", cardId)
+                window.location.href = `http://localhost/SIGEMAPRE/views/tareas/ejecutar-tarea`
+            }else{
+                showToast("Solo tareas en proceso pueden ser ejecutadas", 'ERROR', 2000)
+                return
+            }
+
         }
 
     });

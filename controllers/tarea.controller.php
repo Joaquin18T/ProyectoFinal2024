@@ -10,7 +10,12 @@ if (isset($_GET['operation'])) {
         case 'obtenerTareasPorEstado':
             echo json_encode($tarea->obtenerTareasPorEstado(['idestado' => $_GET['idestado']]));
             break;
-        }
+        
+
+        case 'obtenerTareaPorId':
+            echo json_encode($tarea->obtenerTareaPorId(['idtarea' => $_GET['idtarea']]));
+            break;
+    }
 }
 
 

@@ -3,6 +3,33 @@ use db_cmms;
 DROP PROCEDURE IF EXISTS `sp_filtrar_activos_registrados`;
 DELIMITER $$
 CREATE PROCEDURE `sp_filtrar_activos_registrados` (
+	IN _idarea 		INT,
+    IN _fecha_inicio DATE,
+    IN _fecha_fin DATE
+)
+BEGIN
+    SELECT 
+        ACT.cod_identificacion,
+        ACT.descripcion,
+        MAR.marca,
+        SUBC.subcategoria,
+        AR.area,
+        ACTSIG.fecha_asignacion
+    FROM activos_asignados ACTSIG
+    INNER JOIN activos ACT ON ACT.idactivo = ACTSIG.idactivo
+    INNER JOIN areas AR ON AR.idarea = ACTSIG.idarea
+    INNER JOIN marcas MAR ON MAR.idmarca = ACT.idmarca
+    INNER JOIN subcategorias SUBC ON SUBC.idsubcategoria = ACT.idsubcategoria
+    WHERE (_fecha_inicio IS NULL OR ACTSIG.fecha_asignacion >= _fecha_inicio)
+      AND (_fecha_fin IS NULL OR ACTSIG.fecha_asignacion <= _fecha_fin)
+      AND (_idarea IS NULL OR AR.idarea = _idarea);
+END $$
+
+-- call sp_filtrar_activos_registrados(1 ,null, null);
+
+DROP PROCEDURE IF EXISTS `sp_filtrar_activos_registrados`;
+DELIMITER $$
+CREATE PROCEDURE `sp_filtrar_activos_registrados` (
     IN _fecha_inicio DATE,
     IN _fecha_fin DATE
 )
@@ -24,7 +51,7 @@ BEGIN
 END $$
 
 -- call sp_filtrar_activos_registrados('2022-01-14',null)
-
+-- este sp muestra todas las areas en la que estuvo un activo
 DROP PROCEDURE IF EXISTS `sp_filtrar_areas_activo`;
 DELIMITER $$
 CREATE PROCEDURE `sp_filtrar_areas_activo` (

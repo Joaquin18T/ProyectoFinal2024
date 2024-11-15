@@ -83,3 +83,48 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `actualizarMantenimiento`
+DELIMITER //
+CREATE PROCEDURE `actualizarMantenimiento`(
+	IN _idtm	INT,
+    IN _descripcion 	VARCHAR(300),
+    IN _fecha_finalizado DATE,
+    IN _hora_finalizado TIME,
+    IN _tiempo_ejecutado	TIME
+)
+BEGIN
+	UPDATE tareas_mantenimiento SET
+		descripcion = _descripcion,
+		fecha_finalizado = _fecha_finalizado,
+        hora_finalizado = _hora_finalizado,
+        tiempo_ejecutado = _tiempo_ejecutado
+		where idtm = _idtm;
+END //
+
+DROP PROCEDURE IF EXISTS `verificarMantenimientoEjecutado`
+DELIMITER //
+CREATE PROCEDURE `verificarMantenimientoEjecutado`(
+	IN _idactivo	INT
+)
+BEGIN  
+	SELECT 
+		MAR.idatm,
+        MAR.idactivo,
+        MAR.idtm,
+        TM.idtarea,
+        TM.fecha_inicio,
+        TM.hora_inicio,
+        TM.fecha_finalizado,
+        TM.hora_finalizado,
+        TM.tiempo_ejecutado,
+        TM.descripcion
+    FROM mantenimiento_activos_responsables MAR
+    INNER JOIN tareas_mantenimiento TM ON TM.idtm = MAR.idtm
+	INNER JOIN tareas TAR ON TM.idtarea = TAR.idtarea
+    INNER JOIN activos ACTI ON ACTI.idactivo = MAR.idactivo
+    where MAR.idactivo = _idactivo;
+END //
+
+call verificarMantenimientoEjecutado(14)

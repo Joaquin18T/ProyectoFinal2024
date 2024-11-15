@@ -18,6 +18,19 @@ class Tarea extends ExecQuery
     }
   } // INTEGRADO ✔
 
+  public function obtenerTareaPorId($params = []): array
+  {
+    try {
+      $sp = parent::execQ("CALL obtenerTareaPorId(?)");
+      $sp->execute(array(
+        $params['idtarea']
+      ));
+      return $sp->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  } // INTEGRADO ✔
+
   public function registrarTarea($params = []): int
   {
     try {

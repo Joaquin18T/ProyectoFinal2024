@@ -53,8 +53,31 @@ BEGIN
 
 END //
 
-call obtenerTareasPorEstado(10);
+call obtenerTareasPorEstado(11);
 
+DROP PROCEDURE IF EXISTS `obtenerTareaPorId`
+DELIMITER //
+CREATE PROCEDURE `obtenerTareaPorId`(
+	IN _idtarea	INT
+)
+BEGIN
+	SELECT 		
+		TAR.idtarea,
+        TAR.idestado,
+        AR.area,
+		GROUP_CONCAT(DISTINCT CONCAT(PER.nombres, ' ', PER.apellidos) ORDER BY PER.nombres) AS nombres_responsables,
+		GROUP_CONCAT(DISTINCT ACTI.descripcion ORDER BY ACTI.descripcion) AS descripcion_activos
+	FROM tareas TAR
+	LEFT JOIN activos_tarea ACT ON ACT.idtarea = TAR.idtarea
+	LEFT JOIN responsables_tarea RT ON RT.idtarea = TAR.idtarea
+	LEFT JOIN activos ACTI ON ACTI.idactivo = ACT.idactivo
+	LEFT JOIN usuarios USU ON USU.idusuario = RT.idusuario
+	LEFT JOIN personas PER ON PER.id_persona = USU.idpersona
+    LEFT JOIN activos_asignados ACTAS ON ACTAS.idactivo = ACTI.idactivo
+    LEFT JOIN areas AR ON AR.idarea = ACTAS.idarea
+	WHERE TAR.idtarea = _idtarea
+	GROUP BY TAR.idtarea, TAR.fecha_programada, TAR.hora_programada, TAR.idestado;
+END //
 
 DROP PROCEDURE IF EXISTS `actualizarEstadoTarea`
 DELIMITER $$

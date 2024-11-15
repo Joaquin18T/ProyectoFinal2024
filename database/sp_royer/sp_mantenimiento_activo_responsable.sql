@@ -10,8 +10,23 @@ CREATE PROCEDURE `registrar_mar`(
 )	
 BEGIN
     
-    INSERT INTO mantenimiento_activos_responsables (idtm, idtarea, idusuario)
+    INSERT INTO mantenimiento_activos_responsables (idtm, idactivo, idusuario)
     VALUES (_idtm, _idactivo, _idusuario);
 
 END //
 
+
+DROP PROCEDURE IF EXISTS obtenerDetallesMantenimientoActivo;
+DELIMITER $$
+CREATE PROCEDURE obtenerDetallesMantenimientoActivo
+(
+	IN _idactivo INT
+)
+BEGIN
+	SELECT
+		*
+	FROM mantenimiento_activos_responsables MAR
+    LEFT JOIN tareas_mantenimiento TM ON MAR.idtm = TM.idtm
+    LEFT JOIN tareas TAR ON TM.idtarea = TAR.idtarea
+    WHERE MAR.idactivo = _idactivo ;
+END $$
