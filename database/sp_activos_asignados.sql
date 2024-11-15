@@ -79,3 +79,34 @@ END $$
 -- call sp_filtrar_activosAsignados(12);
 -- select * from estados;
 -- select * from subcategorias;
+DROP PROCEDURE IF EXISTS sp_filter_asignaciones_activos;
+DELIMITER $$
+CREATE PROCEDURE sp_filter_asignaciones_activos
+(
+	IN _cod_identificacion VARCHAR(40),
+    IN _idarea INT,
+    IN _idusuario INT,
+    IN _fecha_asignacion DATE
+)
+BEGIN
+	SELECT
+		AA.idactivo_asig, AA.condicion_asig, AA.fecha_asignacion,
+		A.area, A.idarea,
+		ACT.descripcion, ACT.cod_identificacion,
+		CONCAT(P.apellidos,' ',P.nombres) as supervisor
+        FROM activos_asignados AA
+        INNER JOIN activos ACT ON AA.idactivo = ACT.idactivo
+        INNER JOIN areas A ON AA.idarea = A.idarea
+        INNER JOIN usuarios U ON A.idarea = U.idarea 
+        INNER JOIN personas P ON U.idpersona = P.id_persona
+        WHERE (AA.idarea = _idarea OR _idarea IS NULL) AND
+        (ACT.cod_identificacion = _cod_identificacion OR _cod_identificacion IS NULL) AND
+        -- (U.idusuario = _idusuario OR _idusuario IS NULL) AND
+        (AA.fecha_asignacion = _fecha_asignacion OR _fecha_asignacion IS NULL) AND
+        AA.idestado = 14 AND U.responsable_area = 1
+        ORDER BY AA.create_at ASC; -- SOLO MUESTRA LOS ACTIVOS QUE EN SUS AREAS TIENE SUPERVISOR
+END $$
+CALL sp_filter_asignaciones_activos(null,null,null,null);
+	SELECT
+		AA.idactivo_asig, AA.condicion_asig, AA.fecha_asignacion
+        FROM activos_asignados AA WHERE AA.idarea = 1

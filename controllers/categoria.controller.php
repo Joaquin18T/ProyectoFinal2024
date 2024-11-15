@@ -9,12 +9,11 @@ if (isset($_GET['operation'])) {
     case 'getAll':
       echo json_encode($categoria->getAll());
       break;
-
     case 'obtenerCategoriasPorArea':
       echo json_encode($categoria->obtenerCategoriasPorArea(["idarea" => $_GET['idarea']]));
       break;
+    case 'obtenerSubcategoriasByCategoria':
+      echo json_encode($categoria->obtenerSubcategoriasPorCategorias(['idcategoria'=>$_GET['idcategoria']]));
+      break;
   }
 }
-
-
-// ESTE CONTROLLER NO SE USA .. retiro lo dicho

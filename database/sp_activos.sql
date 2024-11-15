@@ -92,10 +92,10 @@ BEGIN
     AND (A.cod_identificacion LIKE CONCAT('%', _cod_identificacion, '%') OR _cod_identificacion IS NULL)
     AND (AR.idarea = _idarea OR _idarea IS NULL)
     AND (A.fecha_adquisicion>=_fecha_adquisicion AND A.fecha_adquisicion<=_fecha_adquisicion_fin OR _fecha_adquisicion IS NULL OR _fecha_adquisicion_fin IS NULL)
-    ORDER BY A.create_at DESC;
+    ORDER BY A.create_at ASC;
 END $$
 
--- CALL sp_filtrar_activos(null,null,null,null,NULL,null,null,'2024-11-10','2024-11-11');
+-- CALL sp_filtrar_activos(null,null,null,null,NULL,null,null,null,null);
 
 DROP PROCEDURE IF EXISTS sp_get_activo_by_id;
 DELIMITER $$

@@ -30,12 +30,6 @@
                 </div>
                 <div class="col-md-2">
                   <div class="form-floating">
-                    <input type="text" class="form-control filter" id="cod_identificacion" autocomplete="off">
-                    <label for="cod_identificacion">Cod. Identificacion</label>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <div class="form-floating">
                     <select name="marca" id="marca" class="form-select filter">
                       <option value="">Selecciona</option>
                     </select>
@@ -44,9 +38,13 @@
                 </div>
                 <div class="col-md-2">
                   <div class="form-floating">
-                    <select name="modelo" id="modelo" class="form-control filter">
-                      <option value="">Selecciona</option>
-                    </select>
+                    <input type="text" class="form-control filter" id="cod_identificacion" autocomplete="off">
+                    <label for="cod_identificacion">Cod. Identif.</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <input type="text" class="form-control filter" id="modelo" autocomplete="off">
                     <label for="modelo">Modelo</label>
                   </div>
                 </div>
@@ -111,9 +109,9 @@
                       <th>Modelo</th>
                       <th>Cod. Identif.</th>
                       <th>Fecha adq.</th>
-                      <th>Descripcion</th>
                       <th>Estado</th>
                       <th>Especificaciones</th>
+                      <th>Area</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -259,7 +257,7 @@
 
 <!-- LIBRERIA -->
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-<script src="<?= $host ?>js/activos/index.js"></script>
+<script src="<?= $host ?>js/activos/list-activo.js"></script>
 </body>
 
 </html>

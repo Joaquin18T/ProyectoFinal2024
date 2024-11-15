@@ -10,8 +10,7 @@ if (isset($_GET['operation'])) {
       echo json_encode($sub->getAll());
       break;
     case 'getMarcasBySubcategoria':
-      $cleandData = $sub->limpiarCadena($_GET['idsubcategoria']);
-      echo json_encode($sub->getMarcasBySubcategoria(['idsubcategoria' => $cleandData]));
+      echo json_encode($sub->getMarcasBySubcategoria(['idsubcategoria' => $_GET['idsubcategoria']]));
       break;
     case 'getByIdSubcategoria':
       echo json_encode($sub->getSubcategoriaById(['idsubcategoria' => $_GET['idsubcategoria']]));

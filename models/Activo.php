@@ -107,7 +107,7 @@ class Activo extends ExecQuery{
   }
 }
 
-//  $act = new Activo();
+// $act = new Activo();
 
 //  $up = $act->updateEstado(['idactivo'=>3, 'idestado'=>5]);
 //  echo $up;

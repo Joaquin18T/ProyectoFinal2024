@@ -9,6 +9,7 @@ SELECT*FROM areas;
 SELECT*FROM usuarios;
 SELECT*FROM subcategorias;
 SELECT*FROM marcas;
+SELECT*FROM detalles_marca_subcategoria;
 SELECT*FROM activos;
 SELECT*FROM estados;
 SELECT*FROM tipo_estados;
@@ -28,7 +29,7 @@ select*from permisos;
 select*from tareas;
 
 
--- ALTER TABLE notificaciones_asignaciones auto_increment = 1;
+-- ALTER TABLE detalles_marca_subcategoria auto_increment = 1;
 -- delete from permisos where idpermiso>=1;
 -- delete from vistas where idvista>=1;
 -- delete from modulos where idmodulo>=1;
@@ -45,3 +46,6 @@ select*from tareas;
 -- delete from detalles_marca_subcategoria WHERE iddetalle_marca_sub>=1;
 -- delete from marcas WHERE idmarca>=1;
 -- delete from notificaciones_asignaciones WHERE idnotificacion_activo>=6;
+-- delete from detalles_marca_subcategoria WHERE iddetalle_marca_sub>=1;
+
+
